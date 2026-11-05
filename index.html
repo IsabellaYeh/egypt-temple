@@ -237,6 +237,11 @@
   body.calm #motes,body.calm .btn::after{display:none}
   body.calm .rays polygon,body.calm .sunhalo,body.calm .doorbreath,body.calm .spin,body.calm .hb .o::after{animation:none}
   @media (prefers-reduced-motion: reduce){#motes{display:none}.btn::after{display:none}.rays polygon,.sunhalo,.doorbreath,.spin,.hb .o::after{animation:none}}
+  .egl{display:flex;align-items:center;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(212,168,71,.25)}
+  .egl .tr{font-family:"Noto Serif","Noto Serif TC",serif;font-style:italic;color:var(--gold-l);font-size:1.05em}
+  .egl .pr{display:block;font-size:.8em;color:var(--muted);font-style:normal}
+  .say{flex:none;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--gold);background:rgba(212,168,71,.12);color:var(--gold-l);font:inherit;font-size:.78em;cursor:pointer}
+  .say.on{background:rgba(212,168,71,.35)}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -403,7 +408,9 @@
     </div>
     <div id="srcRow"></div>
     <p id="stepBody"></p>
-    <div class="line" id="stepLine"><span class="who">祭司意譯</span><span id="lineText"></span></div>
+    <div class="line" id="stepLine"><span class="who">祭司意譯</span><span id="lineText"></span>
+      <div class="egl hidden" id="egBox"><div style="flex:1;min-width:0"><span class="tr" id="egT"></span><span class="pr" id="egP"></span></div><button class="say" type="button" id="egSay" aria-label="播放古埃及語讀音">聽</button></div>
+    </div>
     <div id="offerBox" class="hidden">
       <div class="small muted">點選要擺上供桌的供品（至少兩樣）</div>
       <div class="offers" id="offers"></div>
@@ -604,6 +611,7 @@
     <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
     <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
     <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
+    <p class="small"><b>古埃及語讀音</b>：象形文字只記子音、不記母音，真正的古代發音已無法確知。本站標的是埃及學家的慣例讀法（在子音間補上 e），並用瀏覽器的語音朗讀唸出來，僅供體驗。</p>
     <p class="small"><b>瀏覽統計</b>：公開網站使用 GoatCounter 做匿名的人數統計，只記錄打開了哪些頁面、從哪裡連進來、用什麼裝置，不使用 cookie，也不會記錄任何祈願、問題或暱稱。</p>
     <p class="small"><b>多人同殿</b>：同時打開這個網頁的人會出現在上方的「殿內」列。只分享暱稱、顏色和所在步驟，祈願內容永遠只留在你的裝置。</p>
     <p class="small"><b>祭司台詞</b>是本站以白話意譯撰寫，方便體驗，並非逐字翻譯。</p>
@@ -776,7 +784,7 @@
     { t:'點火，拿起香爐', src:['P. Berlin 3055 開頭諸則'],
       b:'天亮之前，祭司先點起火，拿起香爐，把香放到火上。香煙在古埃及被視為神的氣息，也用來潔淨即將進入的空間。',
       l:'火已點起，香已就位。我是潔淨的，我前來侍奉。', a:'點火上香', fx:{censer:1} },
-    { t:'進入神殿', src:['P. Berlin 3055 第 22 則「進入神廟之咒」'],
+    { eg:{t:'jnḏ ḥr.k',p:'ined her-ek',say:'ined, her ek',zh:'向你致敬'}, t:'進入神殿', src:['P. Berlin 3055 第 22 則「進入神廟之咒」'],
       b:'祭司穿過一道道越來越暗、越來越窄的門廳，走向神廟最深處的聖所。外面的世界被留在身後。',
       l:'我進入神的居所。不是我自己要來，是神召我前來。', a:'走向聖所', fx:{censer:1} },
     { t:'破開封泥', src:['卡納克多柱廳浮雕（儀節 B）'],
@@ -788,13 +796,13 @@
     { t:'打開神龕，得見神顏', src:['卡納克多柱廳浮雕（儀節 D）'],
       b:'門打開，祭司第一次看見神像的臉。這是整套儀式最關鍵的一刻：神「醒來」，與人面對面。',
       l:'門開了。我看見你的臉，你的光照進這間黑暗的屋子。', a:'打開神龕門', fx:{censer:1,sealOff:1,boltOff:1,open:1} },
-    { t:'親吻大地，讚頌阿蒙', src:['P. Berlin 3055 讚頌阿蒙諸則'],
+    { eg:{t:'rs.k m ḥtp',p:'res-ek em hotep',say:'res ek, em ho tep',zh:'平安地醒來'}, t:'親吻大地，讚頌阿蒙', src:['P. Berlin 3055 讚頌阿蒙諸則'],
       b:'祭司伏下身，額頭貼近地面，稱為「親吻大地」，接著唱誦讚美詩。晨間頌歌常以「平安地醒來」呼喚神明。',
       l:'平安地醒來吧，阿蒙-拉。你在平安中醒來，萬物也隨你醒來。', a:'伏地讚頌', fx:{censer:1,sealOff:1,boltOff:1,open:1,prost:1} },
-    { t:'獻上瑪特', src:['阿拜多斯塞提一世神廟','P. Berlin 3055'],
+    { eg:{t:'mꜣꜥt',p:'maat',say:'ma at',zh:'瑪特（真理與秩序）'}, t:'獻上瑪特', src:['阿拜多斯塞提一世神廟','P. Berlin 3055'],
       b:'祭司舉起一尊小小的瑪特女神像。瑪特代表真理、正義與宇宙秩序，被視為眾神真正賴以為生的「食物」，是所有供品中最根本的一樣。',
       l:'我把瑪特帶到你面前。你以她為生，你因她而安在。', a:'獻上瑪特', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1} },
-    { t:'奠酒與焚香淨化', src:['卡納克浮雕（儀節 14–19）'],
+    { eg:{t:'wꜥb wꜥb',p:'wab, wab',say:'wab. wab.',zh:'潔淨，潔淨'}, t:'奠酒與焚香淨化', src:['卡納克浮雕（儀節 14–19）'],
       b:'用聖水奠酒、焚燒沒藥，一次又一次淨化神像與整個房間。重複是儀式的力量所在。',
       l:'這是潔淨的水，這是潔淨的香。你是潔淨的，這屋子是潔淨的。', a:'灑水焚香', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,water:1} },
     { t:'為神像更衣', src:['阿拜多斯塞提一世神廟（更衣、頭巾諸則）'],
@@ -803,13 +811,13 @@
     { t:'塗油與眼妝', src:['P. Berlin 3055 第 20 則（加蜜的節慶香油）','阿拜多斯塞提一世神廟'],
       b:'用加了蜂蜜的節慶香油塗抹神像，再為祂畫上綠色與黑色的眼妝，就像古埃及人每天為自己做的一樣。',
       l:'香油加了蜂蜜，芬芳屬於你。你的雙眼明亮，看顧這片土地。', a:'塗抹香油', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,cloth:1,oil:1} },
-    { t:'擺上供品，邀請用膳', src:['卡納克浮雕（儀節 9–13、22、25）'],
+    { eg:{t:'ḥtp-dj-nswt',p:'hetep di nesu',say:'he tep di ne su',zh:'國王所獻的供品（供奉祝文的開頭）'}, t:'擺上供品，邀請用膳', src:['卡納克浮雕（儀節 9–13、22、25）'],
       b:'把麵包、糕點、啤酒、葡萄酒、牛奶、牛腿、烤鵝和藍蓮花擺上供桌，唸出「每日菜單」，再邀請神來享用。神不會真的吃，而是享用供品的「精華」。',
       l:'這些都是為你準備的。請來，吃吧，喝吧。', a:'邀請神明享用', offer:true, fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,cloth:1,oil:1,table:1} },
     { t:'關門上閂，掃除足跡', src:['卡納克浮雕（儀節 26、30、31）','Moret 1902 重建'],
       b:'把神像安放回神龕，驅走可能潛入的邪靈，關上門、拉上門閂、重新封好。祭司倒退著走出，並把地上的足跡掃除，讓聖所恢復無人踏入的狀態。',
       l:'門已關，閂已上。我退出，不留下任何足跡。', a:'關門並掃除足跡', fx:{censer:1,maat:0,cloth:1,oil:1,table:1,closed:1,foot:1} },
-    { t:'供品回轉', src:['卡納克浮雕（儀節 34–40）'],
+    { eg:{t:'ꜥnḫ wḏꜣ snb',p:'ankh, wedja, seneb',say:'ankh. wed ja. se neb.',zh:'生命、繁榮、健康'}, t:'供品回轉', src:['卡納克浮雕（儀節 34–40）'],
       b:'被神「享用」過的供品並不會丟掉：先轉給神廟裡的其他神祇與雕像，最後依職級分給祭司們。神的餐桌，最後成了人的餐桌。',
       l:'願這張供桌永遠不缺，願這些供品長存。', a:'完成今日儀式', fx:{table:1,closed:1} }
   ];
@@ -846,6 +854,7 @@
     $('srcRow').innerHTML=s.src.map(function(x){ return '<span class="src">'+esc(x)+'</span>'; }).join('');
     $('stepBody').textContent=s.b;
     $('lineText').textContent=s.l;
+    if(s.eg){ $('egT').textContent=s.eg.t; $('egP').textContent='讀音：'+s.eg.p+'・意思：'+s.eg.zh; $('egBox').classList.remove('hidden'); } else $('egBox').classList.add('hidden');
     $('stepLine').classList.add('hidden');
     $('offerBox').classList.toggle('hidden',!s.offer);
     $('btnAct').textContent=s.a; $('btnAct').classList.remove('hidden');
@@ -863,6 +872,7 @@
     var ACTS={4:'open',5:'kiss',6:'maat',10:'offer'}; if(ACTS[cur]) act(ACTS[cur]);
     burstOn($('stage'), cur===4?28:16, cur===4); if(cur===4) flash();
     $('stepLine').classList.remove('hidden');
+    if(s.eg) speakEg(s.eg.say,$('egSay'));
     this.classList.add('hidden');
     $('offerBox').classList.add('hidden');
     $('btnNext').textContent = cur===STEPS.length-1 ? '收下今日紀錄' : '下一步';
@@ -896,7 +906,9 @@
   };
   $('btnKiss').onclick=function(){
     act('kiss'); burstOn($('kissBox'),14,false);
-    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p>';
+    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">sḏm n.j</span><span class="pr">讀音：sedjem ni・意思：請聽我說</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
+    $('earSay').onclick=function(){ speakEg('se djem ni',this); };
+    speakEg('se djem ni',$('earSay'));
     $('prayBox').classList.remove('hidden'); renderPrev(); $('prayText').focus();
   };
   document.querySelectorAll('[data-ears]').forEach(function(b){
@@ -1325,6 +1337,24 @@
       render();
     }).catch(function(){});
   }
+
+  /* ---- 古埃及語讀音（瀏覽器語音朗讀）---- */
+  var egVoice=null;
+  function pickVoice(){ try{ var vs=speechSynthesis.getVoices(); egVoice=vs.filter(function(v){return /^it/i.test(v.lang);})[0]||vs.filter(function(v){return /^es/i.test(v.lang);})[0]||null; }catch(e){} }
+  try{ if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; } }catch(e){}
+  function speakEg(text,btn){
+    try{
+      if(!window.speechSynthesis) return;
+      speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text); u.lang=egVoice?egVoice.lang:'it-IT'; if(egVoice) u.voice=egVoice; u.rate=.72; u.pitch=.78; u.volume=1;
+      var duck=actx && mus.bus && mus.on;
+      if(duck){ var t=actx.currentTime; mus.bus.gain.cancelScheduledValues(t); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t); mus.bus.gain.linearRampToValueAtTime(.04,t+.3); }
+      u.onstart=function(){ if(btn) btn.classList.add('on'); };
+      u.onend=u.onerror=function(){ if(btn) btn.classList.remove('on'); if(duck && mus.on && actx){ var t2=actx.currentTime; mus.bus.gain.cancelScheduledValues(t2); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t2); mus.bus.gain.linearRampToValueAtTime(.16,t2+1.5); } };
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  $('egSay').onclick=function(){ var s2=STEPS[cur]; if(s2&&s2.eg) speakEg(s2.eg.say,this); };
 
   /* ---- 聖光特效引擎 ---- */
   function fxOff(){ return calmNow(); }
