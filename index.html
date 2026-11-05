@@ -1338,22 +1338,39 @@
   var OSK='egtemple-osiris-v1', STAGES=7;
   var OSI_TXT=['剛播下種子，土還是濕的。','冒出了一點點綠色的芽尖。','小小的麥苗站起來了。','麥苗長到一指高。','整片綠了，奧西里斯的身體開始「活」過來。','麥稈長高，開始抽穗。','麥穗轉成金黃色。','麥子成熟了，可以收成。'];
   function osi(){ var o=load(OSK,null); return o||{sown:false,stage:0,last:'',harvests:0}; }
-  var BLADES=(function(){ var r=rng(2027), a=[]; for(var i=0;i<460;i++) a.push([92+r()*96, 16+r()*378, .75+r()*.5, r()*2-1, r()]); return a; })();
   var OSI_PATH='M140 14 Q150 30 152 62 L172 56 L165 70 Q158 72 156 78 Q160 98 154 112 L180 124 Q190 150 186 210 L176 330 Q172 372 160 392 L120 392 Q108 372 104 330 L94 210 Q90 150 100 124 L126 112 Q120 98 124 78 Q122 72 115 70 L108 56 L128 62 Q130 30 140 14Z';
+  function pz(y){ var t=(y-14)/378; return 1+1.3*(1-t); }
+  function proj(x,y){ var z=pz(y); return [140+(x-140)*1.8/z, 8+327/z]; }
+  function projPath(d,dy){ return d.replace(/(-?[\d.]+) (-?[\d.]+)/g,function(m,x,y){ var q=proj(+x,+y); return q[0].toFixed(1)+' '+(q[1]+(dy||0)).toFixed(1); }); }
+  var BLADES=(function(){
+    var r=rng(2027), a=[], P=null, cx=null;
+    try{ P=new Path2D(OSI_PATH); cx=document.createElement('canvas').getContext('2d'); }catch(e){}
+    for(var i=0;i<900 && a.length<480;i++){ var x=92+r()*96, y=16+r()*378; if(cx && !cx.isPointInPath(P,x,y)) continue; a.push([x,y,.75+r()*.5,r()*2-1,r()]); }
+    a.sort(function(m,n){ return m[1]-n[1]; }); return a;
+  })();
   function osiSVG(o){
-    var st=o.sown?o.stage:-1, L=[0,3,8,14,22,30,36,40][Math.max(0,st)], col=['#7FBF5A','#7FBF5A','#76B850','#6FAE48','#6FA548','#8EAA44','#B7B048','#D4B04A'][Math.max(0,st)], blades='', seeds='';
-    if(st===0) seeds=BLADES.map(function(p,i){ return i%2?'':'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="1.1" fill="#D8C08A"/>'; }).join('');
+    var st=o.sown?o.stage:-1, L=[0,3,7,11,15,19,22,25][Math.max(0,st)], col=['#7FBF5A','#86C35E','#7BBA52','#70AF49','#6AA645','#8EAA44','#B9B04A','#D8B44C'][Math.max(0,st)], blades='', seeds='';
+    if(st===0) seeds=BLADES.map(function(p,i){ if(i%2) return ''; var q=proj(p[0],p[1]), z=pz(p[1]); return '<ellipse cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" rx="'+(1.6/z).toFixed(2)+'" ry="'+(1.0/z).toFixed(2)+'" fill="#D8C08A"/>'; }).join('');
     if(st>=1) BLADES.forEach(function(p,i){ if(st===1 && i%3) return; if(st===2 && i%2) return;
-      var len=L*p[2], x=p[0], y=p[1], bend=p[3]*len*.25;
-      blades+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' q'+(bend/2).toFixed(1)+' '+(-len/2).toFixed(1)+' '+bend.toFixed(1)+' '+(-len).toFixed(1)+'" stroke="'+col+'" stroke-width="'+(st>=4?1.5:1.1)+'" stroke-opacity="'+(.75+p[4]*.25).toFixed(2)+'" fill="none" stroke-linecap="round"/>';
-      if(st>=5 && i%2===0) blades+='<ellipse cx="'+(x+bend).toFixed(1)+'" cy="'+(y-len-3).toFixed(1)+'" rx="1.5" ry="4.2" transform="rotate('+(p[3]*15).toFixed(0)+' '+(x+bend).toFixed(1)+' '+(y-len-3).toFixed(1)+')" fill="'+(st>=6?'#E8C25A':'#B8C85A')+'"/>';
+      var q=proj(p[0],p[1]), z=pz(p[1]), len=L*p[2]*1.25/z, x=q[0], y=q[1], bend=p[3]*len*.28, w=(st>=4?1.9:1.4)/z+.3;
+      var shade=(.55+.45*(1/z)).toFixed(2);
+      blades+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' q'+(bend/2).toFixed(1)+' '+(-len/2).toFixed(1)+' '+bend.toFixed(1)+' '+(-len).toFixed(1)+'" stroke="'+col+'" stroke-width="'+w.toFixed(2)+'" stroke-opacity="'+shade+'" fill="none" stroke-linecap="round"/>';
+      if(st>=5 && i%2===0){ var hx=x+bend, hy=y-len-3/z; blades+='<ellipse cx="'+hx.toFixed(1)+'" cy="'+hy.toFixed(1)+'" rx="'+(1.7/z+.3).toFixed(2)+'" ry="'+(4.6/z+.6).toFixed(2)+'" transform="rotate('+(p[3]*15).toFixed(0)+' '+hx.toFixed(1)+' '+hy.toFixed(1)+')" fill="'+(st>=6?'#EAC45C':'#B8C85A')+'" fill-opacity="'+shade+'"/>'; }
     });
-    return '<svg viewBox="0 0 280 410" role="img" aria-label="奧西里斯苗床，'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
-      '<defs><clipPath id="osiClip"><path d="'+OSI_PATH+'"/></clipPath><radialGradient id="silt" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#3A2A1A"/><stop offset="1" stop-color="#22180E"/></radialGradient></defs>'+
-      '<path d="'+OSI_PATH+'" fill="none" stroke="#5A3C20" stroke-width="12" stroke-linejoin="round"/>'+
-      '<path d="'+OSI_PATH+'" fill="url(#silt)" stroke="url(#ggL)" stroke-width="2" stroke-linejoin="round"/>'+
-      '<path d="M127 62 Q113 40 119 16 M153 62 Q167 40 161 16" stroke="url(#ggL)" stroke-width="2" fill="none" opacity=".8"/>'+
-      '<g clip-path="url(#osiClip)">'+(o.sown?'<rect x="80" y="10" width="120" height="390" fill="#2E2014" opacity=".55"/>':'')+seeds+'<g class="stalk">'+blades+'</g></g>'+
+    var top=projPath(OSI_PATH,0), side=projPath(OSI_PATH,9);
+    return '<svg viewBox="0 40 280 330" role="img" aria-label="平放在地上的奧西里斯苗床，'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
+      '<defs><linearGradient id="silt3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E150C"/><stop offset="1" stop-color="#3E2C1A"/></linearGradient>'+
+      '<linearGradient id="floor3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1209" stop-opacity="0"/><stop offset="1" stop-color="#2A2416"/></linearGradient>'+
+      '<radialGradient id="lamp3" cx=".5" cy=".75" r=".6"><stop offset="0" stop-color="#F2B65A" stop-opacity=".22"/><stop offset="1" stop-color="#F2B65A" stop-opacity="0"/></radialGradient></defs>'+
+      '<rect x="0" y="110" width="280" height="280" fill="url(#floor3)"/>'+
+      '<path d="M20 160 H260 M6 230 H274 M0 320 H280" stroke="#3A3020" stroke-width="1" opacity=".5"/>'+
+      '<ellipse cx="140" cy="270" rx="135" ry="70" fill="url(#lamp3)"/>'+
+      '<path d="'+projPath(OSI_PATH,14)+'" fill="#000" opacity=".5" transform="translate(4 0)"/>'+
+      '<path d="'+side+'" fill="#3E2812" stroke="#2A1A0A" stroke-width="1"/>'+
+      '<path d="'+top+'" fill="#6B4826" stroke="#8A6236" stroke-width="7" stroke-linejoin="round"/>'+
+      '<path d="'+top+'" fill="url(#silt3)" stroke="url(#ggL)" stroke-width="1.5" stroke-linejoin="round"/>'+
+      '<path d="'+projPath('M127 62 Q113 40 119 16 M153 62 Q167 40 161 16',0)+'" stroke="url(#ggL)" stroke-width="1.5" fill="none" opacity=".8"/>'+
+      seeds+'<g class="stalk">'+blades+'</g>'+
       '<g id="osiDrops"></g></svg>';
   }
   function renderOsi(){
