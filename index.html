@@ -957,6 +957,7 @@
   function ensureCtx(){
     if(actx) return true;
     var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+    try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
     actx=new AC();
     comp=actx.createDynamicsCompressor(); comp.threshold.value=-18; comp.ratio.value=4; comp.connect(actx.destination);
     master=actx.createGain(); master.gain.value=.32;
@@ -1019,8 +1020,15 @@
   function musBtn(){ var b=$('btnMusic'); b.textContent=mus.on?'音樂 開':'音樂 關'; b.setAttribute('aria-pressed',mus.on?'true':'false'); }
   musBtn();
   $('btnMusic').addEventListener('click',function(e){ e.stopPropagation(); mus.on=!mus.on; prefs.music=mus.on; save(PK,prefs); musBtn(); if(mus.on) startMusic(); else stopMusic(); });
-  function firstGesture(){ document.removeEventListener('pointerdown',firstGesture,true); document.removeEventListener('keydown',firstGesture,true); if(mus.on && !mus.started) startMusic(); }
-  document.addEventListener('pointerdown',firstGesture,true); document.addEventListener('keydown',firstGesture,true);
+  var GEST=['click','touchend','pointerup','keydown'];
+  function unlocked(){ return actx && actx.state==='running'; }
+  function firstGesture(){
+    try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+    if(mus.on){ if(!mus.started) startMusic(); else if(actx && actx.state!=='running') actx.resume(); }
+    else if(ensureCtx() && actx.state!=='running') actx.resume();
+    setTimeout(function(){ if(unlocked()) GEST.forEach(function(ev){ document.removeEventListener(ev,firstGesture,true); }); },300);
+  }
+  GEST.forEach(function(ev){ document.addEventListener(ev,firstGesture,true); });
   document.addEventListener('visibilitychange',function(){ if(document.hidden) stopMusic(); else if(mus.on && mus.started) startMusic(); });
 
   function bowl(){
