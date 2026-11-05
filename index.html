@@ -242,6 +242,20 @@
   .egl .pr{display:block;font-size:.8em;color:var(--muted);font-style:normal}
   .say{flex:none;min-width:44px;min-height:44px;border-radius:50%;border:1px solid var(--gold);background:rgba(212,168,71,.12);color:var(--gold-l);font:inherit;font-size:.78em;cursor:pointer}
   .say.on{background:rgba(212,168,71,.35)}
+  .rankcard{text-align:center;background:radial-gradient(90% 80% at 50% 0%,#1E3A8A 0%,#0F1936 70%);border:1px solid var(--gold);border-radius:16px;padding:18px;margin:10px 0}
+  .rankcard .rn{font-family:"Noto Serif TC",serif;font-size:1.5em;font-weight:900;color:var(--gold-l);letter-spacing:.12em}
+  .rankcard .rt{font-family:"Noto Serif",serif;font-style:italic;color:var(--gold);font-size:.95em}
+  .bar{height:8px;border-radius:4px;background:#232B44;overflow:hidden;margin:4px 0 2px}
+  .bar i{display:block;height:100%;background:var(--goldgrad)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+  .stats div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+  .stats b{display:block;font-family:"Noto Serif TC",serif;font-size:1.4em;color:var(--gold-l)}
+  .stats span{font-size:.76em;color:var(--muted)}
+  .ladder{list-style:none;padding:0;margin:6px 0}
+  .ladder li{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid #222A40;font-size:.86em}
+  .ladder li.done{color:var(--gold-l)}
+  .ladder li.cur{font-weight:700}
+  .rkbadge{display:inline-block;font-size:.72em;border:1px solid var(--gold-d);color:var(--gold-l);border-radius:999px;padding:0 8px;margin-left:6px;vertical-align:middle;font-family:"Noto Sans TC",sans-serif;font-weight:500}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -324,7 +338,7 @@
     <p class="small muted" style="margin-top:10px">在古埃及，神廟深處只有祭司能進入；一般人則在神廟外圍向「聆聽祈禱的神」說話。點大殿下方的按鈕選一條路，或直接點大門進入聖所。</p>
     <div class="frieze" aria-hidden="true"></div>
     <div class="card" id="meCard">
-      <div class="me-row"><div><div class="small muted">你的形象</div><div class="nm" id="meNick"></div></div><button class="iconbtn" type="button" id="meEdit">改暱稱與顏色</button></div>
+      <div class="me-row"><div><div class="small muted">你的形象</div><div class="nm"><span id="meNick"></span><span class="rkbadge" id="meRank"></span></div></div><button class="iconbtn" type="button" id="meEdit">改暱稱與顏色</button></div>
       <div class="looks" id="homeLooks" role="group" aria-label="選擇你的形象"></div>
     </div>
     <button class="btn link" type="button" id="btnAbout">這是怎麼重建的？資料來源</button>
@@ -586,6 +600,14 @@
   <!-- 我的還願碑 -->
   <section id="s-stelae" class="screen hidden">
     <h2>我的紀錄</h2>
+    <div class="rankcard" id="rankCard"></div>
+    <div class="stats" id="statGrid"></div>
+    <div class="card">
+      <div class="small muted">祭司職級</div>
+      <ul class="ladder" id="ladder"></ul>
+      <p class="small muted" style="margin:6px 0 0">「參拜天數」是你在不同日子打開神廟的天數，一天只算一次。晉升紀錄只存在這個裝置。</p>
+    </div>
+    <h2 style="margin-top:18px">我的還願碑</h2>
     <div class="note"><b>只有你看得到。</b>資料存在這個瀏覽器，清除瀏覽資料或換裝置後會消失。</div>
     <div id="stelaList"></div>
     <h2 style="margin-top:18px">我的神諭陶片</h2>
@@ -611,6 +633,7 @@
     <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
     <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
     <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
+    <p class="small"><b>祭司職級</b>：職稱取自古埃及神廟的祭司體系，由低到高為潔淨祭司（wꜥb）、讀經祭司（ẖry-ḥb）、神之僕（ḥm-nṯr），最高是卡納克阿蒙神廟的大祭司「阿蒙第一先知」。許多基層祭司是兼職的，分成幾個班輪流進神廟服務，其餘時間過一般生活。本站的晉升條件是為體驗設計的，不是古代的規定。</p>
     <p class="small"><b>古埃及語讀音</b>：象形文字只記子音、不記母音，真正的古代發音已無法確知。本站標的是埃及學家的慣例讀法（在子音間補上 e），並用瀏覽器的語音朗讀唸出來，僅供體驗。</p>
     <p class="small"><b>瀏覽統計</b>：公開網站使用 GoatCounter 做匿名的人數統計，只記錄打開了哪些頁面、從哪裡連進來、用什麼裝置，不使用 cookie，也不會記錄任何祈願、問題或暱稱。</p>
     <p class="small"><b>多人同殿</b>：同時打開這個網頁的人會出現在上方的「殿內」列。只分享暱稱、顏色和所在步驟，祈願內容永遠只留在你的裝置。</p>
@@ -642,6 +665,16 @@
 </div>
 
 <!-- 確認 -->
+<div class="dialog-back hidden" id="promo" role="dialog" aria-modal="true" aria-labelledby="prT">
+  <div class="dialog center">
+    <div class="band" aria-hidden="true">𓋹𓌀𓊽</div>
+    <div class="small muted" style="margin-top:6px">晉升</div>
+    <h2 id="prT" style="margin:.2em 0"></h2>
+    <div class="rt serif" id="prTr" style="font-style:italic;color:var(--gold)"></div>
+    <p class="small" id="prD" style="margin-top:10px"></p>
+    <button class="btn" type="button" id="prOk">領受職級</button>
+  </div>
+</div>
 <div class="dialog-back hidden" id="confirm" role="dialog" aria-modal="true" aria-labelledby="cfT">
   <div class="dialog">
     <h2 id="cfT" style="margin-top:0">確定刪除？</h2>
@@ -880,7 +913,7 @@
   };
   $('btnNext').onclick=function(){
     if(cur<STEPS.length-1){ cur++; renderStep(); }
-    else{ var n=load(CK,0)+1; save(CK,n); $('ritualCount').textContent='這是你第 '+n+' 次完成每日儀式'; act('done'); show('s-ritual-done'); setTimeout(function(){ flash(); burstOn(document.querySelector('.badge'),36,true); },250); }
+    else{ var n=load(CK,0)+1; save(CK,n); $('ritualCount').textContent='這是你第 '+n+' 次完成每日儀式'; bump(null); act('done'); show('s-ritual-done'); setTimeout(function(){ flash(); burstOn(document.querySelector('.badge'),36,true); },250); }
   };
   $('btnQuit').onclick=function(){ show('s-home'); };
 
@@ -905,7 +938,7 @@
     show('s-ear-pray');
   };
   $('btnKiss').onclick=function(){
-    act('kiss'); burstOn($('kissBox'),14,false);
+    act('kiss'); burstOn($('kissBox'),14,false); bump('kiss');
     $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">sḏm n.j</span><span class="pr">讀音：sedjem ni・意思：請聽我說</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
     $('earSay').onclick=function(){ speakEg('se djem ni',this); };
     speakEg('se djem ni',$('earSay'));
@@ -945,7 +978,7 @@
   $('btnOfferStela').onclick=function(){
     act('stela');
     var st={id:Date.now().toString(36),god:god.k,ears:ears,text:$('prayText').value.trim(),at:Date.now()};
-    var all=load(SK,[]); all.unshift(st); save(SK,all);
+    var all=load(SK,[]); all.unshift(st); save(SK,all); bump('stelae');
     $('stelaView').innerHTML=stelaSVG(st,true)+(st.text?'<p class="serif center" style="margin-top:10px">「'+esc(st.text)+'」</p>':'');
     setTimeout(function(){ flash(); burstOn($('stelaView'),32,true); },(0.85+st.ears*0.32)*1000);
     show('s-ear-done');
@@ -1137,7 +1170,7 @@
     shakes++; $('sitShakes').textContent='已輕搖叉鈴 '+shakes+' 次';
     var r=$('sitRing'); r.classList.remove('ring'); void r.getBoundingClientRect(); r.classList.add('ring');
   };
-  $('sitEnd').onclick=function(){ clearInterval(sitTick); var m=Math.floor((Date.now()-sitStart)/60000); show('s-home'); feedLocal(m>=1?'你靜坐了 '+m+' 分鐘。':'你靜坐了一會兒。'); };
+  $('sitEnd').onclick=function(){ clearInterval(sitTick); var m=Math.floor((Date.now()-sitStart)/60000); show('s-home'); bump('sitMin',m); feedLocal(m>=1?'你靜坐了 '+m+' 分鐘。':'你靜坐了一會兒。'); };
   function feedLocal(t){ var f=$('hallFeed'); if(!$('hall').classList.contains('hidden')){ feed(t); } }
 
   /* ---------- 神諭出巡 ---------- */
@@ -1184,7 +1217,7 @@
       $('oVerdict').textContent=V[0]; $('oResText').textContent=V[1];
       $('oStatus').textContent='';
       $('oResult').classList.remove('hidden'); $('oAgain').classList.remove('hidden');
-      var all=load(OK_,[]); all.unshift({id:Date.now().toString(36),god:oGod.k,q:q,a:ans,at:Date.now()}); save(OK_,all.slice(0,100));
+      var all=load(OK_,[]); all.unshift({id:Date.now().toString(36),god:oGod.k,q:q,a:ans,at:Date.now()}); save(OK_,all.slice(0,100)); bump('oracles');
       act('or-'+ans); if(ans!=='none'){ flash(); burstOn($('oVerdict'),30,true); }
     },7000*f+60);
   };
@@ -1287,6 +1320,7 @@
       var t=document.createElement('div'), nm=document.createElement('span'), st=document.createElement('span');
       nm.className='nm'; st.className='st';
       nm.textContent=(clean(x.ps.nick,12)||'參拜者')+(x.sameTab?'（你）':(x.me?'（你的另一個分頁）':''));
+      var rk=+x.ps.rk; if(rk>=1 && rk<RANKS.length){ var bd=document.createElement('span'); bd.className='rkbadge'; bd.textContent=RANKS[rk].n; nm.appendChild(bd); }
       st.textContent=status(x.ps);
       t.appendChild(nm); t.appendChild(st); row.appendChild(t); box.appendChild(row);
     });
@@ -1356,6 +1390,38 @@
   }
   $('egSay').onclick=function(){ var s2=STEPS[cur]; if(s2&&s2.eg) speakEg(s2.eg.say,this); };
 
+  /* ---- 祭司職級 ---- */
+  var STK='egtemple-stats-v1';
+  var RANKS=[
+    {n:'參拜者',t:'',p:'',d:0,r:0,desc:'來到神廟外圍，向神說話的一般百姓。'},
+    {n:'潔淨祭司',t:'wꜥb',p:'wab',d:3,r:0,desc:'最基層的祭司，名稱的意思就是「潔淨的人」。負責潔淨與搬運聖物，必須剃髮、勤加沐浴。'},
+    {n:'讀經祭司',t:'ẖry-ḥb',p:'kheri-heb',d:7,r:3,desc:'手捧儀式書卷，在典禮中誦讀經文的祭司。'},
+    {n:'神之僕',t:'ḥm-nṯr',p:'hem-netjer',d:15,r:10,desc:'能進入聖所、親手侍奉神像的高階祭司。'},
+    {n:'阿蒙第一先知',t:'ḥm-nṯr tpy n Jmn',p:'hem-netjer tepy en Imen',d:30,r:30,desc:'卡納克阿蒙神廟的大祭司，權力僅次於國王。'}];
+  function stats(){ var st=load(STK,null)||{}; st.days=st.days||[]; st.stelae=st.stelae||0; st.oracles=st.oracles||0; st.sitMin=st.sitMin||0; st.kiss=st.kiss||0; st.rank=st.rank||0; return st; }
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  function rankOf(st){ var days=st.days.length, rit=load(CK,0), k=0; RANKS.forEach(function(R,i){ if(days>=R.d && rit>=R.r) k=i; }); return k; }
+  function bump(field,n){ var st=stats(); if(field) st[field]=(st[field]||0)+(n||1); var t=today(); if(st.days.indexOf(t)<0) st.days.push(t); var k=rankOf(st), up=k>st.rank; st.rank=Math.max(st.rank,k); save(STK,st); renderRank(); if(up) promote(k); }
+  function promote(k){
+    var R=RANKS[k]; $('prT').textContent=R.n; $('prTr').textContent=R.t?R.t+'（'+R.p+'）':''; $('prD').textContent=R.desc;
+    setTimeout(function(){ dlg('promo',true); $('prOk').focus(); flash(); burstOn($('prT'),40,true); if(R.p) speakEg(R.p.replace(/-/g,' '),null); },600);
+  }
+  $('prOk').onclick=function(){ dlg('promo',false); };
+  function renderRank(){
+    var st=stats(), k=Math.max(st.rank,rankOf(st)), R=RANKS[k], N=RANKS[k+1], days=st.days.length, rit=load(CK,0);
+    $('meRank').textContent=R.n; if(typeof pres==='function' && myState && myState.rk!==k) pres({rk:k});
+    var h='<div class="small muted">你的職級</div><div class="rn">'+R.n+'</div>'+(R.t?'<div class="rt">'+R.t+'（'+R.p+'）</div>':'')+'<p class="small" style="margin:8px 0 0">'+R.desc+'</p>';
+    if(N){ var pd=Math.min(1,days/N.d), pr=N.r?Math.min(1,rit/N.r):1;
+      h+='<div style="text-align:left;margin-top:12px"><div class="small">下一級：<b>'+N.n+'</b></div>'+
+        '<div class="small muted" style="margin-top:6px">參拜天數 '+Math.min(days,N.d)+' / '+N.d+'</div><div class="bar"><i style="width:'+(pd*100).toFixed(0)+'%"></i></div>'+
+        (N.r?'<div class="small muted" style="margin-top:6px">完成每日儀式 '+Math.min(rit,N.r)+' / '+N.r+' 次</div><div class="bar"><i style="width:'+(pr*100).toFixed(0)+'%"></i></div>':'')+'</div>';
+    } else h+='<p class="small" style="color:var(--gold-l);margin-top:10px">你已達到最高職級。</p>';
+    $('rankCard').innerHTML=h;
+    var sg=[[days,'參拜天數'],[rit,'每日儀式'],[st.stelae,'還願碑'],[st.oracles,'求問神諭'],[st.sitMin,'靜坐分鐘'],[st.kiss,'親吻大地']];
+    $('statGrid').innerHTML=sg.map(function(x){ return '<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'; }).join('');
+    $('ladder').innerHTML=RANKS.map(function(Rr,i){ var cond=i===0?'起點':('參拜 '+Rr.d+' 天'+(Rr.r?'・儀式 '+Rr.r+' 次':'')); return '<li class="'+(i<=k?'done':'')+(i===k?' cur':'')+'"><span>'+(i<=k?'✓ ':'')+Rr.n+'</span><span class="muted">'+cond+'</span></li>'; }).join('');
+  }
+
   /* ---- 聖光特效引擎 ---- */
   function fxOff(){ return calmNow(); }
   function burstAt(x,y,n,big){
@@ -1392,6 +1458,7 @@
     try{ var gc=document.createElement('script'); gc.async=true; gc.src='https://gc.zgo.at/count.js'; gc.setAttribute('data-goatcounter','https://egypt-temple.goatcounter.com/count'); document.head.appendChild(gc); }catch(e){}
   }
   show('s-home');
+  bump(null);
   setTimeout(function(){ var sp=$('splash'); sp.classList.add('out'); setTimeout(function(){ sp.remove(); },1100); }, calmNow()?50:1300);
 })();
 </script>
