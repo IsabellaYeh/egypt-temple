@@ -191,6 +191,21 @@
   .hb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;color:var(--ink);font:inherit;font-size:.74em;cursor:pointer;min-width:62px;padding:0;text-shadow:0 1px 3px #000}
   .hb .o{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.45em;color:var(--gold-l);background:linear-gradient(180deg,#26489A,#122458);border:1.5px solid var(--gold);box-shadow:0 4px 12px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.22)}
   .hb:hover .o,.hb:focus-visible .o{filter:brightness(1.2)}
+  .carve .ear path{stroke-dasharray:90;stroke-dashoffset:90;animation:carve .7s ease-out forwards;animation-delay:var(--d)}
+  .carve .ear .chip2{opacity:0;animation:chipfly .9s ease-out forwards;animation-delay:var(--d)}
+  .carve .ear{transform-box:fill-box;transform-origin:center}
+  .carve .glowstone{animation:stoneglow 1.4s ease-out forwards;animation-delay:var(--end)}
+  @keyframes carve{to{stroke-dashoffset:0}}
+  @keyframes chipfly{0%{opacity:.9;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+  @keyframes stoneglow{0%{opacity:0}40%{opacity:.55}100%{opacity:0}}
+  .glowstone{opacity:0}
+  body.calm .carve .ear path{animation:none;stroke-dashoffset:0}
+  body.calm .carve .ear .chip2,body.calm .carve .glowstone{animation:none;opacity:0}
+  @media (prefers-reduced-motion: reduce){.carve .ear path{animation:none;stroke-dashoffset:0}.carve .ear .chip2,.carve .glowstone{animation:none;opacity:0}}
+  .earpick{display:flex;gap:12px;align-items:center}
+  .earpick .seg{flex:1;flex-wrap:wrap}
+  .stelaprev{flex:none;width:118px}
+  .stelaprev svg{width:118px;height:auto;display:block}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -395,11 +410,14 @@
       <label class="lbl" for="prayText">對祂說出你的祈願</label>
       <textarea id="prayText" placeholder="例如：願你聽見我，讓我這次的考試平順。"></textarea>
       <label class="lbl">還願碑上要刻幾隻耳朵？</label>
-      <div class="seg" role="group" aria-label="耳朵數量">
-        <button class="chip" type="button" data-ears="1" aria-pressed="false">1</button>
-        <button class="chip" type="button" data-ears="2" aria-pressed="true">2</button>
-        <button class="chip" type="button" data-ears="4" aria-pressed="false">4</button>
-        <button class="chip" type="button" data-ears="8" aria-pressed="false">8</button>
+      <div class="earpick">
+        <div class="seg" role="group" aria-label="耳朵數量" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button class="chip" type="button" data-ears="1" aria-pressed="false">1 隻</button>
+          <button class="chip" type="button" data-ears="2" aria-pressed="true">2 隻</button>
+          <button class="chip" type="button" data-ears="4" aria-pressed="false">4 隻</button>
+          <button class="chip" type="button" data-ears="8" aria-pressed="false">8 隻</button>
+        </div>
+        <div class="stelaprev" id="stelaPrev" aria-live="polite"></div>
       </div>
       <p class="small muted" style="margin-top:6px">真實的耳朵碑上，耳朵數量從一對到數百隻都有。耳朵越多，越像在說「請一定要聽見」。</p>
       <div class="note"><b>只存在你的裝置。</b>祈願不會上傳，也不會給其他人看；可在「我的還願碑」刪除。</div>
@@ -834,21 +852,24 @@
   $('btnKiss').onclick=function(){
     act('kiss');
     $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p>';
-    $('prayBox').classList.remove('hidden'); $('prayText').focus();
+    $('prayBox').classList.remove('hidden'); renderPrev(); $('prayText').focus();
   };
   document.querySelectorAll('[data-ears]').forEach(function(b){
-    b.onclick=function(){ ears=+b.getAttribute('data-ears'); document.querySelectorAll('[data-ears]').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); };
+    b.onclick=function(){ ears=+b.getAttribute('data-ears'); document.querySelectorAll('[data-ears]').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); renderPrev(); };
   });
 
-  function earSVG(x,y,s,col){
-    return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M10 0 C22 0 26 12 22 22 C19 29 14 30 14 38 C14 44 6 44 5 38" fill="none" stroke="'+col+'" stroke-width="3" stroke-linecap="round"/><path d="M10 8 C16 8 18 14 15 19" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round"/></g>';
+  function earSVG(x,y,s,col,i){
+    var d=(0.35+i*0.32).toFixed(2)+'s', chips='';
+    [[-14,-10],[16,-12],[-8,14],[18,10]].forEach(function(v){ chips+='<circle class="chip2" cx="14" cy="18" r="1.6" fill="#B79A6A" style="--dx:'+v[0]+'px;--dy:'+v[1]+'px"/>'; });
+    return '<g transform="translate('+x+' '+y+') scale('+s+')"><g class="ear" style="--d:'+d+'"><path d="M10 0 C22 0 26 12 22 22 C19 29 14 30 14 38 C14 44 6 44 5 38" fill="none" stroke="'+col+'" stroke-width="3" stroke-linecap="round"/><path d="M10 8 C16 8 18 14 15 19" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round"/>'+chips+'</g></g>';
   }
-  function stelaSVG(st){
+  function stelaSVG(st,anim){
     var g=GODS.filter(function(x){return x.k===st.god;})[0]||GODS[0];
     var n=st.ears, cols=n<=2?n:(n<=4?2:4), rows=Math.ceil(n/cols), s=n<=2?1.3:(n<=4?1.05:.8);
     var w=34*s, h=46*s, gw=cols*w+(cols-1)*10, gh=rows*h+(rows-1)*8, ox=(220-gw)/2, oy=150+(96-gh)/2, e='';
-    for(var i=0;i<n;i++){ var c=i%cols, r=Math.floor(i/cols); e+=earSVG(ox+c*(w+10),oy+r*(h+8),s,'#4A3B22'); }
-    return '<svg viewBox="0 0 220 290" width="220" height="290" role="img" aria-label="獻給'+esc(g.k)+'的還願碑，上方刻著'+esc(g.k)+'的神像，下方刻有 '+n+' 隻耳朵">'+
+    for(var i=0;i<n;i++){ var c=i%cols, r=Math.floor(i/cols); e+=earSVG(ox+c*(w+10),oy+r*(h+8),s,'#4A3B22',i); }
+    var endD=(0.35+n*0.32+0.5).toFixed(2)+'s';
+    return '<svg'+(anim?' class="carve" style="--end:'+endD+'"':'')+' viewBox="0 0 220 290" width="220" height="290" role="img" aria-label="獻給'+esc(g.k)+'的還願碑，上方刻著'+esc(g.k)+'的神像，下方刻有 '+n+' 隻耳朵">'+
       '<path d="M10 286 L10 70 Q10 10 110 10 Q210 10 210 70 L210 286Z" fill="#E6D3A8" stroke="url(#ggL)" stroke-width="4"/>'+
       '<circle cx="110" cy="28" r="7" fill="#C8402A"/><path d="M103 28 Q80 20 58 30 Q80 26 103 31Z M117 28 Q140 20 162 30 Q140 26 117 31Z" fill="'+g.c+'"/>'+
       '<g transform="translate(30 40) scale(.5)">'+DRAW[g.k]()+'</g>'+
@@ -859,14 +880,16 @@
       '<text x="160" y="130" text-anchor="middle" font-family="Noto Sans Egyptian Hieroglyphs, serif" font-size="14" fill="'+g.c+'">𓋹𓌀𓊽</text>'+
       '<line x1="22" y1="142" x2="198" y2="142" stroke="#B8862A" stroke-width="2"/>'+ e +
       '<line x1="24" y1="256" x2="196" y2="256" stroke="#B8862A"/>'+
-      '<text x="110" y="274" text-anchor="middle" font-size="11" fill="#5C5247">願你聽見</text></svg>';
+      '<text x="110" y="274" text-anchor="middle" font-size="11" fill="#5C5247">願你聽見</text>'+
+      (anim?'<path class="glowstone" d="M10 286 L10 70 Q10 10 110 10 Q210 10 210 70 L210 286Z" fill="#FFE7A8"/>':'')+'</svg>';
   }
+  function renderPrev(){ if(!god) return; $('stelaPrev').innerHTML=stelaSVG({god:god.k,ears:ears},true); var sv=$('stelaPrev').querySelector('svg'); if(sv){ sv.setAttribute('aria-label','預覽：刻有 '+ears+' 隻耳朵的還願碑'); } }
   function fmt(ts){ var d=new Date(ts); return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate(); }
   $('btnOfferStela').onclick=function(){
     act('stela');
     var st={id:Date.now().toString(36),god:god.k,ears:ears,text:$('prayText').value.trim(),at:Date.now()};
     var all=load(SK,[]); all.unshift(st); save(SK,all);
-    $('stelaView').innerHTML=stelaSVG(st)+(st.text?'<p class="serif center" style="margin-top:10px">「'+esc(st.text)+'」</p>':'');
+    $('stelaView').innerHTML=stelaSVG(st,true)+(st.text?'<p class="serif center" style="margin-top:10px">「'+esc(st.text)+'」</p>':'');
     show('s-ear-done');
   };
   $('btnDoneStelae').onclick=function(){ show('s-stelae'); };
