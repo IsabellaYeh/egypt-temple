@@ -887,7 +887,7 @@
     $('srcRow').innerHTML=s.src.map(function(x){ return '<span class="src">'+esc(x)+'</span>'; }).join('');
     $('stepBody').textContent=s.b;
     $('lineText').textContent=s.l;
-    if(s.eg){ $('egT').textContent='古埃及語：'+s.eg.zh; $('egP').textContent='按「聽」播放古埃及語讀音'; $('egBox').classList.remove('hidden'); } else $('egBox').classList.add('hidden');
+    if(s.eg){ $('egT').textContent='古埃及語：'+s.eg.zh; $('egP').textContent='會自動唸出，按「聽」可以再聽一次'; $('egBox').classList.remove('hidden'); } else $('egBox').classList.add('hidden');
     $('stepLine').classList.add('hidden');
     $('offerBox').classList.toggle('hidden',!s.offer);
     $('btnAct').textContent=s.a; $('btnAct').classList.remove('hidden');
@@ -939,7 +939,7 @@
   };
   $('btnKiss').onclick=function(){
     act('kiss'); burstOn($('kissBox'),14,false); bump('kiss');
-    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">古埃及語：請聽我說</span><span class="pr">按「聽」播放古埃及語讀音</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
+    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">古埃及語：請聽我說</span><span class="pr">會自動唸出，按「聽」可以再聽一次</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
     $('earSay').onclick=function(){ speakEg('se djem ni',this); };
     speakEg('se djem ni',$('earSay'));
     $('prayBox').classList.remove('hidden'); renderPrev(); $('prayText').focus();
@@ -1138,6 +1138,7 @@
   var GEST=['click','touchend','pointerup','keydown'];
   function unlocked(){ return actx && actx.state==='running'; }
   function firstGesture(){
+    try{ unlockSpeech(); }catch(e){}
     try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
     if(mus.on){ if(!mus.started) startMusic(); else if(actx && actx.state!=='running') actx.resume(); }
     else if(ensureCtx() && actx.state!=='running') actx.resume();
@@ -1379,9 +1380,12 @@
     function best(re){ var c=vs.filter(function(v){return re.test(v.lang);}); return c.filter(function(v){return good.test(v.name);})[0]||c[0]; }
     egVoice=best(/^it/i)||best(/^es/i)||null; }catch(e){} }
   try{ if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; } }catch(e){}
+  var speechUnlocked=false;
+  function unlockSpeech(){ try{ if(speechUnlocked||!window.speechSynthesis) return; var z=new SpeechSynthesisUtterance(' '); z.volume=0; speechSynthesis.speak(z); speechUnlocked=true; }catch(e){} }
   function speakEg(text,btn){
     try{
       if(!window.speechSynthesis) return;
+      unlockSpeech();
       speechSynthesis.cancel();
       var u=new SpeechSynthesisUtterance(text.replace(/[,.] +/g,'... ')); u.lang=egVoice?egVoice.lang:'it-IT'; if(egVoice) u.voice=egVoice; u.rate=.6; u.pitch=.68; u.volume=.9;
       var duck=actx && mus.bus && mus.on;
