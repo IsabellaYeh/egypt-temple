@@ -267,8 +267,8 @@
   body.calm .shard{transition:none}
   .field{background:radial-gradient(80% 60% at 50% 40%,#2B3A22,#0E1209 75%);border-radius:16px;border:1px solid var(--gold-d);overflow:hidden;margin:6px 0}
   .field svg{display:block;width:100%;height:auto}
-  .stalk{transform-box:fill-box;transform-origin:50% 100%;animation:sway 4s ease-in-out infinite}
-  @keyframes sway{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+  .stalk{transform-box:fill-box;transform-origin:50% 100%;animation:sway 5s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:skewX(-1.2deg)}50%{transform:skewX(1.2deg)}}
   body.calm .stalk{animation:none}
   @media (prefers-reduced-motion: reduce){.stalk{animation:none}.shard{transition:none}}
   .growbar{display:flex;gap:4px;margin:6px 0}
@@ -276,6 +276,8 @@
   .growbar i.on{background:linear-gradient(90deg,#5E8C3A,#B8C85A)}
   .drop{animation:drop .9s ease-in forwards}
   @keyframes drop{0%{opacity:0;transform:translateY(-30px)}30%{opacity:1}100%{opacity:0;transform:translateY(40px)}}
+  .grain{animation:grainfall var(--t) cubic-bezier(.5,0,.9,.6) forwards;animation-delay:var(--d);opacity:0}
+  @keyframes grainfall{0%{opacity:0;transform:translateY(-250px)}10%{opacity:1}92%{opacity:1}100%{opacity:0;transform:translateY(0)}}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -585,7 +587,12 @@
           <ellipse cx="140" cy="262" rx="90" ry="10" fill="#000" opacity=".35"/>
           <g id="potWhole"><use href="#potBody"/><path class="crack" id="cr1" d="M150 60 L142 92 L152 118 L138 150" stroke="#2A120A" stroke-width="2.2" fill="none"/><path class="crack" id="cr2" d="M96 120 L118 132 L112 160 L132 176 M176 100 L166 128 L184 150 L170 190" stroke="#2A120A" stroke-width="2.2" fill="none"/></g>
           <g id="potShards" style="display:none"><g class="shard" data-t="translate(-140px,49px) rotate(-92deg)"><g clip-path="url(#pc0)"><use href="#potBody"/></g><polygon points="60.0,36.0 103.4,36.0 112.7,93.6 60.0,92.8" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-99px,69px) rotate(20deg)"><g clip-path="url(#pc1)"><use href="#potBody"/></g><polygon points="60.0,92.8 112.7,93.6 103.2,150.1 60.0,143.7" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-136px,113px) rotate(-105deg)"><g clip-path="url(#pc2)"><use href="#potBody"/></g><polygon points="60.0,143.7 103.2,150.1 102.7,198.8 60.0,202.7" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-109px,139px) rotate(-17deg)"><g clip-path="url(#pc3)"><use href="#potBody"/></g><polygon points="60.0,202.7 102.7,198.8 103.4,242.0 60.0,242.0" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-23px,75px) rotate(-48deg)"><g clip-path="url(#pc4)"><use href="#potBody"/></g><polygon points="103.4,36.0 141.8,36.0 148.5,101.9 112.7,93.6" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-22px,73px) rotate(18deg)"><g clip-path="url(#pc5)"><use href="#potBody"/></g><polygon points="112.7,93.6 148.5,101.9 142.5,145.0 103.2,150.1" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-11px,130px) rotate(-51deg)"><g clip-path="url(#pc6)"><use href="#potBody"/></g><polygon points="103.2,150.1 142.5,145.0 152.5,208.1 102.7,198.8" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(-48px,118px) rotate(62deg)"><g clip-path="url(#pc7)"><use href="#potBody"/></g><polygon points="102.7,198.8 152.5,208.1 151.5,242.0 103.4,242.0" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(71px,41px) rotate(40deg)"><g clip-path="url(#pc8)"><use href="#potBody"/></g><polygon points="141.8,36.0 220.0,36.0 220.0,94.1 148.5,101.9" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(108px,127px) rotate(-45deg)"><g clip-path="url(#pc9)"><use href="#potBody"/></g><polygon points="148.5,101.9 220.0,94.1 220.0,158.6 142.5,145.0" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(98px,115px) rotate(-11deg)"><g clip-path="url(#pc10)"><use href="#potBody"/></g><polygon points="142.5,145.0 220.0,158.6 220.0,191.8 152.5,208.1" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g><g class="shard" data-t="translate(131px,123px) rotate(39deg)"><g clip-path="url(#pc11)"><use href="#potBody"/></g><polygon points="152.5,208.1 220.0,191.8 220.0,242.0 151.5,242.0" fill="none" stroke="#3A1A10" stroke-width="1.2" class="edge" opacity="0"/></g></g>
-          <rect x="0" y="262" width="280" height="38" fill="#120C07" id="potGround" opacity="0"/>
+          <defs><clipPath id="groundClip"><rect x="0" y="0" width="280" height="266"/></clipPath>
+            <linearGradient id="sandG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9BE86"/><stop offset="1" stop-color="#8C7046"/></linearGradient></defs>
+          <g clip-path="url(#groundClip)"><path id="dune" d="M30 266 Q80 214 140 208 Q200 214 250 266 Z" fill="url(#sandG)" style="transform:translateY(70px)"/>
+            <path id="duneRipple" d="M88 236 Q140 226 192 236 M104 250 Q140 242 176 250" stroke="#B89A62" stroke-width="1.2" fill="none" opacity="0"/></g>
+          <g id="grains"></g>
+          <rect x="0" y="266" width="280" height="34" fill="#1A120A" id="potGround"/>
         </svg>
       </div>
       <p class="center" id="potHint" aria-live="polite">用力點陶罐三下，把它打碎。</p>
@@ -602,7 +609,7 @@
   <!-- 奧西里斯麥田 -->
   <section id="s-osiris" class="screen hidden">
     <h2>奧西里斯麥田</h2>
-    <p class="small">在奧西里斯的秘儀節慶裡，古埃及人會用泥土做成奧西里斯形狀的模子，種下麥子，澆水讓它發芽。麥苗從「死去的神」身上長出來，象徵奧西里斯死而復生，也象徵尼羅河每年帶回的生命。</p>
+    <p class="small">古埃及人會做一個奧西里斯形狀的木框，裡面鋪上亞麻布、填滿尼羅河的淤泥，再撒下大麥種子澆水。種子發芽後，整個奧西里斯的身形就會長滿綠色麥苗，象徵他死而復生，也象徵尼羅河每年帶回的生命。圖坦卡門的墓裡就出土過這樣的「奧西里斯苗床」。</p>
     <div class="field" id="field"></div>
     <div class="growbar" id="growBar" aria-hidden="true"></div>
     <p class="center" id="osiStatus" aria-live="polite"></p>
@@ -1259,6 +1266,8 @@
   }
   function resetPot(){
     potHits=0; potBusy=false;
+    var dn=$('dune'); dn.style.transition='none'; dn.style.transform='translateY(70px)'; $('duneRipple').setAttribute('opacity','0'); $('grains').innerHTML='';
+    document.querySelectorAll('#potShards .shard').forEach(function(g){ g.style.transition=''; });
     $('potWhole').style.display=''; $('potShards').style.display='none'; $('potStage').classList.remove('sink');
     document.querySelectorAll('#potShards .shard').forEach(function(g){ g.style.transform=''; g.style.opacity=''; });
     document.querySelectorAll('#potShards .edge').forEach(function(e){ e.setAttribute('opacity',0); });
@@ -1296,10 +1305,31 @@
     }
   }
   $('potSvg').addEventListener('click',hitPot); $('potHit').onclick=hitPot;
+  function sandSound(){
+    try{ if(!ensureCtx()) return; if(actx.state==='suspended') actx.resume();
+      var t=actx.currentTime, len=Math.floor(actx.sampleRate*2.2), b=actx.createBuffer(1,len,actx.sampleRate), d=b.getChannelData(0);
+      for(var i=0;i<len;i++){ var e=Math.min(1,i/(actx.sampleRate*.3))*Math.pow(1-i/len,1.5); d[i]=(Math.random()*2-1)*e*(.6+.4*Math.random()); }
+      var n=actx.createBufferSource(); n.buffer=b; var bp=actx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=3200; bp.Q.value=.6; var g=actx.createGain(); g.gain.value=.22;
+      n.connect(bp); bp.connect(g); g.connect(comp); n.start(t);
+    }catch(e){}
+  }
   $('potBury').onclick=function(){
-    $('potStage').classList.add('sink');
-    document.querySelectorAll('#potShards .shard').forEach(function(g){ g.style.transform=shardT(g)+' translateY(160px)'; g.style.opacity='0'; });
-    this.classList.add('hidden'); setTimeout(function(){ $('potAgain').classList.remove('hidden'); $('potHint').textContent='碎片已經埋進沙裡了。'; },1200);
+    var calm=calmNow(); this.classList.add('hidden'); $('potHint').textContent='碎片落到地上……';
+    document.querySelectorAll('#potShards .shard').forEach(function(g){
+      var bb=g.querySelector('.edge').getBBox(), cx=bb.x+bb.width/2, cy=bb.y+bb.height/2;
+      var tx=(cx-140)*.32+(Math.random()*20-10), ty=246-cy+(Math.random()*10-5), rot=Math.random()*80-40;
+      g.style.transition=calm?'none':'transform .9s cubic-bezier(.3,.6,.3,1)'; g.style.opacity='1';
+      g.style.transform='translate('+tx.toFixed(0)+'px,'+ty.toFixed(0)+'px) rotate('+rot.toFixed(0)+'deg) scale(.5)';
+    });
+    setTimeout(function(){
+      $('potHint').textContent='沙子慢慢把它們蓋住……';
+      if(!calm){ var h=''; for(var i=0;i<110;i++){ var x=50+Math.random()*180, y=215+Math.random()*48; h+='<circle class="grain" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(0.8+Math.random()*1.2).toFixed(1)+'" fill="'+(Math.random()<.5?'#E2C890':'#C9A877')+'" style="--d:'+(Math.random()*1.8).toFixed(2)+'s;--t:'+(.7+Math.random()*.5).toFixed(2)+'s"/>'; }
+        $('grains').innerHTML=h; sandSound(); }
+      var dn=$('dune'); dn.style.transition=calm?'none':'transform 2.4s cubic-bezier(.3,.1,.3,1)'; dn.style.transform='translateY(0)';
+      setTimeout(function(){ $('duneRipple').setAttribute('opacity','.8'); $('grains').innerHTML=''; burstAt(0,0,0,false);
+        var r=$('potStage').getBoundingClientRect(); burstAt(r.left+r.width/2, r.top+r.height*.72, 18, false);
+        $('potHint').textContent='碎片已經埋進沙裡了。'; $('potAgain').classList.remove('hidden'); },calm?50:2600);
+    },calm?50:950);
   };
   $('potAgain').onclick=function(){ $('potBreak').classList.add('hidden'); $('potWrite').classList.remove('hidden'); resetPot(); $('potText').focus(); };
   function enterPot(){ $('potBreak').classList.add('hidden'); $('potWrite').classList.remove('hidden'); $('potText').value=''; $('potInk').innerHTML=''; $('potWriteBtn').disabled=true; resetPot(); }
@@ -1308,18 +1338,22 @@
   var OSK='egtemple-osiris-v1', STAGES=7;
   var OSI_TXT=['剛播下種子，土還是濕的。','冒出了一點點綠色的芽尖。','小小的麥苗站起來了。','麥苗長到一指高。','整片綠了，奧西里斯的身體開始「活」過來。','麥稈長高，開始抽穗。','麥穗轉成金黃色。','麥子成熟了，可以收成。'];
   function osi(){ var o=load(OSK,null); return o||{sown:false,stage:0,last:'',harvests:0}; }
-  var STALKS=(function(){ var r=rng(2027), a=[]; for(var i=0;i<90;i++) a.push([60+r()*160, 40+r()*330, .7+r()*.6, r()]); return a; })();
+  var BLADES=(function(){ var r=rng(2027), a=[]; for(var i=0;i<460;i++) a.push([92+r()*96, 16+r()*378, .75+r()*.5, r()*2-1, r()]); return a; })();
+  var OSI_PATH='M140 14 Q150 30 152 62 L172 56 L165 70 Q158 72 156 78 Q160 98 154 112 L180 124 Q190 150 186 210 L176 330 Q172 372 160 392 L120 392 Q108 372 104 330 L94 210 Q90 150 100 124 L126 112 Q120 98 124 78 Q122 72 115 70 L108 56 L128 62 Q130 30 140 14Z';
   function osiSVG(o){
-    var st=o.sown?o.stage:-1, h=Math.max(0,st)/STAGES, stalks='';
-    if(st>=1){ STALKS.forEach(function(p,i){ if(st<3 && i%3) return; var len=(6+h*38)*p[2], x=p[0], y=p[1], col=st>=6?'#C9A23F':(st>=5?'#9DB04A':'#6FA548');
-      stalks+='<g class="stalk" style="animation-delay:-'+(p[3]*4).toFixed(2)+'s"><path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' q'+(p[3]*4-2).toFixed(1)+' '+(-len/2).toFixed(1)+' 0 '+(-len).toFixed(1)+'" stroke="'+col+'" stroke-width="'+(st>=4?1.8:1.3)+'" fill="none" stroke-linecap="round"/>'+(st>=5?'<ellipse cx="'+x.toFixed(1)+'" cy="'+(y-len-3).toFixed(1)+'" rx="1.6" ry="4" fill="'+(st>=6?'#E8C25A':'#B8C85A')+'"/>':'')+'</g>'; }); }
-    var seeds=st===0?STALKS.map(function(p){ return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="1.3" fill="#D8C08A"/>'; }).join(''):'';
-    var body='M140 20 Q156 20 158 40 L162 44 Q166 70 160 92 L176 110 Q182 140 178 200 L172 300 Q168 360 156 384 L124 384 Q112 360 108 300 L102 200 Q98 140 104 110 L120 92 Q114 70 118 44 L122 40 Q124 20 140 20Z';
-    return '<svg viewBox="0 0 280 410" role="img" aria-label="奧西里斯形狀的苗床，'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
-      '<defs><clipPath id="osiClip"><path d="'+body+'"/></clipPath></defs>'+
-      '<path d="'+body+'" fill="#3B2A1A" stroke="url(#ggL)" stroke-width="3"/>'+
-      '<path d="M128 6 L152 6 L150 22 L130 22Z" fill="url(#ggL)" opacity=".8"/><path d="M118 10 Q112 2 108 10 M162 10 Q168 2 172 10" stroke="url(#ggL)" stroke-width="2" fill="none"/>'+
-      '<g clip-path="url(#osiClip)"><rect x="60" y="20" width="160" height="370" fill="'+(o.sown?'#4A3420':'#3B2A1A')+'"/>'+seeds+stalks+'</g>'+
+    var st=o.sown?o.stage:-1, L=[0,3,8,14,22,30,36,40][Math.max(0,st)], col=['#7FBF5A','#7FBF5A','#76B850','#6FAE48','#6FA548','#8EAA44','#B7B048','#D4B04A'][Math.max(0,st)], blades='', seeds='';
+    if(st===0) seeds=BLADES.map(function(p,i){ return i%2?'':'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="1.1" fill="#D8C08A"/>'; }).join('');
+    if(st>=1) BLADES.forEach(function(p,i){ if(st===1 && i%3) return; if(st===2 && i%2) return;
+      var len=L*p[2], x=p[0], y=p[1], bend=p[3]*len*.25;
+      blades+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' q'+(bend/2).toFixed(1)+' '+(-len/2).toFixed(1)+' '+bend.toFixed(1)+' '+(-len).toFixed(1)+'" stroke="'+col+'" stroke-width="'+(st>=4?1.5:1.1)+'" stroke-opacity="'+(.75+p[4]*.25).toFixed(2)+'" fill="none" stroke-linecap="round"/>';
+      if(st>=5 && i%2===0) blades+='<ellipse cx="'+(x+bend).toFixed(1)+'" cy="'+(y-len-3).toFixed(1)+'" rx="1.5" ry="4.2" transform="rotate('+(p[3]*15).toFixed(0)+' '+(x+bend).toFixed(1)+' '+(y-len-3).toFixed(1)+')" fill="'+(st>=6?'#E8C25A':'#B8C85A')+'"/>';
+    });
+    return '<svg viewBox="0 0 280 410" role="img" aria-label="奧西里斯苗床，'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
+      '<defs><clipPath id="osiClip"><path d="'+OSI_PATH+'"/></clipPath><radialGradient id="silt" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#3A2A1A"/><stop offset="1" stop-color="#22180E"/></radialGradient></defs>'+
+      '<path d="'+OSI_PATH+'" fill="none" stroke="#5A3C20" stroke-width="12" stroke-linejoin="round"/>'+
+      '<path d="'+OSI_PATH+'" fill="url(#silt)" stroke="url(#ggL)" stroke-width="2" stroke-linejoin="round"/>'+
+      '<path d="M127 62 Q113 40 119 16 M153 62 Q167 40 161 16" stroke="url(#ggL)" stroke-width="2" fill="none" opacity=".8"/>'+
+      '<g clip-path="url(#osiClip)">'+(o.sown?'<rect x="80" y="10" width="120" height="390" fill="#2E2014" opacity=".55"/>':'')+seeds+'<g class="stalk">'+blades+'</g></g>'+
       '<g id="osiDrops"></g></svg>';
   }
   function renderOsi(){
