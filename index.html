@@ -562,6 +562,7 @@
     <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
     <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
     <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
+    <p class="small"><b>瀏覽統計</b>：公開網站使用 GoatCounter 做匿名的人數統計，只記錄打開了哪些頁面、從哪裡連進來、用什麼裝置，不使用 cookie，也不會記錄任何祈願、問題或暱稱。</p>
     <p class="small"><b>多人同殿</b>：同時打開這個網頁的人會出現在上方的「殿內」列。只分享暱稱、顏色和所在步驟，祈願內容永遠只留在你的裝置。</p>
     <p class="small"><b>祭司台詞</b>是本站以白話意譯撰寫，方便體驗，並非逐字翻譯。</p>
     <p class="small">延伸閱讀：<br>
@@ -616,6 +617,7 @@
     if(id==='s-sit') startSit(); else if(typeof sitTick!=='undefined' && sitTick){ clearInterval(sitTick); sitTick=null; }
     if(id==='s-home') renderToday();
     if(typeof setWhere==='function') setWhere(id);
+    try{ if(id!=='s-home' && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:'畫面/'+id.replace('s-',''), title:(($(id).querySelector('h1,h2')||{}).textContent||id), event:true}); }catch(e){}
     window.scrollTo(0,0);
     var h=$(id).querySelector('h1,h2'); if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
   }
@@ -1280,6 +1282,9 @@
     }).catch(function(){});
   }
 
+  if(/github\.io$/.test(location.hostname)){
+    try{ var gc=document.createElement('script'); gc.async=true; gc.src='https://gc.zgo.at/count.js'; gc.setAttribute('data-goatcounter','https://egypt-temple.goatcounter.com/count'); document.head.appendChild(gc); }catch(e){}
+  }
   show('s-home');
   setTimeout(function(){ var sp=$('splash'); sp.classList.add('out'); setTimeout(function(){ sp.remove(); },1100); }, calmNow()?50:1300);
 })();
