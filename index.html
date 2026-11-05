@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B1020">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="古埃及神廟">
+<title>線上古埃及神廟</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1020; --panel:#121A2E; --panel2:#18223B; --ink:#F2E7CC; --muted:#B8AC90; --line:#3A3420;
+    --gold:#D4A847; --gold-l:#F4D98C; --gold-d:#8A6420; --lapis:#1E3A8A; --lapis-d:#132759; --carnelian:#C2502E; --turq:#3AA59A;
+    --goldgrad:linear-gradient(135deg,#8A6420 0%,#F4D98C 38%,#C9962E 62%,#F0D184 82%,#9A7024 100%);
+    --fs:17px;
+  }
+  body.big{--fs:20px}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink)}
+  body{font-family:"Noto Sans TC",system-ui,sans-serif;font-size:var(--fs);line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:radial-gradient(120% 60% at 50% -10%,#1B2A55 0%,rgba(11,16,32,0) 60%),var(--bg)}
+  .wrap{max-width:480px;margin:0 auto;padding:16px 20px 40px;min-height:100vh;display:flex;flex-direction:column}
+  h1,h2,h3,.serif{font-family:"Noto Serif TC",serif;letter-spacing:.06em}
+  h1{font-size:1.9em;font-weight:900;margin:.15em 0;line-height:1.3}
+  h2{font-size:1.4em;font-weight:700;margin:.25em 0 .35em;line-height:1.4}
+  h3{font-size:1.08em;margin:.2em 0}
+  .gt{background:var(--goldgrad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1,h2{background:var(--goldgrad);-webkit-background-clip:text;background-clip:text;color:var(--gold-l);-webkit-text-fill-color:transparent}
+  p{margin:.35em 0 .8em}
+  .muted{color:var(--muted)} .small{font-size:.86em} .center{text-align:center}
+  .hiero{font-family:"Noto Sans Egyptian Hieroglyphs",serif;letter-spacing:.15em}
+  .band{font-family:"Noto Sans Egyptian Hieroglyphs",serif;color:var(--gold);text-align:center;font-size:1.4em;letter-spacing:.35em;line-height:1.2;user-select:none}
+  .frieze{height:14px;margin:10px 0;opacity:.9;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M14 13 L8.5 4 L11.5 9.5 L14 1.5 L16.5 9.5 L19.5 4Z' fill='%23D4A847'/%3E%3Cpath d='M0 13 Q-3 8 0 5 Q3 8 0 13Z M28 13 Q25 8 28 5 Q31 8 28 13Z' fill='%233AA59A'/%3E%3Crect y='13' width='28' height='1' fill='%23D4A847'/%3E%3C/svg%3E") repeat-x center}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+  .brand{font-family:"Noto Serif TC",serif;font-weight:700;letter-spacing:.08em;color:var(--gold-l)}
+  .iconbtn{min-width:44px;min-height:44px;border:1px solid var(--line);background:var(--panel);border-radius:10px;color:var(--ink);font:inherit;font-size:.82em;padding:0 10px;cursor:pointer}
+  .iconbtn:hover{border-color:var(--gold)}
+
+  .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:10px 0;box-shadow:inset 0 1px 0 rgba(244,217,140,.08)}
+  .mode{display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;position:relative}
+  .mode:hover{border-color:var(--gold)}
+  .mode::after{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:var(--goldgrad);opacity:.7}
+  .mode .k{font-size:.78em;color:var(--gold);font-weight:700;letter-spacing:.14em}
+  .btn{display:block;width:100%;min-height:54px;border-radius:12px;border:0;background:var(--goldgrad);color:#1A1408;font:inherit;font-weight:700;letter-spacing:.12em;font-size:1.05em;cursor:pointer;margin-top:12px;padding:10px 16px;box-shadow:0 6px 18px rgba(212,168,71,.18),inset 0 1px 0 rgba(255,255,255,.35)}
+  .btn:hover{filter:brightness(1.06)}
+  .btn:disabled{background:#2A2A33;color:#8C8577;box-shadow:none;cursor:not-allowed}
+  .btn.gold{background:var(--goldgrad)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold);font-weight:500;box-shadow:none}
+  .btn.link{background:transparent;color:var(--muted);text-decoration:underline;font-weight:400;min-height:44px;font-size:.92em;letter-spacing:0;box-shadow:none}
+  button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--gold-l);outline-offset:2px}
+  .spacer{flex:1}
+  h1[tabindex]:focus,h2[tabindex]:focus{outline:none}
+  .note{background:rgba(30,58,138,.18);border:1px solid #2B3A66;border-radius:12px;padding:10px 12px;font-size:.84em;color:var(--muted);margin:8px 0}
+  .note b{color:var(--ink)}
+
+  .prog{display:flex;gap:4px;margin:4px 0 8px}
+  .prog span{flex:1;height:4px;border-radius:2px;background:#2A2F42}
+  .prog span.on{background:var(--goldgrad)}
+  .src{display:inline-block;font-size:.76em;border:1px solid var(--gold-d);color:var(--gold-l);border-radius:999px;padding:1px 10px;margin:2px 6px 2px 0;background:rgba(212,168,71,.08)}
+  .stepno{font-size:.82em;color:var(--muted);letter-spacing:.1em}
+  .line{font-family:"Noto Serif TC",serif;font-size:1.05em;background:linear-gradient(180deg,#14224A,#0F1936);color:var(--ink);border:1px solid #2B3A66;border-radius:12px;padding:12px 16px;margin:8px 0;letter-spacing:.04em}
+  .line .who{display:block;font-family:"Noto Sans TC",sans-serif;font-size:.74em;color:var(--gold);margin-bottom:2px;letter-spacing:.14em}
+
+  .stage{background:#070B16;border-radius:16px;overflow:hidden;margin:6px 0 4px;border:1px solid var(--gold-d);box-shadow:0 0 0 4px rgba(212,168,71,.06),0 12px 30px rgba(0,0,0,.45)}
+  .stage svg{display:block;width:100%;height:auto}
+  #door-l,#door-r{transition:transform 2.4s cubic-bezier(.45,0,.2,1)}
+  .open #door-l{transform:translateX(-58px) scaleX(.25)}
+  .open #door-r{transform:translateX(58px) scaleX(.25)}
+  #door-l{transform-origin:150px 150px} #door-r{transform-origin:250px 150px}
+  .fx{transition:opacity 1.2s ease}
+  .smoke path{animation:rise 4.2s ease-in-out infinite;opacity:0}
+  .smoke path:nth-child(2){animation-delay:1.4s}.smoke path:nth-child(3){animation-delay:2.8s}
+  @keyframes rise{0%{opacity:0;transform:translateY(6px)}35%{opacity:.55}100%{opacity:0;transform:translateY(-32px)}}
+  .glow{animation:pulse 3s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.6}}
+  .screen{animation:fadein .7s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  body.calm .smoke path,body.calm .glow{animation:none;opacity:.5}
+  body.calm #door-l,body.calm #door-r{transition:none}
+  body.calm .screen{animation:none}
+  @media (prefers-reduced-motion: reduce){.smoke path,.glow,.screen{animation:none;opacity:.5}.screen{opacity:1}#door-l,#door-r{transition:none}}
+
+  .offers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+  .chip{min-height:52px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font:inherit;color:var(--ink);cursor:pointer;padding:6px}
+  .chip:hover{border-color:var(--gold-d)}
+  .chip[aria-pressed="true"]{border-color:var(--gold);background:rgba(212,168,71,.14);font-weight:700;box-shadow:inset 0 0 0 1px var(--gold)}
+  .offer{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.78em;padding:8px 2px 6px}
+  .offer svg{width:40px;height:40px}
+  .gods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .god{text-align:left;min-height:96px;padding:10px 12px;display:flex;flex-direction:column;justify-content:flex-start}
+  .god b{display:block;font-family:"Noto Serif TC",serif;font-size:1.08em;color:var(--gold-l);letter-spacing:.06em}
+  .gfig{display:flex;justify-content:center;background:radial-gradient(80% 60% at 50% 32%,#6B5532 0%,#3A2E1C 55%,#1E180F 100%);border-radius:8px;margin:0 0 8px;padding:10px 0 4px;border:1px solid var(--gold-d)}
+  .god span{font-size:.8em;color:var(--muted);line-height:1.5;display:block}
+  label.lbl{display:block;font-weight:700;margin:12px 0 4px}
+  textarea,input[type=text]{width:100%;font:inherit;border:1px solid #3A4466;border-radius:12px;padding:12px;background:#0E1528;color:var(--ink)}
+  textarea::placeholder{color:#7F7A6C}
+  textarea{min-height:100px;resize:vertical}
+  .seg{display:flex;gap:8px}.seg .chip{flex:1}
+
+  .stela{display:grid;place-items:center;margin:8px 0}
+  .stela svg{filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
+  .badge{background:radial-gradient(90% 80% at 50% 0%,#1E3A8A 0%,#0F1936 70%);color:var(--ink);border-radius:16px;padding:20px;border:1px solid var(--gold);text-align:center;box-shadow:inset 0 0 0 4px rgba(212,168,71,.12)}
+  .badge .band{font-size:1.2em}
+  .row{display:flex;gap:8px;flex-wrap:wrap}.row .btn{flex:1;min-width:120px}
+  .hidden{display:none !important}
+  .dialog-back{position:fixed;inset:0;background:rgba(4,7,15,.72);display:grid;place-items:center;padding:20px;z-index:10}
+  .dialog{background:var(--panel2);border:1px solid var(--gold-d);border-radius:16px;padding:18px;max-width:420px;width:100%;max-height:85vh;overflow:auto}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;border-bottom:1px solid var(--line)}
+  .toggle input{width:24px;height:24px;accent-color:var(--gold)}
+  ul.tight{padding-left:1.2em;margin:.3em 0} ul.tight li{margin:.25em 0}
+  footer{font-size:.78em;color:var(--muted);text-align:center;margin-top:18px}
+  a{color:var(--gold-l)}
+  .hall{margin:2px 0 8px}
+  .hallbar{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;border:1px solid var(--line);background:rgba(18,26,46,.85);border-radius:999px;padding:4px 14px;color:var(--ink);font:inherit;font-size:.86em;cursor:pointer;text-align:left}
+  .hallbar:hover{border-color:var(--gold-d)}
+  .dot{width:9px;height:9px;border-radius:50%;background:#3FBF7F;box-shadow:0 0 8px #3FBF7F;flex:none}
+  .avs{display:flex;align-items:flex-end;gap:2px;flex:1;min-width:0;overflow:hidden;height:34px}
+  .avs .more{font-size:.8em;color:var(--muted);align-self:center;margin-left:4px}
+  .chev{color:var(--gold);font-size:.85em;flex:none}
+  .av{flex:none;display:block}
+  .av.bow{transform-origin:50% 100%;animation:bow 1.4s ease-in-out 2}
+  @keyframes bow{50%{transform:rotate(30deg) translateY(2px)}}
+  body.calm .av.bow{animation:none;opacity:.6}
+  @media (prefers-reduced-motion: reduce){.av.bow{animation:none;opacity:.6}}
+  .hall-list{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 12px;margin-top:6px;max-height:280px;overflow:auto}
+  .peer{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #222A40;font-size:.86em}
+  .peer:last-child{border-bottom:0}
+  .peer .nm{font-weight:700;color:var(--gold-l)}
+  .peer .st{color:var(--muted);display:block;font-size:.92em}
+  .feed{font-size:.8em;color:var(--gold-l);text-align:center;min-height:0;margin-top:4px}
+  .feed div{animation:fadein .5s ease}
+  .colors{display:flex;gap:8px;margin:6px 0 10px}
+  .colors button{width:40px;height:40px;border-radius:50%;border:2px solid transparent;cursor:pointer}
+  .colors button[aria-pressed="true"]{border-color:var(--gold-l);box-shadow:0 0 0 2px var(--bg) inset}
+  .looks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 2px}
+  .look{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px 6px;font-size:.8em;min-height:96px}
+  .look svg{width:36px;height:60px}
+  .me-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .me-row .nm{font-family:"Noto Serif TC",serif;color:var(--gold-l);font-weight:700}
+  #bark{transform:translateX(-300px);transition:transform 3s cubic-bezier(.4,0,.2,1)}
+  #bark.arrive{transform:translateX(0)}
+  #bark.yes{transform:translateX(46px) rotate(-3deg);transition:transform 1.6s ease-in-out}
+  #bark.no{transform:translateX(-70px);transition:transform 1.6s ease-in-out}
+  #bark.none{transform:translateX(0)}
+  #bark{transform-box:view-box;transform-origin:150px 150px}
+  .walking .bearers{animation:step .6s ease-in-out infinite}
+  @keyframes step{50%{transform:translateY(-2px)}}
+  body.calm #bark{transition:none} body.calm .walking .bearers{animation:none}
+  @media (prefers-reduced-motion: reduce){#bark{transition:none}.walking .bearers{animation:none}}
+  .ostracon{background:#D9C3A0;color:#2A2018;border-radius:26px 40px 20px 34px;padding:18px 22px;font-family:"Noto Serif TC",serif;box-shadow:inset 0 0 0 2px rgba(120,80,40,.25),0 6px 16px rgba(0,0,0,.35)}
+  .ostracon textarea{background:transparent;border:1px dashed #8C6A44;color:#2A2018;min-height:80px}
+  .ostracon textarea::placeholder{color:#6E5638}
+  .verdict{font-family:"Noto Serif TC",serif;font-size:2.2em;font-weight:900;text-align:center;letter-spacing:.3em;margin:6px 0}
+  #splash{position:fixed;inset:0;z-index:20;background:radial-gradient(80% 60% at 50% 40%,#1B2A55,#070B16 70%);display:grid;place-items:center;text-align:center;transition:opacity 1s ease}
+  #splash.out{opacity:0;pointer-events:none}
+  #splash .t{font-family:"Noto Serif TC",serif;color:var(--gold-l);letter-spacing:.3em;font-size:1.05em;margin-top:14px}
+  .today{display:flex;align-items:center;gap:12px;cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}
+  .today .seg3{display:flex;gap:4px;flex:none}
+  .pill{display:inline-grid;place-items:center;min-width:38px;height:38px;border-radius:10px;font-family:"Noto Serif TC",serif;font-weight:900;font-size:1em}
+  .pill.g{background:rgba(212,168,71,.16);color:var(--gold-l);border:1px solid var(--gold-d)}
+  .pill.b{background:rgba(194,80,46,.16);color:#F0A58C;border:1px solid #7A3420}
+  .daybig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+  .daybig div{border-radius:12px;padding:10px 6px;text-align:center}
+  .daybig .lab{display:block;font-size:.78em;color:var(--muted);letter-spacing:.1em}
+  .daybig .v{display:block;font-family:"Noto Serif TC",serif;font-size:1.8em;font-weight:900;line-height:1.3}
+  .daybig .g{background:rgba(212,168,71,.12);border:1px solid var(--gold-d);color:var(--gold-l)}
+  .daybig .b{background:rgba(194,80,46,.12);border:1px solid #7A3420;color:#F0A58C}
+  .yiji{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.92em}
+  .yiji dt{font-family:"Noto Serif TC",serif;font-weight:900}
+  .yiji dd{margin:0}
+  .sitstage svg{display:block;width:100%;height:auto}
+  .timer{font-family:"Noto Serif TC",serif;font-size:2em;text-align:center;color:var(--gold-l);letter-spacing:.12em;margin:6px 0 0}
+  .ring{animation:ring 1.6s ease-out}
+  @keyframes ring{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(1.8)}}
+  body.calm .ring{animation:none;opacity:0}
+  #gdefs{position:absolute;width:0;height:0;overflow:hidden}
+</style>
+</head>
+<body>
+<div id="splash" aria-hidden="true"><div><div class="band" style="font-size:2em">𓋹𓌀𓊽</div><div class="t">神廟大門正在開啟……</div></div></div>
+<svg id="gdefs" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="gg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="16" y2="11" spreadMethod="reflect"><stop offset="0" stop-color="#8A6420"/><stop offset=".55" stop-color="#F4D98C"/><stop offset="1" stop-color="#B8862A"/></linearGradient>
+  <linearGradient id="ggL" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="70" y2="40" spreadMethod="reflect"><stop offset="0" stop-color="#7E5A1C"/><stop offset=".5" stop-color="#F4D98C"/><stop offset="1" stop-color="#B8862A"/></linearGradient>
+  <linearGradient id="lapis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22408F"/><stop offset="1" stop-color="#0E1C48"/></linearGradient>
+  <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9A877"/><stop offset="1" stop-color="#8C7046"/></linearGradient>
+  <linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070B18"/><stop offset=".7" stop-color="#16244E"/><stop offset="1" stop-color="#3B3A5A"/></linearGradient>
+  <radialGradient id="torch" cx=".5" cy=".55" r=".55"><stop offset="0" stop-color="#F2B65A" stop-opacity=".38"/><stop offset=".6" stop-color="#C2502E" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+  <radialGradient id="sunG" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FFE7A8"/><stop offset=".6" stop-color="#E0A43A"/><stop offset="1" stop-color="#A8461E"/></radialGradient>
+</defs></svg>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">線上古埃及神廟</div>
+    <div class="row" style="flex:none">
+      <button class="iconbtn" type="button" id="btnStelae">我的紀錄</button>
+      <button class="iconbtn" type="button" id="btnSettings">設定</button>
+    </div>
+  </div>
+  <div class="hall hidden" id="hall">
+    <button class="hallbar" type="button" id="hallBtn" aria-expanded="false" aria-controls="hallList">
+      <span class="dot" aria-hidden="true"></span><span id="hallCount">殿內 1 人</span>
+      <span class="avs" id="hallAvs" aria-hidden="true"></span><span class="chev" id="hallChev">查看</span>
+    </button>
+    <div class="hall-list hidden" id="hallList"></div>
+    <div class="feed" id="hallFeed" aria-live="polite"></div>
+  </div>
+
+  <!-- 首頁 -->
+  <section id="s-home" class="screen">
+    <div class="band" aria-hidden="true">𓋹𓌀𓊽𓋹𓌀𓊽𓋹</div>
+    <h1 class="center">線上古埃及神廟</h1>
+    <p class="center muted">依神廟浮雕與莎草紙文獻重建的參拜體驗</p>
+    <div class="stage" aria-hidden="true">
+      <svg viewBox="0 0 400 220">
+        <rect width="400" height="220" fill="url(#night)"/>
+        <g fill="#F4E6C0" opacity=".7"><circle cx="40" cy="30" r="1"/><circle cx="90" cy="18" r="1.2"/><circle cx="150" cy="40" r=".8"/><circle cx="330" cy="22" r="1.1"/><circle cx="365" cy="52" r=".8"/><circle cx="260" cy="14" r=".9"/></g>
+        <rect x="18" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M18 64 L24 48 L30 64Z" fill="url(#ggL)"/>
+        <rect x="370" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M370 64 L376 48 L382 64Z" fill="url(#ggL)"/>
+        <g stroke="#8E6A22" stroke-width="2"><path d="M88 52 V200 M112 52 V200 M288 52 V200 M312 52 V200"/></g>
+        <g fill="#C2502E"><path d="M88 54 l14 4 l-14 4Z"/><path d="M112 54 l14 4 l-14 4Z"/><path d="M288 54 l14 4 l-14 4Z"/><path d="M312 54 l14 4 l-14 4Z"/></g>
+        <path d="M58 210 L76 78 L176 78 L182 210Z" fill="url(#stone)"/>
+        <path d="M218 210 L224 78 L324 78 L342 210Z" fill="url(#stone)"/>
+        <rect x="74" y="72" width="104" height="8" fill="url(#ggL)"/><rect x="222" y="72" width="104" height="8" fill="url(#ggL)"/>
+        <g fill="#6F5534" opacity=".6"><rect x="100" y="100" width="52" height="3"/><rect x="100" y="140" width="52" height="3"/><rect x="248" y="100" width="52" height="3"/><rect x="248" y="140" width="52" height="3"/></g>
+        <rect x="174" y="112" width="52" height="98" fill="#0A1024"/>
+        <rect x="174" y="112" width="52" height="98" fill="url(#torch)"/>
+        <rect x="166" y="98" width="68" height="14" fill="url(#ggL)"/>
+        <circle cx="200" cy="105" r="5" fill="url(#sunG)"/><path d="M194 105 Q182 99 170 104 Q182 103 194 107Z M206 105 Q218 99 230 104 Q218 103 206 107Z" fill="#1E3A8A"/>
+        <circle cx="200" cy="40" r="20" fill="url(#sunG)" class="glow"/>
+        <rect x="0" y="208" width="400" height="12" fill="url(#ggL)" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="frieze" aria-hidden="true"></div>
+    <button class="card today" type="button" data-go="s-day" id="todayCard">
+      <div style="flex:1;min-width:0"><div class="small muted">今日吉凶</div><div class="serif" id="todayLine" style="color:var(--gold-l)"></div></div>
+      <div class="seg3" id="todayPills" aria-hidden="true"></div>
+    </button>
+    <div class="card" id="meCard">
+      <div class="me-row"><div><div class="small muted">你的形象</div><div class="nm" id="meNick"></div></div><button class="iconbtn" type="button" id="meEdit">改暱稱與顏色</button></div>
+      <div class="looks" id="homeLooks" role="group" aria-label="選擇你的形象"></div>
+    </div>
+    <p class="small muted">在古埃及，神廟深處只有祭司能進入；一般人則在神廟外圍向「聆聽祈禱的神」說話。你可以選擇其中一條路。</p>
+
+    <button class="card mode" type="button" data-go="s-priest-intro">
+      <div class="k">祭司之路・約 6 分鐘</div>
+      <h3>每日神廟儀式</h3>
+      <div class="small muted">黎明時分，打開阿蒙-拉的神龕：破封、開門、讚頌、獻上瑪特、更衣、塗油、獻供、關門。</div>
+    </button>
+    <button class="card mode" type="button" data-go="s-ear-gods">
+      <div class="k">參拜者之路・約 2 分鐘</div>
+      <h3>聽耳之門</h3>
+      <div class="small muted">像新王國時代的百姓一樣，親吻大地、說出祈願，獻上一塊刻著耳朵的還願碑。</div>
+    </button>
+    <button class="card mode" type="button" data-go="s-oracle">
+      <div class="k">神諭之路・約 1 分鐘</div>
+      <h3>神諭出巡</h3>
+      <div class="small muted">把是非題寫在陶片上，等神的聖船出巡經過。船向前傾是「是」，向後退是「否」。</div>
+    </button>
+    <button class="card mode" type="button" data-go="s-sit">
+      <div class="k">靜坐・不限時間</div>
+      <h3>在多柱廳靜坐</h3>
+      <div class="small muted">什麼都不用做，和此刻也在殿內的人一起安靜坐一會兒。想要的話，可以輕搖叉鈴。</div>
+    </button>
+    <button class="btn link" type="button" id="btnAbout">這是怎麼重建的？資料來源</button>
+    <div class="note"><b>文化重建體驗，非宗教機構。</b>今日也有人實踐古埃及信仰（如 Kemetic 信仰社群），本站僅以歷史文獻為本，不代表任何團體。</div>
+  </section>
+
+  <!-- 祭司 intro -->
+  <section id="s-priest-intro" class="screen hidden">
+    <h2>祭司之路：每日神廟儀式</h2>
+    <p>新王國以後的大神廟，每天黎明都會為神像舉行一套固定儀式：喚醒神明、為祂潔淨、更衣、塗油、奉上食物，再把神龕關上封好。</p>
+    <div class="card small">
+      <b>你將扮演：</b>卡納克（Karnak）阿蒙-拉神廟的值日祭司<br>
+      <b>你將面對：</b>神龕（naos）中的阿蒙-拉神像<br>
+      <b>流程：</b>共 13 步，每步標示它出自哪份文獻
+    </div>
+    <div class="note">儀式的實際順序是學者綜合多份來源重建的，各來源本身也不完全一致。每一步祭司唸的話是本站以白話重寫的意譯，不是逐字翻譯。</div>
+    <div class="spacer"></div>
+    <button class="btn" type="button" id="btnStartRitual">於黎明前進入神廟</button>
+    <button class="btn link" type="button" data-go="s-home">返回</button>
+  </section>
+
+  <!-- 祭司儀式 -->
+  <section id="s-ritual" class="screen hidden">
+    <div class="prog" id="prog" aria-hidden="true"></div>
+    <div class="stepno" id="stepNo"></div>
+    <h2 id="stepTitle"></h2>
+    <div class="stage" id="stage" aria-hidden="true">
+      <svg viewBox="0 0 400 260">
+        <rect width="400" height="260" fill="#060A15"/>
+        <rect x="64" y="16" width="272" height="228" fill="url(#lapis)"/>
+        <g fill="url(#ggL)"><rect x="64" y="16" width="272" height="3"/><rect x="74" y="26" width="5" height="208"/><rect x="321" y="26" width="5" height="208"/></g>
+        <g fill="#D4A847" opacity=".22"><path d="M90 60 l4 -8 l4 8z M90 100 l4 -8 l4 8z M90 140 l4 -8 l4 8z M90 180 l4 -8 l4 8z M302 60 l4 -8 l4 8z M302 100 l4 -8 l4 8z M302 140 l4 -8 l4 8z M302 180 l4 -8 l4 8z"/></g>
+        <ellipse cx="200" cy="150" rx="150" ry="120" fill="url(#torch)"/>
+        <path d="M130 70 L270 70 L270 230 L130 230 Z" fill="#05080F"/>
+        <path d="M120 70 Q200 38 280 70 L280 79 L120 79Z" fill="url(#ggL)"/>
+        <g fill="#1E3A8A"><circle cx="200" cy="62" r="5" fill="url(#sunG)"/><path d="M194 62 Q178 55 162 61 Q178 60 194 64Z M206 62 Q222 55 238 61 Q222 60 206 64Z"/></g>
+        <rect x="126" y="79" width="4" height="151" fill="url(#ggL)"/><rect x="270" y="79" width="4" height="151" fill="url(#ggL)"/>
+        <g id="statue">
+          <ellipse cx="200" cy="150" rx="46" ry="80" fill="url(#torch)"/>
+          <g transform="translate(166 86) scale(.68)">
+            <g id="godFig"></g>
+            <g id="cloth" class="fx" style="opacity:0"><path d="M37 65 Q50 72 63 65 L61 99 L41 99Z" fill="#F3EEE0"/><rect x="41" y="86" width="20" height="4" fill="#2E6B57"/><rect x="41" y="92" width="20" height="4" fill="#C2502E"/></g>
+            <g id="oil" class="fx" style="opacity:0"><ellipse cx="51" cy="46" rx="14" ry="14" fill="none" stroke="#F4D98C" stroke-width="2.5"/><ellipse cx="51" cy="46" rx="20" ry="20" fill="none" stroke="#F4D98C" stroke-width="1" opacity=".5"/></g>
+          </g>
+          <rect x="170" y="216" width="60" height="8" fill="url(#ggL)"/>
+          <g id="maat" class="fx" style="opacity:0" transform="translate(232 183) scale(.26)"><g id="maatFig"></g></g>
+          <g id="oiljar" class="fx" style="opacity:0"><path d="M150 216 L162 216 L163 205 Q156 198 149 205Z" fill="#EDE4D0" stroke="#B8AB8C" stroke-width=".8"/><rect x="151" y="198" width="10" height="4" rx="1" fill="url(#gg)"/></g>
+        </g>
+        <g id="doors">
+          <rect id="door-l" x="130" y="79" width="70" height="151" fill="#5C3D15" stroke="url(#gg)" stroke-width="2.5"/>
+          <rect id="door-r" x="200" y="79" width="70" height="151" fill="#5C3D15" stroke="url(#gg)" stroke-width="2.5"/>
+          <g id="bolt" class="fx"><rect x="176" y="146" width="48" height="7" rx="2" fill="url(#gg)"/></g>
+          <g id="seal" class="fx"><path d="M200 154 V142" stroke="#D8C9A5" stroke-width="2"/><circle cx="200" cy="168" r="10" fill="#8C5A3C"/><circle cx="200" cy="168" r="5.5" fill="#6B4229"/><path d="M197 166 h6 M197 170 h6" stroke="#A8775A" stroke-width="1"/></g>
+        </g>
+        <g id="table" class="fx" style="opacity:0">
+          <rect x="128" y="238" width="144" height="5" fill="url(#ggL)"/>
+          <rect x="190" y="243" width="20" height="13" fill="url(#ggL)"/>
+          <rect x="176" y="255" width="48" height="4" fill="url(#ggL)"/>
+          <g id="food"></g>
+        </g>
+        <g id="censer" class="fx" style="opacity:0">
+          <path d="M40 200 L112 200 L112 204 L40 204Z" fill="url(#gg)"/>
+          <path d="M112 197 q8 -3 10 3 q-2 6 -10 3Z" fill="url(#gg)"/>
+          <path d="M54 192 h22 l-3 8 h-16z" fill="url(#gg)"/>
+          <circle cx="65" cy="190" r="4.5" fill="#E0552B" class="glow"/>
+          <g class="smoke" stroke="#C9C2B4" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M62 182 q-5 -10 0 -20 q5 -10 0 -20"/><path d="M68 180 q5 -10 0 -20 q-5 -10 0 -20"/><path d="M65 182 q-4 -9 0 -18"/></g>
+        </g>
+        <g id="water" class="fx" style="opacity:0">
+          <g transform="rotate(-38 330 180)"><path d="M324 168 L336 168 L336 172 Q343 182 337 194 L323 194 Q317 182 324 172Z" fill="url(#gg)"/><path d="M336 170 Q344 162 348 164" stroke="url(#gg)" stroke-width="3" fill="none"/></g>
+          <path d="M312 170 Q296 186 290 214" stroke="#9CD2F5" stroke-width="2" stroke-dasharray="3 4" fill="none"/>
+          <ellipse cx="288" cy="226" rx="10" ry="2" fill="#9CD2F5" opacity=".5"/>
+        </g>
+        <g id="priest" transform="translate(372 132) scale(-.58 .58)"><g id="priestFig"></g></g>
+        <g id="prost" class="fx" style="opacity:0"><text x="200" y="12" text-anchor="middle" font-size="10" letter-spacing="3" fill="#F4D98C">親吻大地</text></g>
+        <g id="foot" class="fx" style="opacity:0"><text x="200" y="12" text-anchor="middle" font-size="10" letter-spacing="3" fill="#F4D98C">足跡已掃除</text></g>
+      </svg>
+    </div>
+    <div id="srcRow"></div>
+    <p id="stepBody"></p>
+    <div class="line" id="stepLine"><span class="who">祭司意譯</span><span id="lineText"></span></div>
+    <div id="offerBox" class="hidden">
+      <div class="small muted">點選要擺上供桌的供品（至少兩樣）</div>
+      <div class="offers" id="offers"></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn gold" type="button" id="btnAct"></button>
+    <button class="btn hidden" type="button" id="btnNext">下一步</button>
+    <button class="btn link" type="button" id="btnQuit">離開儀式</button>
+  </section>
+
+  <!-- 祭司完成 -->
+  <section id="s-ritual-done" class="screen hidden">
+    <h2 class="center">今日儀式已完成</h2>
+    <div class="frieze" aria-hidden="true"></div>
+    <div class="badge">
+      <div class="band" aria-hidden="true">𓋹𓌀𓊽</div>
+      <div class="serif" style="font-size:1.25em;margin:6px 0">祭司・值日紀錄</div>
+      <div class="small">卡納克・阿蒙-拉神廟</div>
+      <div class="small" id="ritualCount" style="color:#D9B868;margin-top:6px"></div>
+    </div>
+    <p class="small muted" style="margin-top:12px">對古埃及人來說，這套儀式不只是照顧一位神，而是每天重新維護「瑪特」——宇宙的秩序。神龕封好後，要等到明天黎明才會再打開。</p>
+    <div class="spacer"></div>
+    <button class="btn" type="button" data-go="s-ear-gods">走到聽耳之門，留下自己的祈願</button>
+    <button class="btn link" type="button" data-go="s-home">回到神廟入口</button>
+  </section>
+
+  <!-- 聽耳之門：選神 -->
+  <section id="s-ear-gods" class="screen hidden">
+    <h2>聽耳之門</h2>
+    <p class="small">一般人不能進入神殿深處，但可以到神廟外圍、神龕背後的「聽耳禮拜堂」或神廟大門向神祈禱，並留下刻著耳朵的還願碑，請神「聽見」自己。</p>
+    <div class="small muted" style="margin-bottom:6px">選擇你要祈禱的神（以下都曾收到耳朵還願碑）</div>
+    <div class="gods" id="gods"></div>
+    <div class="spacer"></div>
+    <button class="btn" type="button" id="btnGodNext" disabled>走到祂的聽耳之處</button>
+    <button class="btn link" type="button" data-go="s-home">返回</button>
+  </section>
+
+  <!-- 聽耳之門：祈禱 -->
+  <section id="s-ear-pray" class="screen hidden">
+    <h2 id="prayTitle"></h2>
+    <div id="kissBox" class="card center">
+      <p class="small">古埃及人祈禱時，會先深深低下身子，稱為「親吻大地」。</p>
+      <button class="btn gold" type="button" id="btnKiss">親吻大地</button>
+    </div>
+    <div id="prayBox" class="hidden">
+      <label class="lbl" for="prayText">對祂說出你的祈願</label>
+      <textarea id="prayText" placeholder="例如：願你聽見我，讓我這次的考試平順。"></textarea>
+      <label class="lbl">還願碑上要刻幾隻耳朵？</label>
+      <div class="seg" role="group" aria-label="耳朵數量">
+        <button class="chip" type="button" data-ears="1" aria-pressed="false">1</button>
+        <button class="chip" type="button" data-ears="2" aria-pressed="true">2</button>
+        <button class="chip" type="button" data-ears="4" aria-pressed="false">4</button>
+        <button class="chip" type="button" data-ears="8" aria-pressed="false">8</button>
+      </div>
+      <p class="small muted" style="margin-top:6px">真實的耳朵碑上，耳朵數量從一對到數百隻都有。耳朵越多，越像在說「請一定要聽見」。</p>
+      <div class="note"><b>只存在你的裝置。</b>祈願不會上傳，也不會給其他人看；可在「我的還願碑」刪除。</div>
+      <button class="btn" type="button" id="btnOfferStela">獻上還願碑</button>
+    </div>
+    <button class="btn link" type="button" data-go="s-ear-gods">返回</button>
+  </section>
+
+  <!-- 還願碑完成 -->
+  <section id="s-ear-done" class="screen hidden">
+    <h2 class="center">還願碑已獻上</h2>
+    <div class="frieze" aria-hidden="true"></div>
+    <div class="stela" id="stelaView"></div>
+    <p class="small muted center">你已獻上還願碑。願神聽見。</p>
+    <div class="spacer"></div>
+    <button class="btn" type="button" data-go="s-home">回到神廟入口</button>
+    <button class="btn link" type="button" id="btnDoneStelae">查看我的還願碑</button>
+  </section>
+
+  <!-- 每日吉凶 -->
+  <section id="s-day" class="screen hidden">
+    <h2>古埃及吉凶日曆</h2>
+    <div class="small muted" id="dayModern"></div>
+    <div class="serif" id="dayEg" style="font-size:1.15em;color:var(--gold-l);margin:2px 0 4px"></div>
+    <div class="daybig" id="dayParts"></div>
+    <div class="card">
+      <div class="small muted">這一天的神話</div>
+      <p class="serif" id="dayMyth" style="margin:.3em 0 .2em"></p>
+    </div>
+    <div class="card"><dl class="yiji" id="dayYiji"></dl></div>
+    <div class="row"><button class="btn ghost" type="button" id="dayPrev">前一天</button><button class="btn ghost" type="button" id="dayNext">後一天</button></div>
+    <button class="btn link hidden" type="button" id="dayToday">回到今天</button>
+    <div class="note">古埃及人會把一年中每一天分成吉日、凶日，或半吉半凶，記在「吉凶日曆」裡，保存最好的是《開羅曆》。本頁照它的格式（一天分早、中、晚三段，附神話與宜忌）<b>改寫成示範內容，不是逐日翻譯原文</b>；只有新年和年末五天的眾神誕辰依據傳統。日期換算以每年 7 月 19 日為古埃及新年，是簡化的算法。</div>
+    <button class="btn link" type="button" data-go="s-home">回到神廟入口</button>
+  </section>
+
+  <!-- 靜坐 -->
+  <section id="s-sit" class="screen hidden">
+    <h2>在多柱廳靜坐</h2>
+    <p class="small muted" id="sitCount">此刻只有你在這裡。</p>
+    <div class="stage sitstage" aria-hidden="true">
+      <svg viewBox="0 0 400 240">
+        <rect width="400" height="240" fill="#070B16"/>
+        <path d="M150 0 L250 0 L300 240 L100 240Z" fill="#F2B65A" opacity=".07"/>
+        <g fill="url(#stone)"><rect x="20" y="0" width="34" height="200"/><rect x="346" y="0" width="34" height="200"/><rect x="88" y="0" width="26" height="196" opacity=".8"/><rect x="286" y="0" width="26" height="196" opacity=".8"/></g>
+        <g fill="url(#ggL)" opacity=".8"><rect x="14" y="0" width="46" height="10"/><rect x="340" y="0" width="46" height="10"/><rect x="82" y="0" width="38" height="8"/><rect x="280" y="0" width="38" height="8"/></g>
+        <g fill="#6F5534" opacity=".45"><rect x="26" y="40" width="22" height="2"/><rect x="26" y="80" width="22" height="2"/><rect x="26" y="120" width="22" height="2"/><rect x="352" y="40" width="22" height="2"/><rect x="352" y="80" width="22" height="2"/><rect x="352" y="120" width="22" height="2"/></g>
+        <rect x="0" y="200" width="400" height="40" fill="#2A2216"/>
+        <rect x="0" y="200" width="400" height="2" fill="url(#ggL)" opacity=".6"/>
+        <g id="sitOthers"></g>
+        <g id="sitMe" transform="translate(178 132) scale(1.8)"></g>
+        <circle id="sitRing" cx="200" cy="150" r="40" fill="none" stroke="#F4D98C" stroke-width="1.5" opacity="0" style="transform-box:fill-box;transform-origin:center"/>
+      </svg>
+    </div>
+    <div class="timer" id="sitTimer">00:00</div>
+    <p class="center small muted" id="sitHint">不用說話，也不用做什麼。坐多久都可以。</p>
+    <button class="btn ghost" type="button" id="sitShake">輕搖叉鈴</button>
+    <p class="center small muted" id="sitShakes"></p>
+    <button class="btn" type="button" id="sitEnd">起身離開</button>
+  </section>
+
+  <!-- 神諭出巡 -->
+  <section id="s-oracle" class="screen hidden">
+    <h2>神諭出巡</h2>
+    <p class="small">節慶時，祭司扛著神的聖船走出神廟。百姓站在路旁，把問題寫在陶片或莎草紙上呈給神；問題必須能用「是」或「否」回答。聖船往前傾、靠近你，代表「是」；往後退開，代表「否」。</p>
+    <div class="small muted" style="margin:4px 0 6px">向哪一位神求問？</div>
+    <div class="gods" id="oGods"></div>
+    <label class="lbl" for="oQ">寫下你的是非題</label>
+    <div class="ostracon"><textarea id="oQ" maxlength="80" placeholder="例如：我這個月該去面試那份工作嗎？"></textarea></div>
+    <p class="small muted" style="margin-top:8px">問題只存在你的裝置，同殿的人只會看到你求問了哪位神、得到什麼回答。</p>
+    <div class="spacer"></div>
+    <button class="btn" type="button" id="oStart" disabled>呈上陶片，等聖船出巡</button>
+    <button class="btn link" type="button" data-go="s-home">返回</button>
+  </section>
+
+  <section id="s-oracle-run" class="screen hidden">
+    <h2 id="oRunTitle">聖船出巡</h2>
+    <div class="stage" id="oStage" aria-hidden="true">
+      <svg viewBox="0 0 400 230">
+        <rect width="400" height="230" fill="url(#night)"/>
+        <rect x="0" y="150" width="400" height="80" fill="#3A3020"/>
+        <rect x="0" y="150" width="400" height="3" fill="url(#ggL)"/>
+        <g fill="#5C4A2E"><rect x="30" y="40" width="16" height="110"/><rect x="100" y="40" width="16" height="110"/><rect x="170" y="40" width="16" height="110"/><rect x="240" y="40" width="16" height="110"/></g>
+        <g fill="url(#ggL)" opacity=".7"><rect x="26" y="36" width="24" height="6"/><rect x="96" y="36" width="24" height="6"/><rect x="166" y="36" width="24" height="6"/><rect x="236" y="36" width="24" height="6"/></g>
+        <ellipse cx="200" cy="120" rx="190" ry="90" fill="url(#torch)"/>
+        <g id="bark">
+          <g class="bearers" id="bearers"></g>
+          <path d="M44 124 L256 124" stroke="#7A5530" stroke-width="4"/>
+          <path d="M50 108 Q150 134 250 108 L258 98 Q150 124 42 98Z" fill="url(#ggL)"/>
+          <circle cx="40" cy="94" r="8" fill="url(#gg)"/><path d="M34 90 q-6 2 -4 8" stroke="#8A6420" stroke-width="2" fill="none"/>
+          <circle cx="260" cy="94" r="8" fill="url(#gg)"/><path d="M266 90 q6 2 4 8" stroke="#8A6420" stroke-width="2" fill="none"/>
+          <rect x="118" y="64" width="64" height="44" fill="#F3EEE0"/>
+          <g fill="#2A5BA8"><rect x="118" y="72" width="64" height="3"/><rect x="118" y="82" width="64" height="3"/><rect x="118" y="92" width="64" height="3"/></g>
+          <path d="M112 64 L188 64 L182 56 L118 56Z" fill="url(#ggL)"/>
+          <circle cx="150" cy="50" r="5" fill="url(#sunG)"/>
+          <path d="M120 106 L114 112 M180 106 L186 112" stroke="url(#gg)" stroke-width="2"/>
+        </g>
+        <g id="petitioner" transform="translate(328 96) scale(1.35)"></g>
+        <g id="oShard" class="fx" style="opacity:0"><path d="M306 120 l14 -4 l6 8 l-6 8 l-14 -2z" fill="#D9C3A0" stroke="#8C6A44"/></g>
+      </svg>
+    </div>
+    <p class="center muted" id="oStatus" aria-live="polite">聖船正從神廟走出來……</p>
+    <div id="oResult" class="hidden">
+      <div class="ostracon" style="margin-top:6px">
+        <div class="small" id="oResGod"></div>
+        <div style="margin:6px 0 2px" id="oResQ"></div>
+      </div>
+      <div class="verdict gt" id="oVerdict"></div>
+      <p class="center" id="oResText"></p>
+      <p class="small muted center">結果是隨機產生的，只是依史料重現的文化體驗。真正重要的決定，請好好想清楚。</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn hidden" type="button" id="oAgain">再問一個問題</button>
+    <button class="btn link" type="button" data-go="s-home">回到神廟入口</button>
+  </section>
+
+  <!-- 我的還願碑 -->
+  <section id="s-stelae" class="screen hidden">
+    <h2>我的紀錄</h2>
+    <div class="note"><b>只有你看得到。</b>資料存在這個瀏覽器，清除瀏覽資料或換裝置後會消失。</div>
+    <div id="stelaList"></div>
+    <h2 style="margin-top:18px">我的神諭陶片</h2>
+    <div id="oracleList"></div>
+    <div class="spacer"></div>
+    <button class="btn link" type="button" data-go="s-home">回到神廟入口</button>
+  </section>
+
+  <footer><span class="hiero" aria-hidden="true">𓋹𓌀𓊽</span><br>文化重建體驗・非宗教機構・祈願只存在你的裝置</footer>
+</div>
+
+<!-- 關於 -->
+<div class="dialog-back hidden" id="about" role="dialog" aria-modal="true" aria-labelledby="aboutT">
+  <div class="dialog">
+    <h2 id="aboutT" style="margin-top:0">這是怎麼重建的？</h2>
+    <p class="small"><b>每日神廟儀式</b>主要依據兩類文獻：</p>
+    <ul class="tight small">
+      <li>阿拜多斯（Abydos）塞提一世神廟的浮雕與銘文（約西元前 1290–1279 年）</li>
+      <li>柏林莎草紙 P. Berlin 3055（阿蒙儀式）與 3014、3053（穆特儀式），第 22 王朝，以僧侶體寫下咒文全文</li>
+      <li>補充：卡納克多柱廳、梅迪內特哈布（Medinet Habu）等神廟浮雕</li>
+    </ul>
+    <p class="small">學者 Alexandre Moret 於 1902 年首先把這些來源整理成完整流程。柏林莎草紙的阿蒙儀式約有 66 則，本站精簡為 13 步；更衣、塗油的細節主要來自阿拜多斯版本。每份來源都不完整，所以這是「最可能的樣子」，不是唯一正解。</p>
+    <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
+    <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
+    <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
+    <p class="small"><b>多人同殿</b>：同時打開這個網頁的人會出現在上方的「殿內」列。只分享暱稱、顏色和所在步驟，祈願內容永遠只留在你的裝置。</p>
+    <p class="small"><b>祭司台詞</b>是本站以白話意譯撰寫，方便體驗，並非逐字翻譯。</p>
+    <p class="small">延伸閱讀：<br>
+      <a href="https://www.ucl.ac.uk/museums-static/digitalegypt/religion/dailycult.html">UCL Digital Egypt：Daily Offering Ritual</a><br>
+      <a href="https://digitalkarnak.ucsc.edu/wp-content/uploads/2020/10/daily-ritual-pdf_compressed.pdf">Digital Karnak：The Daily Ritual</a><br>
+      <a href="https://www.metmuseum.org/art/collection/search/549526">大都會博物館：耳朵模型與耳朵碑</a></p>
+    <button class="btn" type="button" id="aboutClose">關閉</button>
+  </div>
+</div>
+
+<!-- 設定 -->
+<div class="dialog-back hidden" id="settings" role="dialog" aria-modal="true" aria-labelledby="setT">
+  <div class="dialog">
+    <h2 id="setT" style="margin-top:0">設定</h2>
+    <label class="lbl" for="optNick" style="margin-top:0">你的暱稱（同殿的人會看到）</label>
+    <input type="text" id="optNick" maxlength="12">
+    <div class="lbl" id="colLbl">衣領顏色</div>
+    <div class="colors" id="optColors" role="group" aria-labelledby="colLbl"></div>
+    <div class="lbl" id="lookLbl">形象</div>
+    <div class="looks" id="setLooks" role="group" aria-labelledby="lookLbl"></div>
+    <p class="small muted" style="margin:0 0 6px">同殿的人只會看到你的暱稱、衣領顏色和你走到哪一步，<b>不會看到你寫的祈願</b>。</p>
+    <label class="toggle"><span>大字體</span><input type="checkbox" id="optBig"></label>
+    <label class="toggle"><span>減少動畫</span><input type="checkbox" id="optCalm"></label>
+    <button class="btn" type="button" id="setClose">完成</button>
+  </div>
+</div>
+
+<!-- 確認 -->
+<div class="dialog-back hidden" id="confirm" role="dialog" aria-modal="true" aria-labelledby="cfT">
+  <div class="dialog">
+    <h2 id="cfT" style="margin-top:0">確定刪除？</h2>
+    <p class="muted">這筆紀錄會從你的裝置上永久刪除。</p>
+    <div class="row"><button class="btn ghost" type="button" id="cfNo">取消</button><button class="btn" type="button" id="cfYes">刪除</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SK='egtemple-stelae-v1', PK='egtemple-prefs-v1', CK='egtemple-rituals-v1';
+  var mem={};
+  function load(k,fb){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fb; }catch(e){ return k in mem?mem[k]:fb; } }
+  function save(k,v){ mem[k]=v; try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+  function show(id){
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.add('hidden'); });
+    $(id).classList.remove('hidden');
+    if(id==='s-stelae'){ renderStelae(); renderOracles(); }
+    if(id==='s-day') renderDay();
+    if(id==='s-sit') startSit(); else if(typeof sitTick!=='undefined' && sitTick){ clearInterval(sitTick); sitTick=null; }
+    if(id==='s-home') renderToday();
+    if(typeof setWhere==='function') setWhere(id);
+    window.scrollTo(0,0);
+    var h=$(id).querySelector('h1,h2'); if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ show(b.getAttribute('data-go')); }); });
+
+  // dialogs & prefs
+  function dlg(id,open){ $(id).classList.toggle('hidden',!open); }
+  $('btnAbout').onclick=function(){ dlg('about',true); $('aboutClose').focus(); };
+  $('aboutClose').onclick=function(){ dlg('about',false); };
+  var prefs=load(PK,{});
+  function applyPrefs(){ document.body.classList.toggle('big',!!prefs.big); document.body.classList.toggle('calm',!!prefs.calm); $('optBig').checked=!!prefs.big; $('optCalm').checked=!!prefs.calm; }
+  applyPrefs();
+  $('btnSettings').onclick=function(){ dlg('settings',true); $('optBig').focus(); };
+  $('setClose').onclick=function(){ dlg('settings',false); };
+  $('optBig').onchange=function(){ prefs.big=this.checked; save(PK,prefs); applyPrefs(); };
+  $('optCalm').onchange=function(){ prefs.calm=this.checked; save(PK,prefs); applyPrefs(); };
+  $('btnStelae').onclick=function(){ show('s-stelae'); };
+
+  /* ---------- 神祇圖像（依古埃及浮雕的標準造型，面向右）---------- */
+  var GOLD='url(#gg)', LINEN='#F3EEE0', BLK='#1C1C1C';
+  function ankh(x,y){ return '<g fill="none" stroke="'+GOLD+'" stroke-width="2.2" stroke-linecap="round"><ellipse cx="'+x+'" cy="'+(y-6)+'" rx="2.8" ry="4"/><path d="M'+(x-4.5)+' '+(y-1)+' H'+(x+4.5)+' M'+x+' '+(y-1)+' V'+(y+11)+'"/></g>'; }
+  function was(x,top,bot){ return '<g stroke="'+GOLD+'" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M'+x+' '+top+' V'+bot+'"/><path d="M'+x+' '+top+' L'+(x+6)+' '+(top-4)+' L'+(x+8)+' '+(top-1)+'"/><path d="M'+x+' '+bot+' L'+(x-3)+' '+(bot+4)+' M'+x+' '+bot+' L'+(x+3)+' '+(bot+4)+'"/></g>'; }
+  function collar(){ return '<path d="M38 64 Q50 79 62 64" fill="none" stroke="#2A5BA8" stroke-width="3"/><path d="M39 67 Q50 83 61 67" fill="none" stroke="'+GOLD+'" stroke-width="2.5"/><path d="M40 70 Q50 86 60 70" fill="none" stroke="#9A3B26" stroke-width="2"/>'; }
+  function face(S){ return '<ellipse cx="51" cy="46" rx="8" ry="9" fill="'+S+'"/><path d="M58 42 L62 48 L58 50Z" fill="'+S+'"/><path d="M53 50 Q57 53 59 51" fill="'+S+'"/><path d="M52.5 44 Q55.5 42.5 58 44 Q55.5 45.5 52.5 44Z" fill="#fff"/><circle cx="55.6" cy="44" r="1.1" fill="'+BLK+'"/><path d="M52 44 L47 45" stroke="'+BLK+'" stroke-width="1.2"/><path d="M53 41 Q56 39.5 59 41" stroke="'+BLK+'" stroke-width="1" fill="none"/>'; }
+  function maleBody(S){
+    return '<path d="M37 66 L31 103 L35 105 L41 70Z" fill="'+S+'"/>'+ankh(33,112)+
+      '<path d="M44 134 L42 188 L48 188 L50 134Z" fill="'+S+'"/><path d="M53 134 L61 188 L67 188 L58 134Z" fill="'+S+'"/>'+
+      '<path d="M40 188 L53 188 L53 192 L40 192Z" fill="'+S+'"/><path d="M59 188 L75 188 Q76 192 74 192 L59 192Z" fill="'+S+'"/>'+
+      '<rect x="47" y="53" width="7" height="12" fill="'+S+'"/>'+
+      '<path d="M36 64 Q50 60 64 64 L60 100 L42 100Z" fill="'+S+'"/>'+
+      '<path d="M40 100 L62 100 L69 134 L37 134Z" fill="'+LINEN+'"/><path d="M57 102 L69 134 L59 134Z" fill="#E2D6BC"/><rect x="40" y="97" width="22" height="4" fill="'+GOLD+'"/>'+
+      collar()+
+      '<path d="M62 66 L72 85 L76 83 L66 64Z" fill="'+S+'"/>'+was(76,38,188)+'<circle cx="75" cy="84" r="3" fill="'+S+'"/>';
+  }
+  var DRAW={
+    '阿蒙-拉':function(){ var S='#3E63A8';
+      return '<path d="M44 36 L38 72" stroke="#9A3B26" stroke-width="2.5"/>'+maleBody(S)+face(S)+
+        '<path d="M55 54 L57 64 Q58 67 61 64" stroke="'+BLK+'" stroke-width="2.4" fill="none"/>'+
+        '<path d="M42 40 Q42 33 50 33 L59 33 L59 40Z" fill="'+GOLD+'"/><rect x="42" y="36" width="17" height="2" fill="#9A3B26"/>'+
+        '<path d="M45 33 L46 0 L50 0 L50 33Z" fill="'+GOLD+'"/><path d="M51 33 L51 0 L55 0 L54 33Z" fill="#D9B45A"/>'+
+        '<g stroke="#8E6A22" stroke-width=".8"><path d="M45.5 8 H50 M45.5 16 H50 M45 24 H50 M51 8 H55 M51 16 H54.6 M51 24 H54.4"/></g>'; },
+    '普塔':function(){ var S='#4F8A5B';
+      return '<path d="M34 182 L70 182 L66 192 L34 192Z" fill="'+GOLD+'"/>'+
+        '<path d="M41 64 Q51 59 61 64 Q63 120 62 182 L41 182 Q39 120 41 64Z" fill="'+LINEN+'"/>'+
+        '<g stroke="#D6CBB0" stroke-width="1" fill="none"><path d="M42 110 Q51 114 61 110 M42 125 Q51 129 61 125 M42 140 Q51 144 61 140 M42 155 Q51 159 61 155 M42 170 Q51 174 61 170"/></g>'+
+        '<path d="M41 68 L35 80 L40 84Z" fill="'+GOLD+'"/><circle cx="36" cy="84" r="3" fill="'+GOLD+'"/>'+
+        '<rect x="47" y="53" width="7" height="12" fill="'+S+'"/>'+collar()+face(S)+
+        '<rect x="56" y="53" width="3.4" height="11" fill="'+BLK+'"/>'+
+        '<path d="M42 46 Q42 31 51 31 Q60 31 60 42 L56 40 Q51 37 46 41 L44 47Z" fill="#2A5BA8"/>'+
+        '<g stroke="'+GOLD+'" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M66 40 V182"/><path d="M66 40 L72 36 L74 39"/></g>'+
+        '<ellipse cx="66" cy="54" rx="3" ry="4" fill="none" stroke="'+GOLD+'" stroke-width="2.2"/><path d="M61.5 59 H70.5" stroke="'+GOLD+'" stroke-width="2.2"/>'+
+        '<g stroke="'+GOLD+'" stroke-width="2"><path d="M61 66 H71 M61 70 H71 M61 74 H71"/></g>'+
+        '<circle cx="63" cy="84" r="3.2" fill="'+S+'"/><circle cx="63" cy="94" r="3.2" fill="'+S+'"/>'; },
+    '哈索爾':function(){ var S='#D9A26B';
+      return '<path d="M40 38 Q50 30 60 38 L59 70 L53 70 L53 54 L47 54 L46 74 L39 74Z" fill="'+BLK+'"/>'+
+        '<path d="M38 66 L32 103 L36 105 L41 70Z" fill="'+S+'"/>'+ankh(34,112)+
+        '<rect x="47" y="53" width="7" height="12" fill="'+S+'"/>'+
+        '<path d="M40 64 Q50 60 60 64 L61 182 L43 182Z" fill="#9A3B26"/>'+
+        '<path d="M44 64 L46 84 M58 64 L56 84" stroke="#7A2A18" stroke-width="2"/>'+
+        '<path d="M44 182 L52 182 L52 190 L42 190Z" fill="'+S+'"/><path d="M54 182 L60 182 L68 190 L54 190Z" fill="'+S+'"/>'+
+        collar()+'<path d="M60 66 L71 84 L75 82 L64 64Z" fill="'+S+'"/>'+
+        '<g stroke="#2E6B57" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M75 44 V186"/></g><path d="M75 44 L69 33 L81 33Z" fill="#2E6B57"/>'+
+        '<circle cx="74" cy="84" r="3" fill="'+S+'"/>'+face(S)+
+        '<path d="M42 41 Q44 33 52 33 Q59 34 60 40 L55 38 Q48 36 44 44Z" fill="'+BLK+'"/>'+
+        '<rect x="41" y="29" width="20" height="5" fill="'+GOLD+'"/>'+
+        '<path d="M43 30 Q30 18 40 4" stroke="'+BLK+'" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M59 30 Q72 18 62 4" stroke="'+BLK+'" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+        '<circle cx="51" cy="16" r="10" fill="#C8402A"/><path d="M58 30 Q62 24 59 21" stroke="'+GOLD+'" stroke-width="2" fill="none"/>'; },
+    '托特':function(){ var S='#9A6A45';
+      return '<path d="M42 38 L58 38 L60 66 L54 66 L54 54 L47 54 L46 70 L40 70Z" fill="#1F3F7A"/>'+
+        maleBody(S)+
+        '<ellipse cx="52" cy="43" rx="8" ry="7" fill="'+BLK+'"/><path d="M57 40 Q72 45 82 64" stroke="'+BLK+'" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+        '<circle cx="54.5" cy="41" r="1.4" fill="#fff"/>'+
+        '<path d="M42 32 Q51 42 60 32" stroke="'+GOLD+'" stroke-width="3" fill="none"/><circle cx="51" cy="24" r="8" fill="#E8E4D8"/>'; },
+    '瑪特':function(){ var S='#D9A26B';
+      return '<path d="M28 120 L72 120 L72 128 L28 128 Z" fill="'+GOLD+'"/>'+
+        '<path d="M34 60 Q44 56 54 60 L58 120 L32 120Z" fill="#2A5BA8"/><path d="M36 92 L70 92 L70 120 L60 120 L60 100 L36 100Z" fill="#2A5BA8"/>'+
+        '<path d="M36 40 Q44 32 54 40 L54 66 L36 66Z" fill="'+BLK+'"/>'+
+        '<ellipse cx="46" cy="44" rx="8" ry="9" fill="'+S+'"/><path d="M53 40 L57 46 L53 48Z" fill="'+S+'"/><circle cx="50" cy="42" r="1.2" fill="'+BLK+'"/>'+
+        '<rect x="37" y="34" width="18" height="4" fill="'+GOLD+'"/>'+
+        '<path d="M44 34 Q40 18 44 4 Q52 14 48 34Z" fill="'+LINEN+'" stroke="#B8B0A0" stroke-width="1"/>'+
+        '<path d="M48 66 L62 74 L60 78 L46 72Z" fill="'+S+'"/>'+ankh(64,84); }
+  };
+  DRAW['祭司']=function(){ var S='#9A6A45';
+    return '<path d="M37 66 L31 103 L35 105 L41 70Z" fill="'+S+'"/>'+
+      '<path d="M44 150 L42 188 L48 188 L50 150Z" fill="'+S+'"/><path d="M53 150 L61 188 L67 188 L58 150Z" fill="'+S+'"/>'+
+      '<path d="M40 188 L53 188 L53 192 L40 192Z" fill="'+S+'"/><path d="M59 188 L75 188 Q76 192 74 192 L59 192Z" fill="'+S+'"/>'+
+      '<rect x="47" y="53" width="7" height="12" fill="'+S+'"/>'+
+      '<path d="M36 64 Q50 60 64 64 L60 98 L42 98Z" fill="'+S+'"/>'+
+      '<path d="M40 96 L62 96 L70 160 L36 160Z" fill="'+LINEN+'" opacity=".96"/><path d="M40 96 L62 96 L61 102 L41 102Z" fill="'+LINEN+'"/>'+
+      '<path d="M38 64 Q50 76 62 64" fill="none" stroke="'+GOLD+'" stroke-width="2.5"/>'+
+      '<path d="M62 66 L76 58 L78 62 L65 71Z" fill="'+S+'"/><path d="M60 72 L74 66 L76 70 L62 77Z" fill="'+S+'"/>'+
+      '<ellipse cx="51" cy="45" rx="8.5" ry="9.5" fill="'+S+'"/><path d="M58 42 L62 48 L58 50Z" fill="'+S+'"/>'+
+      '<path d="M53 43.5 Q55.5 42 58 43.5 Q55.5 45 53 43.5Z" fill="#fff"/><circle cx="55.7" cy="43.5" r="1" fill="'+BLK+'"/><path d="M52 43.5 L47.5 44.5" stroke="'+BLK+'" stroke-width="1.1"/>'; };
+  var OBJ={
+    '白麵包':'<path d="M7 38 L13 8 L19 38Z" fill="#E7C88C"/><path d="M19 38 L26 13 L33 38Z" fill="#D2AA66"/><g fill="#A9824A"><circle cx="13" cy="24" r="1"/><circle cx="12" cy="31" r="1"/><circle cx="26" cy="27" r="1"/></g>',
+    '糕點':'<ellipse cx="20" cy="34" rx="14" ry="4.5" fill="#A8692F"/><ellipse cx="20" cy="27" rx="12" ry="4.5" fill="#C98C4A"/><ellipse cx="20" cy="20" rx="9" ry="4" fill="#DDA761"/><path d="M14 20 Q20 16 26 20" stroke="url(#gg)" stroke-width="1.6" fill="none"/><path d="M26 21 q1 5 0 7" stroke="#E8B54A" stroke-width="1.4"/>',
+    '啤酒':'<path d="M14 13 Q7 26 14 37 L26 37 Q33 26 26 13Z" fill="#A8703F"/><path d="M12 14 Q20 1 28 14Z" fill="#5E3F24"/><rect x="11" y="20" width="18" height="2" fill="url(#gg)"/><path d="M16 26 Q20 28 24 26" stroke="#8A5A30" stroke-width="1" fill="none"/>',
+    '葡萄酒':'<path d="M16 5 L24 5 L24 10 Q31 16 29 27 L20 38 L11 27 Q9 16 16 10Z" fill="#8C5A3C"/><path d="M16 11 Q10 11 11 17 M24 11 Q30 11 29 17" stroke="#6B4229" stroke-width="2" fill="none"/><rect x="11" y="20" width="18" height="3" fill="#6E1E32"/><rect x="15" y="3" width="10" height="3" rx="1" fill="url(#gg)"/><g fill="#5B2A6A"><circle cx="32" cy="30" r="2.4"/><circle cx="36" cy="30" r="2.4"/><circle cx="34" cy="34" r="2.4"/><circle cx="30" cy="34" r="2.4"/><circle cx="32" cy="38" r="2.2"/></g>',
+    '牛奶':'<path d="M16 9 L24 9 L24 14 Q33 20 30 30 Q26 38 20 38 Q14 38 10 30 Q7 20 16 14Z" fill="#F2EEE4" stroke="#C9BFA8" stroke-width="1"/><rect x="14.5" y="6" width="11" height="4" rx="1.5" fill="url(#gg)"/><path d="M12 24 Q20 27 28 24" stroke="#D9D0BC" stroke-width="1.2" fill="none"/>',
+    '牛腿':'<path d="M9 7 Q22 2 27 11 Q25 20 23 28 L25 34 L18 36 L16 28 Q9 18 9 7Z" fill="#9A3A22"/><path d="M12 9 Q20 6 24 12" stroke="#C2603E" stroke-width="2" fill="none"/><ellipse cx="17" cy="6" rx="6" ry="3" fill="#EDE0C8"/><path d="M16 34 L26 33 L26 38 L16 38Z" fill="#2A1A10"/>',
+    '烤鵝':'<ellipse cx="18" cy="29" rx="13" ry="8" fill="#C27A3A"/><path d="M28 25 Q37 17 33 9" stroke="#C27A3A" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="33" cy="9" r="3.4" fill="#C27A3A"/><path d="M35 9 L39 10" stroke="#E0A040" stroke-width="2"/><path d="M8 24 Q18 20 26 24" stroke="#A35F28" stroke-width="1.2" fill="none"/><path d="M10 36 L14 30 M16 37 L18 31" stroke="#7A4A20" stroke-width="1.6"/>',
+    '藍蓮花':'<g stroke="#3F7D4E" stroke-width="1.8" fill="none"><path d="M20 38 Q20 26 20 16 M20 38 Q14 28 10 22 M20 38 Q26 28 31 21"/></g><path d="M20 17 L13 5 L17 13 L20 2 L23 13 L27 5Z" fill="#4C79C4"/><path d="M20 17 L17 9 L20 12 L23 9Z" fill="#E8D48A"/><path d="M10 23 Q6 16 10 11 Q14 16 10 23Z" fill="#6F95D6"/><path d="M31 22 Q27 15 31 10 Q35 15 31 22Z" fill="#6F95D6"/>'
+  };
+  function objSVG(o){ return '<svg viewBox="0 0 40 40" aria-hidden="true">'+OBJ[o]+'</svg>'; }
+  function godSVG(k,w,h,label){
+    return '<svg viewBox="22 0 64 196" width="'+w+'" height="'+h+'"'+(label?' role="img" aria-label="'+esc(label)+'"':' aria-hidden="true"')+'>'+DRAW[k]()+'</svg>';
+  }
+  $('godFig').innerHTML=DRAW['阿蒙-拉']();
+  $('maatFig').innerHTML=DRAW['瑪特']();
+  $('priestFig').innerHTML=DRAW['祭司']();
+
+  /* ---------- 每日神廟儀式 ---------- */
+  var STEPS=[
+    { t:'點火，拿起香爐', src:['P. Berlin 3055 開頭諸則'],
+      b:'天亮之前，祭司先點起火，拿起香爐，把香放到火上。香煙在古埃及被視為神的氣息，也用來潔淨即將進入的空間。',
+      l:'火已點起，香已就位。我是潔淨的，我前來侍奉。', a:'點火上香', fx:{censer:1} },
+    { t:'進入神殿', src:['P. Berlin 3055 第 22 則「進入神廟之咒」'],
+      b:'祭司穿過一道道越來越暗、越來越窄的門廳，走向神廟最深處的聖所。外面的世界被留在身後。',
+      l:'我進入神的居所。不是我自己要來，是神召我前來。', a:'走向聖所', fx:{censer:1} },
+    { t:'破開封泥', src:['卡納克多柱廳浮雕（儀節 B）'],
+      b:'神龕的門前一晚以泥封封住。祭司打破封泥，表示這扇門從昨天關上後，沒有被任何人碰過。',
+      l:'封泥已破，封印已解。我伸手，不帶任何不潔。', a:'破開封泥', fx:{censer:1,sealOff:1} },
+    { t:'拉開門閂', src:['卡納克多柱廳浮雕（儀節 C）'],
+      b:'接著拉開神龕的門閂。浮雕上，塞提一世正伸手把門閂往後拉。',
+      l:'門閂已退。天的門扇，即將為你打開。', a:'拉開門閂', fx:{censer:1,sealOff:1,boltOff:1} },
+    { t:'打開神龕，得見神顏', src:['卡納克多柱廳浮雕（儀節 D）'],
+      b:'門打開，祭司第一次看見神像的臉。這是整套儀式最關鍵的一刻：神「醒來」，與人面對面。',
+      l:'門開了。我看見你的臉，你的光照進這間黑暗的屋子。', a:'打開神龕門', fx:{censer:1,sealOff:1,boltOff:1,open:1} },
+    { t:'親吻大地，讚頌阿蒙', src:['P. Berlin 3055 讚頌阿蒙諸則'],
+      b:'祭司伏下身，額頭貼近地面，稱為「親吻大地」，接著唱誦讚美詩。晨間頌歌常以「平安地醒來」呼喚神明。',
+      l:'平安地醒來吧，阿蒙-拉。你在平安中醒來，萬物也隨你醒來。', a:'伏地讚頌', fx:{censer:1,sealOff:1,boltOff:1,open:1,prost:1} },
+    { t:'獻上瑪特', src:['阿拜多斯塞提一世神廟','P. Berlin 3055'],
+      b:'祭司舉起一尊小小的瑪特女神像。瑪特代表真理、正義與宇宙秩序，被視為眾神真正賴以為生的「食物」，是所有供品中最根本的一樣。',
+      l:'我把瑪特帶到你面前。你以她為生，你因她而安在。', a:'獻上瑪特', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1} },
+    { t:'奠酒與焚香淨化', src:['卡納克浮雕（儀節 14–19）'],
+      b:'用聖水奠酒、焚燒沒藥，一次又一次淨化神像與整個房間。重複是儀式的力量所在。',
+      l:'這是潔淨的水，這是潔淨的香。你是潔淨的，這屋子是潔淨的。', a:'灑水焚香', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,water:1} },
+    { t:'為神像更衣', src:['阿拜多斯塞提一世神廟（更衣、頭巾諸則）'],
+      b:'取下前一天的布料，為神像換上新的白布，以及綠色、紅色等布帶，並為祂繫上頭巾。神像被當成真正需要照料的身體。',
+      l:'這是白色的布，是潔淨的衣裳。我為你披上，讓你美麗如初。', a:'披上新布', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,cloth:1} },
+    { t:'塗油與眼妝', src:['P. Berlin 3055 第 20 則（加蜜的節慶香油）','阿拜多斯塞提一世神廟'],
+      b:'用加了蜂蜜的節慶香油塗抹神像，再為祂畫上綠色與黑色的眼妝，就像古埃及人每天為自己做的一樣。',
+      l:'香油加了蜂蜜，芬芳屬於你。你的雙眼明亮，看顧這片土地。', a:'塗抹香油', fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,cloth:1,oil:1} },
+    { t:'擺上供品，邀請用膳', src:['卡納克浮雕（儀節 9–13、22、25）'],
+      b:'把麵包、糕點、啤酒、葡萄酒、牛奶、牛腿、烤鵝和藍蓮花擺上供桌，唸出「每日菜單」，再邀請神來享用。神不會真的吃，而是享用供品的「精華」。',
+      l:'這些都是為你準備的。請來，吃吧，喝吧。', a:'邀請神明享用', offer:true, fx:{censer:1,sealOff:1,boltOff:1,open:1,maat:1,cloth:1,oil:1,table:1} },
+    { t:'關門上閂，掃除足跡', src:['卡納克浮雕（儀節 26、30、31）','Moret 1902 重建'],
+      b:'把神像安放回神龕，驅走可能潛入的邪靈，關上門、拉上門閂、重新封好。祭司倒退著走出，並把地上的足跡掃除，讓聖所恢復無人踏入的狀態。',
+      l:'門已關，閂已上。我退出，不留下任何足跡。', a:'關門並掃除足跡', fx:{censer:1,maat:0,cloth:1,oil:1,table:1,closed:1,foot:1} },
+    { t:'供品回轉', src:['卡納克浮雕（儀節 34–40）'],
+      b:'被神「享用」過的供品並不會丟掉：先轉給神廟裡的其他神祇與雕像，最後依職級分給祭司們。神的餐桌，最後成了人的餐桌。',
+      l:'願這張供桌永遠不缺，願這些供品長存。', a:'完成今日儀式', fx:{table:1,closed:1} }
+  ];
+  var OFFERS=['白麵包','糕點','啤酒','葡萄酒','牛奶','牛腿','烤鵝','藍蓮花'];
+  var cur=0, picked=[];
+
+  var prog=$('prog'); STEPS.forEach(function(){ prog.appendChild(document.createElement('span')); });
+  var ob=$('offers');
+  OFFERS.forEach(function(o){
+    var b=document.createElement('button'); b.type='button'; b.className='chip offer'; b.innerHTML=objSVG(o)+'<span>'+o+'</span>'; b.setAttribute('aria-pressed','false');
+    b.onclick=function(){ var i=picked.indexOf(o); if(i<0)picked.push(o); else picked.splice(i,1); b.setAttribute('aria-pressed',i<0?'true':'false'); drawFood(); $('btnAct').disabled=picked.length<2; };
+    ob.appendChild(b);
+  });
+  function drawFood(){
+    var g=$('food'), h='';
+    var n=picked.length, step=Math.min(21,150/Math.max(n,1)), x0=200-(n*step)/2-2;
+    picked.forEach(function(o,i){ h+='<g transform="translate('+(x0+i*step)+' 213) scale(.62)">'+OBJ[o]+'</g>'; });
+    g.innerHTML=h;
+  }
+  function setFx(fx,done){
+    var f=Object.assign({},fx);
+    function op(id,v){ $(id).style.opacity=v?1:0; }
+    op('censer',f.censer); op('seal',!f.sealOff||f.closed); op('bolt',!f.boltOff||f.closed);
+    $('stage').classList.toggle('open',!!f.open && !f.closed);
+    op('maat',f.maat); op('cloth',f.cloth); op('oil',f.oil); op('oiljar',f.oil); op('water',f.water); op('table',f.table);
+    op('prost',f.prost); op('foot',f.foot);
+  }
+  function prevFx(i){ return i>0?STEPS[i-1].fx:{}; }
+  function renderStep(){
+    var s=STEPS[cur];
+    prog.querySelectorAll('span').forEach(function(sp,i){ sp.classList.toggle('on',i<=cur); });
+    $('stepNo').textContent='第 '+(cur+1)+' / '+STEPS.length+' 步'; pres({where:'priest',step:cur+1});
+    $('stepTitle').textContent=s.t;
+    $('srcRow').innerHTML=s.src.map(function(x){ return '<span class="src">'+esc(x)+'</span>'; }).join('');
+    $('stepBody').textContent=s.b;
+    $('lineText').textContent=s.l;
+    $('stepLine').classList.add('hidden');
+    $('offerBox').classList.toggle('hidden',!s.offer);
+    $('btnAct').textContent=s.a; $('btnAct').classList.remove('hidden');
+    $('btnAct').disabled=!!s.offer && picked.length<2;
+    $('btnNext').classList.add('hidden');
+    setFx(prevFx(cur));
+    if(s.offer){ $('table').style.opacity=1; }
+    window.scrollTo(0,0);
+    var h=$('stepTitle'); h.setAttribute('tabindex','-1'); h.focus({preventScroll:true});
+  }
+  $('btnStartRitual').onclick=function(){ cur=0; picked=[]; drawFood(); ob.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed','false');}); show('s-ritual'); renderStep(); };
+  $('btnAct').onclick=function(){
+    var s=STEPS[cur];
+    setFx(s.fx);
+    var ACTS={4:'open',5:'kiss',6:'maat',10:'offer'}; if(ACTS[cur]) act(ACTS[cur]);
+    $('stepLine').classList.remove('hidden');
+    this.classList.add('hidden');
+    $('offerBox').classList.add('hidden');
+    $('btnNext').textContent = cur===STEPS.length-1 ? '收下今日紀錄' : '下一步';
+    $('btnNext').classList.remove('hidden'); $('btnNext').focus();
+  };
+  $('btnNext').onclick=function(){
+    if(cur<STEPS.length-1){ cur++; renderStep(); }
+    else{ var n=load(CK,0)+1; save(CK,n); $('ritualCount').textContent='這是你第 '+n+' 次完成每日儀式'; act('done'); show('s-ritual-done'); }
+  };
+  $('btnQuit').onclick=function(){ show('s-home'); };
+
+  /* ---------- 聽耳之門 ---------- */
+  var GODS=[
+    {k:'普塔',e:'Ptah',d:'孟斐斯的創造之神，以「聆聽祈禱者」聞名，耳朵碑數量最多。',c:'#2E6B57'},
+    {k:'阿蒙-拉',e:'Amun-Ra',d:'底比斯的眾神之王。卡納克東側有「聆聽祈禱的阿蒙-拉」神殿。',c:'#1F4B87'},
+    {k:'哈索爾',e:'Hathor',d:'愛、喜悅、音樂與女性之神。代爾巴哈里的神殿出土許多耳朵護身符。',c:'#9A3B26'},
+    {k:'托特',e:'Thoth',d:'智慧、書寫與知識之神，書記與學習者的守護者。',c:'#5B4A8A'}
+  ];
+  var god=null, ears=2;
+  var gb=$('gods');
+  GODS.forEach(function(g){
+    var b=document.createElement('button'); b.type='button'; b.className='chip god'; b.setAttribute('aria-pressed','false');
+    b.innerHTML='<div class="gfig">'+godSVG(g.k,46,140)+'</div><b>'+g.k+'</b><span>'+g.e+'</span><span style="margin-top:4px">'+g.d+'</span>';
+    b.onclick=function(){ god=g; gb.querySelectorAll('.god').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); $('btnGodNext').disabled=false; };
+    gb.appendChild(b);
+  });
+  $('btnGodNext').onclick=function(){
+    $('prayTitle').textContent='向'+god.k+'祈禱'; pres({god:god.k});
+    $('kissBox').classList.remove('hidden'); $('prayBox').classList.add('hidden'); $('prayText').value='';
+    show('s-ear-pray');
+  };
+  $('btnKiss').onclick=function(){
+    act('kiss');
+    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p>';
+    $('prayBox').classList.remove('hidden'); $('prayText').focus();
+  };
+  document.querySelectorAll('[data-ears]').forEach(function(b){
+    b.onclick=function(){ ears=+b.getAttribute('data-ears'); document.querySelectorAll('[data-ears]').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); };
+  });
+
+  function earSVG(x,y,s,col){
+    return '<g transform="translate('+x+' '+y+') scale('+s+')"><path d="M10 0 C22 0 26 12 22 22 C19 29 14 30 14 38 C14 44 6 44 5 38" fill="none" stroke="'+col+'" stroke-width="3" stroke-linecap="round"/><path d="M10 8 C16 8 18 14 15 19" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round"/></g>';
+  }
+  function stelaSVG(st){
+    var g=GODS.filter(function(x){return x.k===st.god;})[0]||GODS[0];
+    var n=st.ears, cols=n<=2?n:(n<=4?2:4), rows=Math.ceil(n/cols), s=n<=2?1.3:(n<=4?1.05:.8);
+    var w=34*s, h=46*s, gw=cols*w+(cols-1)*10, gh=rows*h+(rows-1)*8, ox=(220-gw)/2, oy=150+(96-gh)/2, e='';
+    for(var i=0;i<n;i++){ var c=i%cols, r=Math.floor(i/cols); e+=earSVG(ox+c*(w+10),oy+r*(h+8),s,'#4A3B22'); }
+    return '<svg viewBox="0 0 220 290" width="220" height="290" role="img" aria-label="獻給'+esc(g.k)+'的還願碑，上方刻著'+esc(g.k)+'的神像，下方刻有 '+n+' 隻耳朵">'+
+      '<path d="M10 286 L10 70 Q10 10 110 10 Q210 10 210 70 L210 286Z" fill="#E6D3A8" stroke="url(#ggL)" stroke-width="4"/>'+
+      '<circle cx="110" cy="28" r="7" fill="#C8402A"/><path d="M103 28 Q80 20 58 30 Q80 26 103 31Z M117 28 Q140 20 162 30 Q140 26 117 31Z" fill="'+g.c+'"/>'+
+      '<g transform="translate(30 40) scale(.5)">'+DRAW[g.k]()+'</g>'+
+      '<g fill="url(#ggL)"><rect x="78" y="112" width="40" height="3"/><rect x="95" y="115" width="6" height="22"/><rect x="86" y="136" width="24" height="3"/></g>'+
+      '<g transform="translate(78 90) scale(.55)">'+OBJ['白麵包']+'</g><g transform="translate(96 90) scale(.55)">'+OBJ['藍蓮花']+'</g>'+
+      '<text x="160" y="84" text-anchor="middle" font-family="Noto Serif TC, serif" font-weight="700" font-size="18" fill="#1E1A16">獻給</text>'+
+      '<text x="160" y="108" text-anchor="middle" font-family="Noto Serif TC, serif" font-weight="700" font-size="18" fill="#1E1A16">'+esc(g.k)+'</text>'+
+      '<text x="160" y="130" text-anchor="middle" font-family="Noto Sans Egyptian Hieroglyphs, serif" font-size="14" fill="'+g.c+'">𓋹𓌀𓊽</text>'+
+      '<line x1="22" y1="142" x2="198" y2="142" stroke="#B8862A" stroke-width="2"/>'+ e +
+      '<line x1="24" y1="256" x2="196" y2="256" stroke="#B8862A"/>'+
+      '<text x="110" y="274" text-anchor="middle" font-size="11" fill="#5C5247">願你聽見</text></svg>';
+  }
+  function fmt(ts){ var d=new Date(ts); return d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate(); }
+  $('btnOfferStela').onclick=function(){
+    act('stela');
+    var st={id:Date.now().toString(36),god:god.k,ears:ears,text:$('prayText').value.trim(),at:Date.now()};
+    var all=load(SK,[]); all.unshift(st); save(SK,all);
+    $('stelaView').innerHTML=stelaSVG(st)+(st.text?'<p class="serif center" style="margin-top:10px">「'+esc(st.text)+'」</p>':'');
+    show('s-ear-done');
+  };
+  $('btnDoneStelae').onclick=function(){ show('s-stelae'); };
+
+  var delId=null, delKind='stela';
+  function renderStelae(){
+    var all=load(SK,[]), box=$('stelaList');
+    if(!all.length){ box.innerHTML='<div class="card center muted">還沒有還願碑。到「聽耳之門」獻上第一塊吧。</div>'; return; }
+    box.innerHTML=all.map(function(st){
+      return '<div class="card"><div class="stela">'+stelaSVG(st)+'</div>'+
+        (st.text?'<p class="serif">「'+esc(st.text)+'」</p>':'<p class="muted small">（無文字，只在心中說）</p>')+
+        '<div class="small muted">'+fmt(st.at)+'・'+esc(st.god)+'・'+st.ears+' 隻耳朵</div>'+
+        '<button class="btn link" type="button" data-del="'+st.id+'" style="text-align:left;padding-left:0">刪除這塊還願碑</button></div>';
+    }).join('');
+    box.querySelectorAll('[data-del]').forEach(function(b){ b.onclick=function(){ delKind='stela'; delId=b.getAttribute('data-del'); dlg('confirm',true); $('cfNo').focus(); }; });
+  }
+  $('cfNo').onclick=function(){ dlg('confirm',false); delId=null; };
+  $('cfYes').onclick=function(){ dlg('confirm',false); if(delKind==='oracle'){ save(OK_,load(OK_,[]).filter(function(x){return x.id!==delId;})); renderOracles(); } else { save(SK,load(SK,[]).filter(function(x){return x.id!==delId;})); renderStelae(); } delId=null; };
+
+  /* ---------- 吉凶日曆 ---------- */
+  var MONTHS=['托特月','帕奧皮月','哈索爾月','科亞克月','提比月','梅基爾月','法美諾特月','法穆提月','帕孔斯月','帕伊尼月','埃皮菲月','梅索里月'];
+  var SEASONS=['泛濫季','生長季','收穫季'];
+  var EPA=[['奧西里斯',1],['荷魯斯',1],['賽特',0],['伊西斯',1],['奈芙蒂斯',1]];
+  var GOODM=['拉的太陽船平安渡過了夜之河，眾神在天上歡慶。','哈索爾從遠方歸來，人們以音樂和啤酒迎接她。','荷魯斯受傷的眼睛被治好了，恢復完整。','尼羅河水漲起，田地得到滋養。','托特記下眾神的判決，一切回到秩序。','伊西斯找回了奧西里斯，眾神為此喜悅。','眾神在這一天聚在一起，分享供桌上的食物。','普塔完成了他的工作，萬物各安其位。'];
+  var BADM=['賽特在這一天與荷魯斯爭鬥。','大蛇阿佩普在夜裡攔阻太陽船。','塞赫美特的怒氣在這一天還沒平息。','眾神在這一天哀悼奧西里斯。','這一天，風從沙漠吹來，帶著不安。'];
+  var YI=['向神獻上供品','拜訪親友','開始一件新工作','整理家中','為神唱歌','寫信給遠方的人','種下種子','清洗衣物','在河邊散步'];
+  var JI=['夜裡出門','與人爭吵','渡河遠行','輕易許下承諾','在怒氣中做決定','熬夜','把話說得太滿'];
+  function rng(seed){ return function(){ seed=(seed*1664525+1013904223)>>>0; return seed/4294967296; }; }
+  function egDate(d){
+    var y=d.getFullYear(), ny=new Date(y,6,19); if(d<ny) ny=new Date(y-1,6,19);
+    var idx=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-ny)/864e5); if(idx>364) idx=364;
+    return idx;
+  }
+  function dayInfo(d){
+    var idx=egDate(d), R=rng(idx*7919+13), parts, name, myth, epa=null;
+    for(var k=0;k<3;k++) R();
+    if(idx>=360){ epa=EPA[idx-360]; name='年末五天之第 '+(idx-359)+' 天・'+epa[0]+'誕辰';
+      parts=epa[1]?[1,1,1]:[0,0,0];
+      myth=epa[1]?'這是'+epa[0]+'的誕辰。年末這五天不屬於任何月份，是眾神誕生的日子。':'這是賽特的誕辰。傳統上，年末五天裡賽特誕生的這一天被視為不吉。';
+    } else {
+      var m=Math.floor(idx/30), dd=idx%30+1;
+      name=SEASONS[Math.floor(m/4)]+'・'+MONTHS[m]+'第 '+dd+' 天';
+      if(idx===0){ parts=[1,1,1]; myth='新年第一天。天狼星重新出現在黎明前的天空，尼羅河即將泛濫，一切重新開始。'; }
+      else { parts=[R()<.66?1:0,R()<.66?1:0,R()<.66?1:0]; var good=parts[0]+parts[1]+parts[2]>=2;
+        myth=good?GOODM[Math.floor(R()*GOODM.length)]:BADM[Math.floor(R()*BADM.length)]; }
+    }
+    var yi=YI[Math.floor(R()*YI.length)], ji=JI[Math.floor(R()*JI.length)];
+    return {idx:idx,name:name,parts:parts,myth:myth,yi:yi,ji:ji};
+  }
+  var dayOff=0;
+  function renderDay(){
+    var d=new Date(); d.setDate(d.getDate()+dayOff); var I=dayInfo(d), L=['早上','中午','晚上'];
+    $('dayModern').textContent=(d.getMonth()+1)+' 月 '+d.getDate()+' 日'+(dayOff===0?'（今天）':'');
+    $('dayEg').textContent=I.name;
+    $('dayParts').innerHTML=I.parts.map(function(g,i){ return '<div class="'+(g?'g':'b')+'"><span class="lab">'+L[i]+'</span><span class="v">'+(g?'吉':'凶')+'</span></div>'; }).join('');
+    $('dayMyth').textContent=I.myth;
+    $('dayYiji').innerHTML='<dt style="color:var(--gold-l)">宜</dt><dd>'+esc(I.yi)+'</dd><dt style="color:#F0A58C">忌</dt><dd>'+esc(I.ji)+'</dd>';
+    $('dayToday').classList.toggle('hidden',dayOff===0);
+  }
+  function renderToday(){
+    var I=dayInfo(new Date());
+    $('todayLine').textContent=I.name;
+    $('todayPills').innerHTML=I.parts.map(function(g){ return '<span class="pill '+(g?'g':'b')+'">'+(g?'吉':'凶')+'</span>'; }).join('');
+  }
+  renderToday();
+  $('dayPrev').onclick=function(){ dayOff--; renderDay(); };
+  $('dayNext').onclick=function(){ dayOff++; renderDay(); };
+  $('dayToday').onclick=function(){ dayOff=0; renderDay(); };
+  $('todayCard').addEventListener('click',function(){ dayOff=0; renderDay(); });
+
+  /* ---------- 靜坐 ---------- */
+  var sitStart=0, sitTick=null, shakes=0;
+  function fmtT(ms){ var s2=Math.floor(ms/1000), m=Math.floor(s2/60); return (m<10?'0':'')+m+':'+(s2%60<10?'0':'')+(s2%60); }
+  function startSit(){
+    sitStart=Date.now(); shakes=0; $('sitShakes').textContent='';
+    $('sitMe').innerHTML=lookArt(lookOK(prefs.look),COLORS.indexOf(prefs.color)>=0?prefs.color:'#D4A847',true);
+    clearInterval(sitTick); sitTick=setInterval(function(){ $('sitTimer').textContent=fmtT(Date.now()-sitStart); },1000);
+    $('sitTimer').textContent='00:00'; renderSit();
+  }
+  function renderSit(){
+    if(!room){ $('sitCount').textContent='此刻只有你在這裡。'; $('sitOthers').innerHTML=''; return; }
+    var others=peopleList().filter(function(x){ return !x.sameTab && x.ps.where==='sit'; });
+    $('sitCount').textContent=others.length?'此刻有 '+(others.length+1)+' 人一起靜坐。':'此刻只有你在這裡。';
+    var pos=[[130,152],[246,152],[60,154],[318,154],[110,156],[268,156],[150,158],[226,158]], h='';
+    others.slice(0,8).forEach(function(x,i){ var c=COLORS.indexOf(x.ps.color)>=0?x.ps.color:'#D4A847'; h+='<g transform="translate('+pos[i][0]+' '+pos[i][1]+') scale(1.2)" opacity=".85">'+lookArt(lookOK(x.ps.look),c,false)+'</g>'; });
+    $('sitOthers').innerHTML=h;
+  }
+  $('sitShake').onclick=function(){
+    shakes++; $('sitShakes').textContent='已輕搖叉鈴 '+shakes+' 次';
+    var r=$('sitRing'); r.classList.remove('ring'); void r.getBoundingClientRect(); r.classList.add('ring');
+  };
+  $('sitEnd').onclick=function(){ clearInterval(sitTick); var m=Math.floor((Date.now()-sitStart)/60000); show('s-home'); feedLocal(m>=1?'你靜坐了 '+m+' 分鐘。':'你靜坐了一會兒。'); };
+  function feedLocal(t){ var f=$('hallFeed'); if(!$('hall').classList.contains('hidden')){ feed(t); } }
+
+  /* ---------- 神諭出巡 ---------- */
+  var OK_='egtemple-oracles-v1';
+  var OGODS=[
+    {k:'阿蒙-拉',e:'Amun-Ra',d:'卡納克的眾神之王，大多數時期最常被求問的神。'},
+    {k:'阿蒙霍特普一世',e:'Amenhotep I',d:'被神化的國王，工匠村代爾麥地那居民最常求問的對象。'}];
+  var oGod=null, oTimers=[];
+  var ob2=$('oGods');
+  OGODS.forEach(function(g){
+    var b=document.createElement('button'); b.type='button'; b.className='chip god'; b.setAttribute('aria-pressed','false');
+    b.innerHTML='<b>'+g.k+'</b><span>'+g.e+'</span><span style="margin-top:4px">'+g.d+'</span>';
+    b.onclick=function(){ oGod=g; ob2.querySelectorAll('.god').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); oCheck(); };
+    ob2.appendChild(b);
+  });
+  function oCheck(){ $('oStart').disabled=!(oGod && $('oQ').value.trim()); }
+  $('oQ').addEventListener('input',oCheck);
+  function drawBearers(){
+    var h='';
+    [62,104,146,188,230].forEach(function(x){ h+='<g transform="translate('+(x-12)+' 126) scale(.62)"><circle cx="20" cy="8" r="6" fill="#9A6A45"/><path d="M12 15 Q20 13 28 15 L30 52 L10 52Z" fill="#F3EEE0"/><path d="M13 52 h5 v14 h-5z M22 52 h5 v14 h-5z" fill="#9A6A45"/><path d="M26 16 L30 0" stroke="#9A6A45" stroke-width="4"/></g>'; });
+    $('bearers').innerHTML=h;
+  }
+  drawBearers();
+  function clearO(){ oTimers.forEach(clearTimeout); oTimers=[]; }
+  function later(fn,ms){ oTimers.push(setTimeout(fn,ms)); }
+  function calmNow(){ return document.body.classList.contains('calm') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  $('oStart').onclick=function(){
+    clearO();
+    var q=$('oQ').value.trim(), r=Math.random(), ans=r<0.45?'yes':(r<0.9?'no':'none');
+    var bark=$('bark'); bark.setAttribute('class',''); $('oStage').classList.add('walking');
+    $('petitioner').innerHTML=lookArt(lookOK(prefs.look),COLORS.indexOf(prefs.color)>=0?prefs.color:'#D4A847',true);
+    $('oShard').style.opacity=0;
+    $('oResult').classList.add('hidden'); $('oAgain').classList.add('hidden');
+    $('oRunTitle').textContent=oGod.k+'的聖船出巡';
+    $('oStatus').textContent='聖船正從神廟走出來……';
+    show('s-oracle-run'); pres({god:oGod.k});
+    var f=calmNow()?0.15:1;
+    later(function(){ bark.setAttribute('class','arrive'); },60);
+    later(function(){ $('oStage').classList.remove('walking'); $('oShard').style.opacity=1; $('oStatus').textContent='聖船停在你面前。你舉起陶片，向神提問……'; },3100*f+60);
+    later(function(){ bark.setAttribute('class',ans==='yes'?'yes':(ans==='no'?'no':'none')); $('oStatus').textContent='……'; },5200*f+60);
+    later(function(){
+      var V={yes:['是','聖船向前傾，朝你靠了過來。神的回答是「是」。'],no:['否','聖船向後退開了。神的回答是「否」。'],none:['無應','聖船停在原地，一動也不動。神這次沒有回答，古人遇到這種情況，會換個說法再問一次。']}[ans];
+      $('oResGod').textContent='呈給'+oGod.k+'的陶片'; $('oResQ').textContent=q;
+      $('oVerdict').textContent=V[0]; $('oResText').textContent=V[1];
+      $('oStatus').textContent='';
+      $('oResult').classList.remove('hidden'); $('oAgain').classList.remove('hidden');
+      var all=load(OK_,[]); all.unshift({id:Date.now().toString(36),god:oGod.k,q:q,a:ans,at:Date.now()}); save(OK_,all.slice(0,100));
+      act('or-'+ans);
+    },7000*f+60);
+  };
+  $('oAgain').onclick=function(){ clearO(); $('oQ').value=''; oCheck(); show('s-oracle'); };
+  document.querySelectorAll('#s-oracle-run [data-go]').forEach(function(b){ b.addEventListener('click',clearO); });
+  function renderOracles(){
+    var all=load(OK_,[]), box=$('oracleList');
+    if(!all.length){ box.innerHTML='<div class="card center muted">還沒有求問過神諭。</div>'; return; }
+    box.textContent='';
+    all.forEach(function(o){
+      var c=document.createElement('div'); c.className='ostracon'; c.style.margin='10px 0';
+      var g=document.createElement('div'); g.className='small'; g.textContent=fmt(o.at)+'・呈給'+o.god;
+      var q=document.createElement('div'); q.style.margin='4px 0'; q.textContent=o.q;
+      var a=document.createElement('div'); a.style.fontWeight='900'; a.textContent='回答：'+({yes:'是',no:'否',none:'無應'}[o.a]||'');
+      var d=document.createElement('button'); d.type='button'; d.className='btn link'; d.style.cssText='color:#5A4630;text-align:left;padding-left:0;min-height:40px'; d.textContent='刪除這片陶片';
+      d.onclick=function(){ delKind='oracle'; delId=o.id; dlg('confirm',true); $('cfNo').focus(); };
+      c.appendChild(g); c.appendChild(q); c.appendChild(a); c.appendChild(d); box.appendChild(c);
+    });
+  }
+
+  /* ---------- 多人同殿（room capability）---------- */
+  var COLORS=['#2A5BA8','#C2502E','#3AA59A','#D4A847','#8A5BB8','#E07BA0'];
+  var NICKS=['尼羅河旅人','莎草紙書記','蓮花信眾','清晨香客','底比斯居民','孟斐斯居民','紙莎草信眾','神廟訪客'];
+  if(!prefs.nick){ prefs.nick=NICKS[Math.floor(Math.random()*NICKS.length)]+Math.floor(10+Math.random()*90); save(PK,prefs); }
+  if(COLORS.indexOf(prefs.color)<0){ prefs.color=COLORS[Math.floor(Math.random()*COLORS.length)]; save(PK,prefs); }
+  var LOOKS=[
+    {k:'priest',n:'祭司'},{k:'scribe',n:'書記'},{k:'musician',n:'樂師'},
+    {k:'noble',n:'貴婦'},{k:'farmer',n:'農人'},{k:'cat',n:'神廟貓'}];
+  prefs.look=lookOK(prefs.look);
+  var room=null, myState={v:1,nick:prefs.nick,color:prefs.color,look:prefs.look,where:'home'}, lastAct={}, feedTimer=null, bowTimer=null;
+  function pres(patch){ Object.assign(myState,patch); if(room){ room.presence(patch).catch(function(){}); } render(); }
+  function act(a){ pres({act:a,actAt:Date.now()}); }
+  var WHERE={'s-home':'home','s-priest-intro':'priest-intro','s-ritual':'priest','s-ritual-done':'priest-done','s-ear-gods':'ear','s-ear-pray':'ear-pray','s-ear-done':'ear-done','s-stelae':'stelae','s-oracle':'oracle','s-oracle-run':'oracle-run','s-day':'day','s-sit':'sit'};
+  window.setWhere=function(id){ var w=WHERE[id]||'home', p={where:w}; if(w!=='priest') p.step=null; if(w==='ear') p.god=null; pres(p); };
+  var setWhere=window.setWhere;
+  function clean(t,n){ return String(t==null?'':t).replace(/[\u0000-\u001f​-‏‪-‮⁠-⁯]/g,'').slice(0,n); }
+  function godName(g){ return GODS.some(function(x){return x.k===g;})?g:''; }
+  function status(ps){
+    var w=ps.where, st=+ps.step;
+    if(w==='priest' && st>=1 && st<=STEPS.length) return '祭司之路・第 '+st+' 步「'+STEPS[st-1].t+'」';
+    if(w==='priest-intro') return '準備進入聖所';
+    if(w==='priest-done') return '完成了今日儀式';
+    if(w==='ear') return '在聽耳之門';
+    if(w==='ear-pray') return godName(ps.god)?'在聽耳之門向'+ps.god+'祈禱':'在聽耳之門祈禱';
+    if(w==='ear-done') return '獻上了還願碑';
+    if(w==='stelae') return '在看自己的紀錄';
+    if(w==='oracle') return '正在陶片上寫問題';
+    if(w==='day') return '在看今日吉凶';
+    if(w==='sit') return '在多柱廳靜坐';
+    if(w==='oracle-run') return '在路旁等'+(['阿蒙-拉','阿蒙霍特普一世'].indexOf(ps.god)>=0?ps.god:'神')+'的聖船出巡';
+    return '在神廟入口';
+  }
+  function actText(ps){
+    var g=godName(ps.god);
+    return {kiss:'親吻了大地', open:'打開了阿蒙-拉的神龕', maat:'向阿蒙-拉獻上瑪特', offer:'向阿蒙-拉擺上供品', done:'完成了今日儀式', stela:(g?'向'+g:'')+'獻上了還願碑', 'or-yes':'得到神諭：是', 'or-no':'得到神諭：否', 'or-none':'求問神諭，神沒有回答'}[ps.act]||'';
+  }
+  function lookArt(k,c,me){
+    var S='#9A6A45', W='#9A6A45', L=me?'#FFF7DE':'#EEE7D6', B='#1C1C1C', G='#D4A847';
+    var col='<path d="M7 14.5 Q12 19.5 17 14.5" stroke="'+c+'" stroke-width="2.4" fill="none"/>';
+    switch(k){
+      case 'scribe': return '<path d="M8 33 h3 v5 h-3z M13 33 h3 v5 h-3z" fill="'+S+'"/><path d="M7 14 Q12 12.5 17 14 L16 24 L8 24Z" fill="'+S+'"/><path d="M7.5 23 L16.5 23 L18.5 33 L5.5 33Z" fill="'+L+'"/>'+col+
+        '<circle cx="12" cy="8" r="5" fill="'+S+'"/><path d="M6.6 10 Q6 2.4 12 2.4 Q18 2.4 17.4 10 L17.4 13 L15.6 13 L15.6 6.6 L8.4 6.6 L8.4 13 L6.6 13Z" fill="'+B+'"/><path d="M16 19 l6 -2.2 l.9 2.2 l-6 2.2z" fill="'+G+'"/><path d="M21 13 l1.5 5" stroke="#C2502E" stroke-width="1"/>';
+      case 'musician': return '<path d="M7 14 Q12 12.5 17 14 L18.6 38 L5.4 38Z" fill="'+L+'"/><rect x="7.4" y="22" width="9.6" height="1.6" fill="'+c+'"/><path d="M5.6 9 Q5.6 1.8 12 1.8 Q18.4 1.8 18.4 9 L18.4 20 L15.6 20 L15.6 13 L8.4 13 L8.4 20 L5.6 20Z" fill="'+B+'"/>'+col+
+        '<circle cx="12" cy="8.4" r="4" fill="#D9A26B"/><path d="M19.5 15 v9" stroke="'+G+'" stroke-width="1.4"/><ellipse cx="19.5" cy="12" rx="2.2" ry="3.2" fill="none" stroke="'+G+'" stroke-width="1.2"/><path d="M17.6 11 h3.8 M17.6 13 h3.8" stroke="'+G+'" stroke-width=".8"/>';
+      case 'noble': return '<path d="M7 14 Q12 12.5 17 14 L19 38 L5 38Z" fill="'+L+'"/><path d="M7 22 L17 32" stroke="'+c+'" stroke-width="1.6"/><path d="M5.2 9 Q5.2 2.2 12 2.2 Q18.8 2.2 18.8 9 L18.8 23 L15.6 23 L15.6 13 L8.4 13 L8.4 23 L5.2 23Z" fill="'+B+'"/>'+col+
+        '<circle cx="12" cy="8.6" r="4" fill="#D9A26B"/><path d="M12 2.8 L9.6 -.4 L11 1.2 L12 -1 L13 1.2 L14.4 -.4Z" fill="#4C79C4"/><rect x="6" y="2.6" width="12" height="1.2" fill="'+G+'"/>';
+      case 'farmer': W='#8A5A38';
+        return '<path d="M8 31 h3 v7 h-3z M13 31 h3 v7 h-3z" fill="'+W+'"/><path d="M7 14 Q12 12.5 17 14 L16 25 L8 25Z" fill="'+W+'"/><path d="M7.5 24 L16.5 24 L17.5 31 L6.5 31Z" fill="'+L+'"/>'+col+
+        '<circle cx="12" cy="8" r="5" fill="'+W+'"/><path d="M6.4 9 Q6.4 2.4 12 2.4 Q17.6 2.4 17.6 9 L18.4 14 L15.4 11.6 L15.4 6.8 L8.6 6.8 L8.6 11.6 L5.6 14Z" fill="#E8DFC8"/><path d="M20.5 10 V38" stroke="#7A5530" stroke-width="1.6"/><path d="M20.5 10 q3 1 2 4" stroke="#B9B3A6" stroke-width="1.4" fill="none"/>';
+      case 'cat': return '<path d="M7 38 Q4.5 27 9.6 20.5 L9.6 14 Q8.6 9 8.8 4.6 L11.4 8.6 L14.6 8.6 L17.2 4.6 Q17.4 9 16.4 14 L16.4 20.5 Q21.5 27 19 38Z" fill="#2B2420"/><path d="M18.6 36.5 Q24 34 21.6 27.5" stroke="#2B2420" stroke-width="2.2" fill="none" stroke-linecap="round"/>'+
+        '<path d="M10 16.6 Q13 19.4 16 16.6" stroke="'+c+'" stroke-width="2" fill="none"/><circle cx="11.4" cy="11.6" r=".9" fill="'+G+'"/><circle cx="14.6" cy="11.6" r=".9" fill="'+G+'"/><circle cx="16.6" cy="9.6" r="1" fill="none" stroke="'+G+'" stroke-width=".8"/>'+(me?'':'');
+      default: return '<circle cx="12" cy="8" r="5" fill="'+S+'"/><path d="M6 14 Q12 12 18 14 L19.5 38 L4.5 38Z" fill="'+L+'"/>'+col;
+    }
+  }
+  function lookOK(k){ return LOOKS.some(function(x){return x.k===k;})?k:'priest'; }
+  function avatar(color,bow,me,look){
+    color=COLORS.indexOf(color)>=0?color:'#D4A847';
+    return '<svg class="av'+(bow?' bow':'')+'" viewBox="0 -2 24 42" width="22" height="38" aria-hidden="true">'+lookArt(lookOK(look),color,me)+(me?'<path d="M12 -2 l2 2.4 h-4z" fill="#F4D98C"/>':'')+'</svg>';
+  }
+  function peopleList(){
+    if(!room) return [{me:true,sameTab:true,ps:myState,peer:'me'}];
+    var list=room.peers().filter(function(p){return p.kind==='viewer';}).map(function(p){ return {me:p.isMe,sameTab:p.sameTab,ps:p.sameTab?myState:(p.presence||{}),peer:p.peer}; });
+    if(!list.some(function(x){return x.sameTab;})) list.unshift({me:true,sameTab:true,ps:myState,peer:'me'});
+    list.sort(function(a,b){ return (b.sameTab?1:0)-(a.sameTab?1:0); });
+    return list;
+  }
+  function isBowing(ps){ return ps && (ps.act==='kiss'||ps.act==='stela') && Date.now()-(+ps.actAt||0)<3500; }
+  function render(){
+    if(!room) return;
+    if(!$('s-sit').classList.contains('hidden')) renderSit();
+    var list=peopleList(), n=list.length, av='';
+    $('hallCount').textContent='殿內 '+n+' 人';
+    list.slice(0,9).forEach(function(x){ av+=avatar(x.ps.color,isBowing(x.ps),x.sameTab,x.ps.look); });
+    if(n>9) av+='<span class="more">+'+(n-9)+'</span>';
+    $('hallAvs').innerHTML=av;
+    var box=$('hallList'); box.textContent='';
+    list.forEach(function(x){
+      var row=document.createElement('div'); row.className='peer';
+      row.innerHTML=avatar(x.ps.color,isBowing(x.ps),x.sameTab,x.ps.look);
+      var t=document.createElement('div'), nm=document.createElement('span'), st=document.createElement('span');
+      nm.className='nm'; st.className='st';
+      nm.textContent=(clean(x.ps.nick,12)||'參拜者')+(x.sameTab?'（你）':(x.me?'（你的另一個分頁）':''));
+      st.textContent=status(x.ps);
+      t.appendChild(nm); t.appendChild(st); row.appendChild(t); box.appendChild(row);
+    });
+    if(n<=1){ var e=document.createElement('p'); e.className='small muted'; e.style.margin='6px 0'; e.textContent='目前殿內只有你。把這個網頁分享給朋友，同時打開就能看見彼此。'; box.appendChild(e); }
+    clearTimeout(bowTimer); if(list.some(function(x){return isBowing(x.ps);})) bowTimer=setTimeout(render,3600);
+  }
+  function feed(text){
+    var f=$('hallFeed'); f.textContent=''; var d=document.createElement('div'); d.textContent=text; f.appendChild(d);
+    clearTimeout(feedTimer); feedTimer=setTimeout(function(){ f.textContent=''; },5000);
+  }
+  $('hallBtn').onclick=function(){ var open=$('hallList').classList.toggle('hidden')===false; this.setAttribute('aria-expanded',open); $('hallChev').textContent=open?'收起':'查看'; };
+  // settings: nick & color
+  var cbox=$('optColors');
+  COLORS.forEach(function(c,i){ var b=document.createElement('button'); b.type='button'; b.style.background=c; b.setAttribute('aria-label','顏色 '+(i+1)); b.setAttribute('aria-pressed',c===prefs.color?'true':'false');
+    b.onclick=function(){ prefs.color=c; save(PK,prefs); cbox.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');}); b.setAttribute('aria-pressed','true'); pres({color:c}); renderLooks(); };
+    cbox.appendChild(b); });
+  function renderLooks(){
+    ['homeLooks','setLooks'].forEach(function(id){
+      var box=$(id); box.textContent='';
+      LOOKS.forEach(function(l){
+        var b=document.createElement('button'); b.type='button'; b.className='chip look'; b.setAttribute('aria-pressed',l.k===prefs.look?'true':'false');
+        b.innerHTML='<svg viewBox="0 -2 24 42" aria-hidden="true">'+lookArt(l.k,prefs.color,false)+'</svg><span>'+l.n+'</span>';
+        b.onclick=function(){ prefs.look=l.k; save(PK,prefs); pres({look:l.k}); renderLooks(); };
+        box.appendChild(b);
+      });
+    });
+    $('meNick').textContent=prefs.nick;
+  }
+  renderLooks();
+  $('meEdit').onclick=function(){ dlg('settings',true); $('optNick').focus(); };
+  $('optNick').value=prefs.nick;
+  $('optNick').addEventListener('change',function(){ var v=clean(this.value.trim(),12)||prefs.nick; this.value=v; prefs.nick=v; save(PK,prefs); pres({nick:v}); renderLooks(); });
+
+  if(window.claude && typeof window.claude.use==='function'){
+    window.claude.use('room').then(function(r){
+      if(!r) return;
+      room=r;
+      $('hall').classList.remove('hidden');
+      room.presence(myState).catch(function(){});
+      room.onPeers(function(ch){
+        ch.joined.forEach(function(p){ lastAct[p.peer]=p.presence&&p.presence.actAt; });
+        ch.updated.forEach(function(p){
+          var ps=p.presence||{}; if(p.sameTab||p.kind!=='viewer') return;
+          if(ps.actAt && ps.actAt!==lastAct[p.peer]){ lastAct[p.peer]=ps.actAt; var t=actText(ps); if(t && Date.now()-ps.actAt<15000) feed((clean(ps.nick,12)||'有位參拜者')+' '+t); }
+        });
+        render();
+      },function(){ render(); });
+      render();
+    }).catch(function(){});
+  }
+
+  show('s-home');
+  setTimeout(function(){ var sp=$('splash'); sp.classList.add('out'); setTimeout(function(){ sp.remove(); },1100); }, calmNow()?50:1300);
+})();
+</script>
+</body>
+</html>
