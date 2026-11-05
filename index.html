@@ -1374,18 +1374,22 @@
 
   /* ---- 古埃及語讀音（瀏覽器語音朗讀）---- */
   var egVoice=null;
-  function pickVoice(){ try{ var vs=speechSynthesis.getVoices(); egVoice=vs.filter(function(v){return /^it/i.test(v.lang);})[0]||vs.filter(function(v){return /^es/i.test(v.lang);})[0]||null; }catch(e){} }
+  function pickVoice(){ try{
+    var vs=speechSynthesis.getVoices(), good=/premium|enhanced|natural|neural|siri|google/i;
+    function best(re){ var c=vs.filter(function(v){return re.test(v.lang);}); return c.filter(function(v){return good.test(v.name);})[0]||c[0]; }
+    egVoice=best(/^it/i)||best(/^es/i)||null; }catch(e){} }
   try{ if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; } }catch(e){}
   function speakEg(text,btn){
     try{
       if(!window.speechSynthesis) return;
       speechSynthesis.cancel();
-      var u=new SpeechSynthesisUtterance(text); u.lang=egVoice?egVoice.lang:'it-IT'; if(egVoice) u.voice=egVoice; u.rate=.72; u.pitch=.78; u.volume=1;
+      var u=new SpeechSynthesisUtterance(text.replace(/[,.] +/g,'... ')); u.lang=egVoice?egVoice.lang:'it-IT'; if(egVoice) u.voice=egVoice; u.rate=.6; u.pitch=.68; u.volume=.9;
       var duck=actx && mus.bus && mus.on;
       if(duck){ var t=actx.currentTime; mus.bus.gain.cancelScheduledValues(t); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t); mus.bus.gain.linearRampToValueAtTime(.04,t+.3); }
       u.onstart=function(){ if(btn) btn.classList.add('on'); };
       u.onend=u.onerror=function(){ if(btn) btn.classList.remove('on'); if(duck && mus.on && actx){ var t2=actx.currentTime; mus.bus.gain.cancelScheduledValues(t2); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t2); mus.bus.gain.linearRampToValueAtTime(.16,t2+1.5); } };
-      speechSynthesis.speak(u);
+      try{ bowl(); }catch(e){}
+      setTimeout(function(){ speechSynthesis.speak(u); },650);
     }catch(e){}
   }
   $('egSay').onclick=function(){ var s2=STEPS[cur]; if(s2&&s2.eg) speakEg(s2.eg.say,this); };
