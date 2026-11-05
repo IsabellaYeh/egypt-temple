@@ -199,6 +199,7 @@
     <div class="brand">線上古埃及神廟</div>
     <div class="row" style="flex:none">
       <button class="iconbtn" type="button" id="btnStelae">我的紀錄</button>
+      <button class="iconbtn" type="button" id="btnMusic" aria-pressed="true" aria-label="背景音樂">音樂 開</button>
       <button class="iconbtn" type="button" id="btnSettings">設定</button>
     </div>
   </div>
@@ -565,6 +566,7 @@
     <p class="small muted" style="margin:0 0 6px">同殿的人只會看到你的暱稱、衣領顏色和你走到哪一步，<b>不會看到你寫的祈願</b>。</p>
     <label class="toggle"><span>大字體</span><input type="checkbox" id="optBig"></label>
     <label class="toggle"><span>減少動畫</span><input type="checkbox" id="optCalm"></label>
+    <p class="small muted" style="margin:8px 0 0">背景音樂是本站以古埃及壁畫上的樂器（豎琴、叉鈴）音色寫的氛圍音樂。古埃及的旋律沒有流傳下來，這不是古代原曲。</p>
     <button class="btn" type="button" id="setClose">完成</button>
   </div>
 </div>
@@ -951,14 +953,79 @@
     others.slice(0,8).forEach(function(x,i){ var c=COLORS.indexOf(x.ps.color)>=0?x.ps.color:'#D4A847'; h+='<g transform="translate('+pos[i][0]+' '+pos[i][1]+') scale(1.2)" opacity=".85">'+lookArt(lookOK(x.ps.look),c,false)+'</g>'; });
     $('sitOthers').innerHTML=h;
   }
-  var actx=null, master=null;
+  var actx=null, master=null, comp=null;
+  function ensureCtx(){
+    if(actx) return true;
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+    actx=new AC();
+    comp=actx.createDynamicsCompressor(); comp.threshold.value=-18; comp.ratio.value=4; comp.connect(actx.destination);
+    master=actx.createGain(); master.gain.value=.32;
+    var dl=actx.createDelay(1.5); dl.delayTime.value=.23; var fb=actx.createGain(); fb.gain.value=.28; var lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1800;
+    master.connect(comp); master.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(comp);
+    return true;
+  }
+  /* ---- 背景音樂：豎琴、低音、叉鈴的氛圍音樂 ---- */
+  var mus={on:prefs.music!==false, started:false, bus:null, timer:null, next:0, last:5, drones:[]};
+  var SCALE=[146.83,164.81,174.61,220,233.08,293.66,329.63,349.23,440];
+  function harp(f,t,vel){
+    var o=actx.createOscillator(), o2=actx.createOscillator(), g=actx.createGain(), lp=actx.createBiquadFilter();
+    o.type='triangle'; o.frequency.value=f; o2.type='sine'; o2.frequency.value=f*2;
+    lp.type='lowpass'; lp.frequency.setValueAtTime(2600,t); lp.frequency.exponentialRampToValueAtTime(700,t+1.8);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vel,t+.006); g.gain.exponentialRampToValueAtTime(.0001,t+3.2);
+    var g2=actx.createGain(); g2.gain.value=.25;
+    o.connect(lp); o2.connect(g2); g2.connect(lp); lp.connect(g); g.connect(mus.bus);
+    o.start(t); o2.start(t); o.stop(t+3.3); o2.stop(t+3.3);
+  }
+  function shimmer(t){
+    var n=actx.createBufferSource(), len=Math.floor(actx.sampleRate*.5), b=actx.createBuffer(1,len,actx.sampleRate), d=b.getChannelData(0);
+    for(var i=0;i<len;i++){ var env=Math.pow(1-i/len,2)*(0.6+0.4*Math.sin(i/len*Math.PI*14)); d[i]=(Math.random()*2-1)*env; }
+    var hp=actx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=5200; var g=actx.createGain(); g.gain.value=.05;
+    n.buffer=b; n.connect(hp); hp.connect(g); g.connect(mus.bus); n.start(t);
+  }
+  function schedule(){
+    if(!mus.on||!actx) return;
+    var now=actx.currentTime;
+    while(mus.next<now+1.5){
+      var t=mus.next;
+      if(Math.random()<.78){
+        mus.last=Math.max(0,Math.min(SCALE.length-1,mus.last+[-2,-1,-1,1,1,2][Math.floor(Math.random()*6)]));
+        harp(SCALE[mus.last],t,.16+Math.random()*.06);
+        if(Math.random()<.18) harp(SCALE[Math.max(0,mus.last-3)]/2,t,.1);
+      }
+      if(Math.random()<.06) shimmer(t+.2);
+      mus.next=t+(Math.random()<.2?1.8:0.55+Math.random()*0.5);
+    }
+  }
+  function startMusic(){
+    if(!mus.on||!ensureCtx()) return;
+    if(actx.state==='suspended') actx.resume();
+    if(!mus.bus){
+      mus.bus=actx.createGain(); mus.bus.gain.value=0; mus.bus.connect(comp);
+      var rv=actx.createDelay(2); rv.delayTime.value=.42; var rfb=actx.createGain(); rfb.gain.value=.35; var rlp=actx.createBiquadFilter(); rlp.type='lowpass'; rlp.frequency.value=1400;
+      mus.bus.connect(rv); rv.connect(rlp); rlp.connect(rfb); rfb.connect(rv); rlp.connect(comp);
+      [[73.42,.5],[110,.3],[146.83,.12]].forEach(function(d){
+        var o=actx.createOscillator(), g=actx.createGain(), lfo=actx.createOscillator(), lg=actx.createGain();
+        o.type='sine'; o.frequency.value=d[0]; g.gain.value=d[1]*.35; lfo.frequency.value=.05+Math.random()*.05; lg.gain.value=d[1]*.15;
+        lfo.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(mus.bus); o.start(); lfo.start(); mus.drones.push(o,lfo);
+      });
+    }
+    var t=actx.currentTime; mus.bus.gain.cancelScheduledValues(t); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t); mus.bus.gain.linearRampToValueAtTime(.16,t+4);
+    mus.next=Math.max(mus.next,t+1.2); clearInterval(mus.timer); mus.timer=setInterval(schedule,400); mus.started=true;
+  }
+  function stopMusic(){
+    clearInterval(mus.timer); mus.timer=null;
+    if(actx && mus.bus){ var t=actx.currentTime; mus.bus.gain.cancelScheduledValues(t); mus.bus.gain.setValueAtTime(mus.bus.gain.value,t); mus.bus.gain.linearRampToValueAtTime(0,t+1.2); }
+  }
+  function musBtn(){ var b=$('btnMusic'); b.textContent=mus.on?'音樂 開':'音樂 關'; b.setAttribute('aria-pressed',mus.on?'true':'false'); }
+  musBtn();
+  $('btnMusic').addEventListener('click',function(e){ e.stopPropagation(); mus.on=!mus.on; prefs.music=mus.on; save(PK,prefs); musBtn(); if(mus.on) startMusic(); else stopMusic(); });
+  function firstGesture(){ document.removeEventListener('pointerdown',firstGesture,true); document.removeEventListener('keydown',firstGesture,true); if(mus.on && !mus.started) startMusic(); }
+  document.addEventListener('pointerdown',firstGesture,true); document.addEventListener('keydown',firstGesture,true);
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) stopMusic(); else if(mus.on && mus.started) startMusic(); });
+
   function bowl(){
     try{
-      if(!actx){ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; actx=new AC();
-        var comp=actx.createDynamicsCompressor(); comp.threshold.value=-18; comp.ratio.value=4; comp.connect(actx.destination);
-        master=actx.createGain(); master.gain.value=.32;
-        var dl=actx.createDelay(1.5); dl.delayTime.value=.23; var fb=actx.createGain(); fb.gain.value=.28; var lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1800;
-        master.connect(comp); master.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(comp); }
+      if(!ensureCtx()) return;
       if(actx.state==='suspended') actx.resume();
       var t=actx.currentTime, f0=196*(0.985+Math.random()*0.03);
       [[1,1,9],[2.76,.45,6.5],[5.4,.2,4],[8.93,.09,2.6]].forEach(function(p){
