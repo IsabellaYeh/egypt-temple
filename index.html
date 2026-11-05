@@ -610,7 +610,8 @@
   <section id="s-osiris" class="screen hidden">
     <h2>奧西里斯麥田</h2>
     <p class="small">古埃及人會做一個奧西里斯形狀的木框，裡面鋪上亞麻布、填滿尼羅河的淤泥，再撒下大麥種子澆水。種子發芽後，整個奧西里斯的身形就會長滿綠色麥苗，象徵他死而復生，也象徵尼羅河每年帶回的生命。圖坦卡門的墓裡就出土過這樣的「奧西里斯苗床」。</p>
-    <div class="field" id="field"></div>
+    <div class="field" id="field" style="touch-action:none;cursor:grab"></div>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-top:-2px"><span class="small muted">用手指拖動可以轉換角度</span><button class="iconbtn" type="button" id="osiReset">回正</button></div>
     <div class="growbar" id="growBar" aria-hidden="true"></div>
     <p class="center" id="osiStatus" aria-live="polite"></p>
     <button class="btn" type="button" id="osiBtn"></button>
@@ -1339,9 +1340,14 @@
   var OSI_TXT=['剛播下種子，土還是濕的。','冒出了一點點綠色的芽尖。','小小的麥苗站起來了。','麥苗長到一指高。','整片綠了，奧西里斯的身體開始「活」過來。','麥稈長高，開始抽穗。','麥穗轉成金黃色。','麥子成熟了，可以收成。'];
   function osi(){ var o=load(OSK,null); return o||{sown:false,stage:0,last:'',harvests:0}; }
   var OSI_PATH='M140 14 Q150 30 152 62 L172 56 L165 70 Q158 72 156 78 Q160 98 154 112 L180 124 Q190 150 186 210 L176 330 Q172 372 160 392 L120 392 Q108 372 104 330 L94 210 Q90 150 100 124 L126 112 Q120 98 124 78 Q122 72 115 70 L108 56 L128 62 Q130 30 140 14Z';
-  function pz(y){ var t=(y-14)/378; return 1+1.3*(1-t); }
-  function proj(x,y){ var z=pz(y); return [140+(x-140)*1.8/z, 8+327/z]; }
-  function projPath(d,dy){ return d.replace(/(-?[\d.]+) (-?[\d.]+)/g,function(m,x,y){ var q=proj(+x,+y); return q[0].toFixed(1)+' '+(q[1]+(dy||0)).toFixed(1); }); }
+  var VIEW={yaw:-18,pitch:40};
+  function P3(x,y,h){
+    var X=x-140, Z=y-203, ya=VIEW.yaw*Math.PI/180, ph=VIEW.pitch*Math.PI/180;
+    var X2=X*Math.cos(ya)-Z*Math.sin(ya), Z2=X*Math.sin(ya)+Z*Math.cos(ya);
+    var yv=(h||0)*Math.cos(ph)-Z2*Math.sin(ph), zv=(h||0)*Math.sin(ph)+Z2*Math.cos(ph), sc=330/(560-zv);
+    return [140+X2*sc, 205-yv*sc, zv, sc];
+  }
+  function projPath(d,h){ return d.replace(/(-?[\d.]+) (-?[\d.]+)/g,function(m,x,y){ var q=P3(+x,+y,h); return q[0].toFixed(1)+' '+q[1].toFixed(1); }); }
   var BLADES=(function(){
     var r=rng(2027), a=[], P=null, cx=null;
     try{ P=new Path2D(OSI_PATH); cx=document.createElement('canvas').getContext('2d'); }catch(e){}
@@ -1349,30 +1355,34 @@
     a.sort(function(m,n){ return m[1]-n[1]; }); return a;
   })();
   function osiSVG(o){
-    var st=o.sown?o.stage:-1, L=[0,3,7,11,15,19,22,25][Math.max(0,st)], col=['#7FBF5A','#86C35E','#7BBA52','#70AF49','#6AA645','#8EAA44','#B9B04A','#D8B44C'][Math.max(0,st)], blades='', seeds='';
-    if(st===0) seeds=BLADES.map(function(p,i){ if(i%2) return ''; var q=proj(p[0],p[1]), z=pz(p[1]); return '<ellipse cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" rx="'+(1.6/z).toFixed(2)+'" ry="'+(1.0/z).toFixed(2)+'" fill="#D8C08A"/>'; }).join('');
-    if(st>=1) BLADES.forEach(function(p,i){ if(st===1 && i%3) return; if(st===2 && i%2) return;
-      var q=proj(p[0],p[1]), z=pz(p[1]), len=L*p[2]*1.25/z, x=q[0], y=q[1], bend=p[3]*len*.28, w=(st>=4?1.9:1.4)/z+.3;
-      var shade=(.55+.45*(1/z)).toFixed(2);
-      blades+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' q'+(bend/2).toFixed(1)+' '+(-len/2).toFixed(1)+' '+bend.toFixed(1)+' '+(-len).toFixed(1)+'" stroke="'+col+'" stroke-width="'+w.toFixed(2)+'" stroke-opacity="'+shade+'" fill="none" stroke-linecap="round"/>';
-      if(st>=5 && i%2===0){ var hx=x+bend, hy=y-len-3/z; blades+='<ellipse cx="'+hx.toFixed(1)+'" cy="'+hy.toFixed(1)+'" rx="'+(1.7/z+.3).toFixed(2)+'" ry="'+(4.6/z+.6).toFixed(2)+'" transform="rotate('+(p[3]*15).toFixed(0)+' '+hx.toFixed(1)+' '+hy.toFixed(1)+')" fill="'+(st>=6?'#EAC45C':'#B8C85A')+'" fill-opacity="'+shade+'"/>'; }
+    var st=o.sown?o.stage:-1, L=[0,4,9,14,20,26,30,34][Math.max(0,st)], col=['#7FBF5A','#86C35E','#7BBA52','#70AF49','#6AA645','#8EAA44','#B9B04A','#D8B44C'][Math.max(0,st)], blades='', seeds='';
+    var items=BLADES.map(function(p,i){ var q=P3(p[0],p[1],0); return {p:p,i:i,q:q}; }).sort(function(m,n){ return m.q[2]-n.q[2]; });
+    if(st===0) seeds=items.map(function(it){ if(it.i%2) return ''; var q=it.q; return '<ellipse cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" rx="'+(1.4*q[3]).toFixed(2)+'" ry="'+(.9*q[3]).toFixed(2)+'" fill="#D8C08A"/>'; }).join('');
+    if(st>=1) items.forEach(function(it){ var p=it.p, i=it.i; if(st===1 && i%3) return; if(st===2 && i%2) return;
+      var len=L*p[2], top=P3(p[0]+p[3]*len*.25,p[1],len), mid=P3(p[0]+p[3]*len*.08,p[1],len*.55), base=it.q, w=((st>=4?1.6:1.2)*base[3]+.2), shade=Math.min(1,.55+.5*base[3]).toFixed(2);
+      blades+='<path d="M'+base[0].toFixed(1)+' '+base[1].toFixed(1)+' Q'+mid[0].toFixed(1)+' '+mid[1].toFixed(1)+' '+top[0].toFixed(1)+' '+top[1].toFixed(1)+'" stroke="'+col+'" stroke-width="'+w.toFixed(2)+'" stroke-opacity="'+shade+'" fill="none" stroke-linecap="round"/>';
+      if(st>=5 && i%2===0){ var hd=P3(p[0]+p[3]*len*.28,p[1],len+3); blades+='<ellipse cx="'+hd[0].toFixed(1)+'" cy="'+hd[1].toFixed(1)+'" rx="'+(1.5*hd[3]+.2).toFixed(2)+'" ry="'+(3.8*hd[3]+.4).toFixed(2)+'" fill="'+(st>=6?'#EAC45C':'#B8C85A')+'" fill-opacity="'+shade+'"/>'; }
     });
-    var top=projPath(OSI_PATH,0), side=projPath(OSI_PATH,9);
-    return '<svg viewBox="0 40 280 330" role="img" aria-label="平放在地上的奧西里斯苗床，'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
-      '<defs><linearGradient id="silt3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E150C"/><stop offset="1" stop-color="#3E2C1A"/></linearGradient>'+
-      '<linearGradient id="floor3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1209" stop-opacity="0"/><stop offset="1" stop-color="#2A2416"/></linearGradient>'+
-      '<radialGradient id="lamp3" cx=".5" cy=".75" r=".6"><stop offset="0" stop-color="#F2B65A" stop-opacity=".22"/><stop offset="1" stop-color="#F2B65A" stop-opacity="0"/></radialGradient></defs>'+
-      '<rect x="0" y="110" width="280" height="280" fill="url(#floor3)"/>'+
-      '<path d="M20 160 H260 M6 230 H274 M0 320 H280" stroke="#3A3020" stroke-width="1" opacity=".5"/>'+
-      '<ellipse cx="140" cy="270" rx="135" ry="70" fill="url(#lamp3)"/>'+
-      '<path d="'+projPath(OSI_PATH,14)+'" fill="#000" opacity=".5" transform="translate(4 0)"/>'+
-      '<path d="'+side+'" fill="#3E2812" stroke="#2A1A0A" stroke-width="1"/>'+
-      '<path d="'+top+'" fill="#6B4826" stroke="#8A6236" stroke-width="7" stroke-linejoin="round"/>'+
-      '<path d="'+top+'" fill="url(#silt3)" stroke="url(#ggL)" stroke-width="1.5" stroke-linejoin="round"/>'+
-      '<path d="'+projPath('M127 62 Q113 40 119 16 M153 62 Q167 40 161 16',0)+'" stroke="url(#ggL)" stroke-width="1.5" fill="none" opacity=".8"/>'+
+    return '<svg viewBox="0 30 280 340" role="img" aria-label="平放在地上的奧西里斯苗床，可以用手指拖動轉換角度。'+(o.sown?OSI_TXT[o.stage]:'還沒播種')+'">'+
+      '<defs><linearGradient id="silt3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241A10"/><stop offset="1" stop-color="#3E2C1A"/></linearGradient>'+
+      '<radialGradient id="lamp3" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="#F2B65A" stop-opacity=".2"/><stop offset="1" stop-color="#F2B65A" stop-opacity="0"/></radialGradient></defs>'+
+      '<ellipse cx="140" cy="230" rx="140" ry="110" fill="url(#lamp3)"/>'+
+      '<path d="'+projPath(OSI_PATH,-14)+'" fill="#000" opacity=".4" transform="translate(5 4)"/>'+
+      '<path d="'+projPath(OSI_PATH,-10)+'" fill="#3E2812" stroke="#2A1A0A" stroke-width="1"/>'+
+      '<path d="'+projPath(OSI_PATH,0)+'" fill="#6B4826" stroke="#8A6236" stroke-width="6" stroke-linejoin="round"/>'+
+      '<path d="'+projPath(OSI_PATH,0)+'" fill="url(#silt3)" stroke="url(#ggL)" stroke-width="1.4" stroke-linejoin="round"/>'+
+      '<path d="'+projPath('M127 62 Q113 40 119 16 M153 62 Q167 40 161 16',0)+'" stroke="url(#ggL)" stroke-width="1.4" fill="none" opacity=".8"/>'+
       seeds+'<g class="stalk">'+blades+'</g>'+
       '<g id="osiDrops"></g></svg>';
   }
+  (function(){
+    var f=$('field'), drag=null, raf=0;
+    function redraw(){ raf=0; $('field').innerHTML=osiSVG(osi()); }
+    f.addEventListener('pointerdown',function(e){ drag={x:e.clientX,y:e.clientY,yaw:VIEW.yaw,pitch:VIEW.pitch}; try{ f.setPointerCapture(e.pointerId); }catch(_){} });
+    f.addEventListener('pointermove',function(e){ if(!drag) return; VIEW.yaw=drag.yaw+(e.clientX-drag.x)*.6; VIEW.pitch=Math.max(12,Math.min(82,drag.pitch-(e.clientY-drag.y)*.35)); if(!raf) raf=requestAnimationFrame(redraw); });
+    ['pointerup','pointercancel'].forEach(function(ev){ f.addEventListener(ev,function(){ drag=null; }); });
+    $('osiReset').onclick=function(){ VIEW.yaw=-18; VIEW.pitch=40; redraw(); };
+  })();
   function renderOsi(){
     var o=osi(), t=today();
     $('field').innerHTML=osiSVG(o);
