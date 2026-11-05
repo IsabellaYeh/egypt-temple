@@ -633,7 +633,7 @@
     <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
     <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
     <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
-    <p class="small"><b>祭司職級</b>：職稱取自古埃及神廟的祭司體系，由低到高為潔淨祭司（wʿb）、讀經祭司（ẖry-ḥb）、神之僕（ḥm-nṯr），最高是卡納克阿蒙神廟的大祭司「阿蒙第一先知」。許多基層祭司是兼職的，分成幾個班輪流進神廟服務，其餘時間過一般生活。本站的晉升條件是為體驗設計的，不是古代的規定。</p>
+    <p class="small"><b>祭司職級</b>：職稱取自古埃及神廟的祭司體系，由低到高為潔淨祭司（wab）、讀經祭司（kheri-heb）、神之僕（hem-netjer），最高是卡納克阿蒙神廟的大祭司「阿蒙第一先知」。許多基層祭司是兼職的，分成幾個班輪流進神廟服務，其餘時間過一般生活。本站的晉升條件是為體驗設計的，不是古代的規定。</p>
     <p class="small"><b>古埃及語讀音</b>：象形文字只記子音、不記母音，真正的古代發音已無法確知。本站標的是埃及學家的慣例讀法（在子音間補上 e），並用瀏覽器的語音朗讀唸出來，僅供體驗。</p>
     <p class="small"><b>瀏覽統計</b>：公開網站使用 GoatCounter 做匿名的人數統計，只記錄打開了哪些頁面、從哪裡連進來、用什麼裝置，不使用 cookie，也不會記錄任何祈願、問題或暱稱。</p>
     <p class="small"><b>多人同殿</b>：同時打開這個網頁的人會出現在上方的「殿內」列。只分享暱稱、顏色和所在步驟，祈願內容永遠只留在你的裝置。</p>
@@ -887,7 +887,7 @@
     $('srcRow').innerHTML=s.src.map(function(x){ return '<span class="src">'+esc(x)+'</span>'; }).join('');
     $('stepBody').textContent=s.b;
     $('lineText').textContent=s.l;
-    if(s.eg){ $('egT').textContent=s.eg.t; $('egP').textContent='讀音：'+s.eg.p+'・意思：'+s.eg.zh; $('egBox').classList.remove('hidden'); } else $('egBox').classList.add('hidden');
+    if(s.eg){ $('egT').textContent=s.eg.p; $('egP').textContent='古埃及語・'+s.eg.zh; $('egBox').classList.remove('hidden'); } else $('egBox').classList.add('hidden');
     $('stepLine').classList.add('hidden');
     $('offerBox').classList.toggle('hidden',!s.offer);
     $('btnAct').textContent=s.a; $('btnAct').classList.remove('hidden');
@@ -939,7 +939,7 @@
   };
   $('btnKiss').onclick=function(){
     act('kiss'); burstOn($('kissBox'),14,false); bump('kiss');
-    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">sḏm n.j</span><span class="pr">讀音：sedjem ni・意思：請聽我說</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
+    $('kissBox').innerHTML='<p class="small" style="margin:0">你低下身，親吻了大地。現在，'+esc(god.k)+'正在聽。</p><div class="egl" style="text-align:left"><div style="flex:1;min-width:0"><span class="tr">sedjem ni</span><span class="pr">古埃及語・請聽我說</span></div><button class="say" type="button" id="earSay" aria-label="播放古埃及語讀音">聽</button></div>';
     $('earSay').onclick=function(){ speakEg('se djem ni',this); };
     speakEg('se djem ni',$('earSay'));
     $('prayBox').classList.remove('hidden'); renderPrev(); $('prayText').focus();
@@ -1407,14 +1407,14 @@
   function rankOf(st){ var days=st.days.length, rit=load(CK,0), k=0; RANKS.forEach(function(R,i){ if(days>=R.d && rit>=R.r) k=i; }); return k; }
   function bump(field,n){ var st=stats(); if(field) st[field]=(st[field]||0)+(n||1); var t=today(); if(st.days.indexOf(t)<0) st.days.push(t); var k=rankOf(st), up=k>st.rank; st.rank=Math.max(st.rank,k); save(STK,st); renderRank(); if(up) promote(k); }
   function promote(k){
-    var R=RANKS[k]; $('prT').textContent=R.n; $('prTr').textContent=R.t?R.t+'（'+R.p+'）':''; $('prD').textContent=R.desc;
+    var R=RANKS[k]; $('prT').textContent=R.n; $('prTr').textContent=R.p||''; $('prD').textContent=R.desc;
     setTimeout(function(){ dlg('promo',true); $('prOk').focus(); flash(); burstOn($('prT'),40,true); if(R.p) speakEg(R.p.replace(/-/g,' '),null); },600);
   }
   $('prOk').onclick=function(){ dlg('promo',false); };
   function renderRank(){
     var st=stats(), k=Math.max(st.rank,rankOf(st)), R=RANKS[k], N=RANKS[k+1], days=st.days.length, rit=load(CK,0);
     $('meRank').textContent=R.n; if(typeof pres==='function' && myState && myState.rk!==k) pres({rk:k});
-    var h='<div class="small muted">你的職級</div><div class="rn">'+R.n+'</div>'+(R.t?'<div class="rt">'+R.t+'（'+R.p+'）</div>':'')+'<p class="small" style="margin:8px 0 0">'+R.desc+'</p>';
+    var h='<div class="small muted">你的職級</div><div class="rn">'+R.n+'</div>'+(R.p?'<div class="rt">'+R.p+'</div>':'')+'<p class="small" style="margin:8px 0 0">'+R.desc+'</p>';
     if(N){ var pd=Math.min(1,days/N.d), pr=N.r?Math.min(1,rit/N.r):1;
       h+='<div style="text-align:left;margin-top:12px"><div class="small">下一級：<b>'+N.n+'</b></div>'+
         '<div class="small muted" style="margin-top:6px">參拜天數 '+Math.min(days,N.d)+' / '+N.d+'</div><div class="bar"><i style="width:'+(pd*100).toFixed(0)+'%"></i></div>'+
