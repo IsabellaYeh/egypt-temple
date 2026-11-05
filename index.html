@@ -148,6 +148,12 @@
   #bark.yes{transform:translateX(46px) rotate(-3deg);transition:transform 1.6s ease-in-out}
   #bark.no{transform:translateX(-70px);transition:transform 1.6s ease-in-out}
   #bark.none{transform:translateX(0)}
+  #bark.left{transform:translateX(-18px) rotate(4deg);transition:transform 1.6s ease-in-out}
+  #bark.right{transform:translateX(18px) rotate(-4deg);transition:transform 1.6s ease-in-out}
+  #bark.sway{animation:bsway 1.1s ease-in-out 3}
+  @keyframes bsway{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+  body.calm #bark.sway{animation:none}
+  .oracleline{font-family:"Noto Serif TC",serif;font-size:1.3em;line-height:1.7;text-align:center;color:var(--gold-l);margin:10px 4px;text-shadow:0 0 18px rgba(244,217,140,.35)}
   #bark{transform-box:view-box;transform-origin:150px 150px}
   .walking .bearers{animation:step .6s ease-in-out infinite}
   @keyframes step{50%{transform:translateY(-2px)}}
@@ -647,11 +653,11 @@
   <!-- 神諭出巡 -->
   <section id="s-oracle" class="screen hidden">
     <h2>神諭出巡</h2>
-    <p class="small">節慶時，祭司扛著神的聖船走出神廟。百姓站在路旁，把問題寫在陶片或莎草紙上呈給神；問題必須能用「是」或「否」回答。聖船往前傾、靠近你，代表「是」；往後退開，代表「否」。</p>
+    <p class="small">節慶時，祭司扛著神的聖船走出神廟。百姓站在路旁，把心中的疑問寫在陶片上呈給神。聖船會停下、傾身、轉向或輕輕搖晃，祭司再把神的意思轉述成一句話。神諭從不把話說滿，要聽懂它，得靠你自己。</p>
     <div class="small muted" style="margin:4px 0 6px">向哪一位神求問？</div>
     <div class="gods" id="oGods"></div>
-    <label class="lbl" for="oQ">寫下你的是非題</label>
-    <div class="ostracon"><textarea id="oQ" maxlength="80" placeholder="例如：我這個月該去面試那份工作嗎？"></textarea></div>
+    <label class="lbl" for="oQ">寫下你想問神的事</label>
+    <div class="ostracon"><textarea id="oQ" maxlength="80" placeholder="例如：我該怎麼面對這份新工作？"></textarea></div>
     <p class="small muted" style="margin-top:8px">問題只存在你的裝置，同殿的人只會看到你求問了哪位神、得到什麼回答。</p>
     <div class="spacer"></div>
     <button class="btn" type="button" id="oStart" disabled>呈上陶片，等聖船出巡</button>
@@ -690,9 +696,9 @@
         <div class="small" id="oResGod"></div>
         <div style="margin:6px 0 2px" id="oResQ"></div>
       </div>
-      <div class="verdict gt" id="oVerdict"></div>
+      <div class="verdict gt" id="oVerdict" style="font-size:1.4em;letter-spacing:.12em"></div>
       <p class="center" id="oResText"></p>
-      <p class="small muted center">結果是隨機產生的，只是依史料重現的文化體驗。真正重要的決定，請好好想清楚。</p>
+      <p class="small muted center">神諭是隨機抽出的，只是依史料重現的文化體驗。它不替你做決定，只陪你想一想。</p>
     </div>
     <div class="spacer"></div>
     <button class="btn hidden" type="button" id="oAgain">再問一個問題</button>
@@ -734,7 +740,7 @@
     <p class="small">學者 Alexandre Moret 於 1902 年首先把這些來源整理成完整流程。柏林莎草紙的阿蒙儀式約有 66 則，本站精簡為 13 步；更衣、塗油的細節主要來自阿拜多斯版本。每份來源都不完整，所以這是「最可能的樣子」，不是唯一正解。</p>
     <p class="small"><b>聽耳之門</b>依據新王國時期的個人虔信：神廟背後的聽耳禮拜堂、神廟大門處的祈禱點，以及獻給普塔、阿蒙-拉、托特、哈索爾等神的耳朵還願碑與耳朵模型。注意：學界對卡納克東側神殿是否真的開放給百姓使用仍有爭論。</p>
     <p class="small"><b>吉凶日曆</b>依據古埃及的吉凶日曆傳統，以《開羅曆》（P. Cairo 86637）的格式為參考：一天分三段標吉凶，附上相關神話與宜忌。本站內容是改寫的示範，不是原文。</p>
-    <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓提出是非題，由聖船的動作表示回答。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
+    <p class="small"><b>神諭出巡</b>依據新王國以後的神諭習俗：神的聖船在節慶出巡時，百姓向神提問，由聖船的動作表示回答；古代多半問的是能用是或否回答的問題，本站改成以聖船的動作加上一句古埃及箴言來回應，留給你自己解讀。箴言取自《普塔霍特普的教誨》、《阿蒙尼摩普的教誨》等智慧文學與墓室中的《豎琴師之歌》，由本站以白話改寫，不是逐字翻譯。工匠村代爾麥地那的居民最常向神化的國王阿蒙霍特普一世求問，大多數時期最常被求問的則是阿蒙神。網頁上的回答是隨機產生的。</p>
     <p class="small"><b>打破紅陶罐</b>依據古埃及的「詛咒文書」：中王國時期的人把敵人和災禍的名字寫在紅陶罐或陶偶上，打碎後埋起來。</p>
     <p class="small"><b>奧西里斯麥田</b>依據奧西里斯秘儀中的「奧西里斯苗床」與「穀物奧西里斯」：在奧西里斯形狀的模子裡種麥子，讓它發芽，象徵復活。網站上的麥子每天澆一次水會長高一階，七階後可以收成。</p>
     <p class="small"><b>祭司職級</b>：職稱取自古埃及神廟的祭司體系，由低到高為潔淨祭司、讀經祭司、神之僕，最高是卡納克阿蒙神廟的大祭司「阿蒙第一先知」。許多基層祭司是兼職的，分成幾個班輪流進神廟服務，其餘時間過一般生活。本站的晉升條件是為體驗設計的，不是古代的規定。</p>
@@ -1554,6 +1560,13 @@
 
   /* ---------- 神諭出巡 ---------- */
   var OK_='egtemple-oracles-v1';
+  var OMOVES=[
+    {k:'fwd',cls:'yes',n:'聖船向你傾身',lines:[['一生都要跟隨你的心。','《普塔霍特普的教誨》'],['趁還活著，跟隨你的心，把日子過得像節慶，不要厭倦。','《豎琴師之歌》']]},
+    {k:'back',cls:'no',n:'聖船退後了一步',lines:[['不要說「今天和明天一樣」，沒有人知道明天會帶來什麼。','《阿蒙尼摩普的教誨》'],['不要因為自己懂得多就驕傲，向無知的人請教，也向有智慧的人請教。','《普塔霍特普的教誨》']]},
+    {k:'left',cls:'left',n:'聖船轉向左方',lines:[['人說的話是一回事，神做的事是另一回事。','《阿蒙尼摩普的教誨》'],['好的話語比綠寶石還難尋，卻可能出自推磨的婢女口中。','《普塔霍特普的教誨》']]},
+    {k:'right',cls:'right',n:'聖船轉向右方',lines:[['瑪特是偉大的，它的力量長久不變。','《普塔霍特普的教誨》'],['寧可在神的手中貧窮，也不要在倉庫裡富有。','《阿蒙尼摩普的教誨》']]},
+    {k:'still',cls:'none',n:'聖船停在原地',lines:[['真正安靜的人，像園中的一棵樹，枝葉茂盛，果實加倍。','《阿蒙尼摩普的教誨》']]},
+    {k:'sway',cls:'sway',n:'聖船輕輕搖晃',lines:[['帶著快樂的心吃麵包，勝過帶著煩惱擁有財富。','《阿蒙尼摩普的教誨》']]}];
   var OGODS=[
     {k:'阿蒙-拉',e:'Amun-Ra',d:'卡納克的眾神之王，大多數時期最常被求問的神。'},
     {k:'阿蒙霍特普一世',e:'Amenhotep I',d:'被神化的國王，工匠村代爾麥地那居民最常求問的對象。'}];
@@ -1578,7 +1591,7 @@
   function calmNow(){ return document.body.classList.contains('calm') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
   $('oStart').onclick=function(){
     clearO();
-    var q=$('oQ').value.trim(), r=Math.random(), ans=r<0.45?'yes':(r<0.9?'no':'none');
+    var q=$('oQ').value.trim(), mv=OMOVES[Math.floor(Math.random()*OMOVES.length)], pick=mv.lines[Math.floor(Math.random()*mv.lines.length)], line=pick[0], srcT=pick[1], ans=mv.k;
     var bark=$('bark'); bark.setAttribute('class',''); $('oStage').classList.add('walking');
     $('petitioner').innerHTML=lookArt(lookOK(prefs.look),COLORS.indexOf(prefs.color)>=0?prefs.color:'#D4A847',true);
     $('oShard').style.opacity=0;
@@ -1589,15 +1602,14 @@
     var f=calmNow()?0.15:1;
     later(function(){ bark.setAttribute('class','arrive'); },60);
     later(function(){ $('oStage').classList.remove('walking'); $('oShard').style.opacity=1; $('oStatus').textContent='聖船停在你面前。你舉起陶片，向神提問……'; },3100*f+60);
-    later(function(){ bark.setAttribute('class',ans==='yes'?'yes':(ans==='no'?'no':'none')); $('oStatus').textContent='……'; },5200*f+60);
+    later(function(){ bark.setAttribute('class',mv.cls); $('oStatus').textContent='……'; },5200*f+60);
     later(function(){
-      var V={yes:['是','聖船向前傾，朝你靠了過來。神的回答是「是」。'],no:['否','聖船向後退開了。神的回答是「否」。'],none:['無應','聖船停在原地，一動也不動。神這次沒有回答，古人遇到這種情況，會換個說法再問一次。']}[ans];
       $('oResGod').textContent='呈給'+oGod.k+'的陶片'; $('oResQ').textContent=q;
-      $('oVerdict').textContent=V[0]; $('oResText').textContent=V[1];
+      $('oVerdict').textContent=mv.n; $('oResText').innerHTML='<span class="small muted">祭司轉述神的話：</span><div class="oracleline"></div>'; $('oResText').querySelector('.oracleline').textContent='「'+line+'」'; var sr=document.createElement('div'); sr.className='small muted center'; sr.textContent='改寫自'+srcT; $('oResText').appendChild(sr);
       $('oStatus').textContent='';
       $('oResult').classList.remove('hidden'); $('oAgain').classList.remove('hidden');
-      var all=load(OK_,[]); all.unshift({id:Date.now().toString(36),god:oGod.k,q:q,a:ans,at:Date.now()}); save(OK_,all.slice(0,100)); bump('oracles');
-      act('or-'+ans); if(ans!=='none'){ flash(); burstOn($('oVerdict'),30,true); }
+      var all=load(OK_,[]); all.unshift({id:Date.now().toString(36),god:oGod.k,q:q,a:ans,m:mv.n,l:line,src:srcT,at:Date.now()}); save(OK_,all.slice(0,100)); bump('oracles');
+      act('or-'+ans); flash(); burstOn($('oVerdict'),30,true);
     },7000*f+60);
   };
   $('oAgain').onclick=function(){ clearO(); $('oQ').value=''; oCheck(); show('s-oracle'); };
@@ -1610,7 +1622,7 @@
       var c=document.createElement('div'); c.className='ostracon'; c.style.margin='10px 0';
       var g=document.createElement('div'); g.className='small'; g.textContent=fmt(o.at)+'・呈給'+o.god;
       var q=document.createElement('div'); q.style.margin='4px 0'; q.textContent=o.q;
-      var a=document.createElement('div'); a.style.fontWeight='900'; a.textContent='回答：'+({yes:'是',no:'否',none:'無應'}[o.a]||'');
+      var a=document.createElement('div'); a.style.fontWeight='900'; a.textContent=o.l?('神諭：「'+o.l+'」'+(o.src?'（'+o.src+'）':'')):('回答：'+({yes:'是',no:'否',none:'無應'}[o.a]||''));
       var d=document.createElement('button'); d.type='button'; d.className='btn link'; d.style.cssText='color:#5A4630;text-align:left;padding-left:0;min-height:40px'; d.textContent='刪除這片陶片';
       d.onclick=function(){ delKind='oracle'; delId=o.id; dlg('confirm',true); $('cfNo').focus(); };
       c.appendChild(g); c.appendChild(q); c.appendChild(a); c.appendChild(d); box.appendChild(c);
@@ -1653,7 +1665,7 @@
   }
   function actText(ps){
     var g=godName(ps.god);
-    return {kiss:'親吻了大地', open:'打開了阿蒙-拉的神龕', maat:'向阿蒙-拉獻上瑪特', offer:'向阿蒙-拉擺上供品', done:'完成了今日儀式', stela:(g?'向'+g:'')+'獻上了還願碑', 'or-yes':'得到神諭：是', 'or-no':'得到神諭：否', 'or-none':'求問神諭，神沒有回答', pot:'打破了一個紅陶罐', sow:'在奧西里斯苗床播下麥種', water:'為奧西里斯麥田澆了水', harvest:'收成了奧西里斯麥子'}[ps.act]||'';
+    return {kiss:'親吻了大地', open:'打開了阿蒙-拉的神龕', maat:'向阿蒙-拉獻上瑪特', offer:'向阿蒙-拉擺上供品', done:'完成了今日儀式', stela:(g?'向'+g:'')+'獻上了還願碑', 'or-yes':'得到了神諭', 'or-no':'得到了神諭', 'or-none':'得到了神諭', 'or-fwd':'得到了神諭', 'or-back':'得到了神諭', 'or-left':'得到了神諭', 'or-right':'得到了神諭', 'or-still':'得到了神諭', 'or-sway':'得到了神諭', pot:'打破了一個紅陶罐', sow:'在奧西里斯苗床播下麥種', water:'為奧西里斯麥田澆了水', harvest:'收成了奧西里斯麥子'}[ps.act]||'';
   }
   function lookArt(k,c,me){
     var S='#9A6A45', W='#9A6A45', L=me?'#FFF7DE':'#EEE7D6', B='#1C1C1C', G='#D4A847';
