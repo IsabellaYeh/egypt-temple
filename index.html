@@ -278,6 +278,22 @@
   @keyframes drop{0%{opacity:0;transform:translateY(-30px)}30%{opacity:1}100%{opacity:0;transform:translateY(40px)}}
   .grain{animation:grainfall var(--t) cubic-bezier(.5,0,.9,.6) forwards;animation-delay:var(--d);opacity:0}
   @keyframes grainfall{0%{opacity:0;transform:translateY(-250px)}10%{opacity:1}92%{opacity:1}100%{opacity:0;transform:translateY(0)}}
+  #priest{transition:transform 1.3s cubic-bezier(.45,.05,.4,1)}
+  #priest.walking #priestFig{animation:pbob .42s ease-in-out infinite}
+  @keyframes pbob{50%{transform:translateY(-3px)}}
+  body.calm #priest{transition:none} body.calm #priest.walking #priestFig{animation:none}
+  @media (prefers-reduced-motion: reduce){#priest{transition:none}#priest.walking #priestFig{animation:none}}
+  #bField svg{max-height:56vh;width:auto;max-width:100%;margin:0 auto;display:block}
+  .tools{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+  .tool{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-size:.72em;color:var(--muted)}
+  .tool svg{width:28px;height:28px}
+  .tool.cur{border-color:var(--gold);color:var(--gold-l);background:rgba(212,168,71,.14)}
+  .tool.done{color:var(--ink)}
+  .drawframe{stroke-dasharray:1400;stroke-dashoffset:1400;animation:dframe 2s ease-in-out forwards}
+  @keyframes dframe{to{stroke-dashoffset:0}}
+  .fadein{animation:fin 1.4s ease forwards;opacity:0}
+  @keyframes fin{to{opacity:1}}
+  body.calm .drawframe{animation:none;stroke-dashoffset:0} body.calm .fadein{animation:none;opacity:1}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -435,11 +451,10 @@
           <g class="smoke" stroke="#C9C2B4" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M62 182 q-5 -10 0 -20 q5 -10 0 -20"/><path d="M68 180 q5 -10 0 -20 q-5 -10 0 -20"/><path d="M65 182 q-4 -9 0 -18"/></g>
         </g>
         <g id="water" class="fx" style="opacity:0">
-          <g transform="rotate(-38 330 180)"><path d="M324 168 L336 168 L336 172 Q343 182 337 194 L323 194 Q317 182 324 172Z" fill="url(#gg)"/><path d="M336 170 Q344 162 348 164" stroke="url(#gg)" stroke-width="3" fill="none"/></g>
-          <path d="M312 170 Q296 186 290 214" stroke="#9CD2F5" stroke-width="2" stroke-dasharray="3 4" fill="none"/>
-          <ellipse cx="288" cy="226" rx="10" ry="2" fill="#9CD2F5" opacity=".5"/>
+          <path d="M292 150 Q282 182 280 222" stroke="#9CD2F5" stroke-width="2" stroke-dasharray="3 4" fill="none"/>
+          <ellipse cx="279" cy="230" rx="10" ry="2" fill="#9CD2F5" opacity=".5"/>
         </g>
-        <g id="priest" transform="translate(372 132) scale(-.58 .58)"><g id="priestFig"></g></g>
+        <g id="priest" style="transform:translate(372px,132px) scale(-.58,.58)"><g id="priestFig"></g></g>
         <g id="prost" class="fx" style="opacity:0"><text x="200" y="12" text-anchor="middle" font-size="10" letter-spacing="3" fill="#F4D98C">親吻大地</text></g>
         <g id="foot" class="fx" style="opacity:0"><text x="200" y="12" text-anchor="middle" font-size="10" letter-spacing="3" fill="#F4D98C">足跡已掃除</text></g>
       </svg>
@@ -609,13 +624,23 @@
   <!-- 奧西里斯麥田 -->
   <section id="s-osiris" class="screen hidden">
     <h2>奧西里斯麥田</h2>
-    <p class="small">古埃及人會做一個奧西里斯形狀的木框，裡面鋪上亞麻布、填滿尼羅河的淤泥，再撒下大麥種子澆水。種子發芽後，整個奧西里斯的身形就會長滿綠色麥苗，象徵他死而復生，也象徵尼羅河每年帶回的生命。圖坦卡門的墓裡就出土過這樣的「奧西里斯苗床」。</p>
-    <div class="field" id="field" style="touch-action:none;cursor:grab"></div>
-    <div class="row" style="justify-content:space-between;align-items:center;margin-top:-2px"><span class="small muted">用手指拖動可以轉換角度</span><button class="iconbtn" type="button" id="osiReset">回正</button></div>
-    <div class="growbar" id="growBar" aria-hidden="true"></div>
-    <p class="center" id="osiStatus" aria-live="polite"></p>
-    <button class="btn" type="button" id="osiBtn"></button>
-    <p class="small muted center" id="osiNote"></p>
+    <p class="small">古埃及人會做一個奧西里斯形狀的木框，裡面鋪上亞麻布、填滿尼羅河的淤泥，再撒下大麥種子澆水。種子發芽後，整個奧西里斯的身形就會長滿綠色麥苗，象徵他死而復生，也象徵尼羅河每年帶回的生命。圖坦卡門的墓裡就出土過這樣的「奧西里斯苗床」。現在換你親手做一個：照順序用五樣工具完成，種子撒在哪裡，麥苗就從哪裡長出來。</p>
+    <div id="osiBuild" class="hidden">
+      <div class="tools" id="bTools" role="list"></div>
+      <div class="field" id="bField" style="touch-action:none"></div>
+      <div class="bar" style="margin-top:6px"><i id="bProg" style="width:0%"></i></div>
+      <p class="center" id="bHint" aria-live="polite"></p>
+      <button class="btn" type="button" id="bBtn"></button>
+      <button class="btn link" type="button" id="bUndo">重來</button>
+    </div>
+    <div id="osiGrow">
+      <div class="field" id="field" style="touch-action:none;cursor:grab"></div>
+      <div class="row" style="justify-content:space-between;align-items:center;margin-top:-2px"><span class="small muted">用手指拖動可以轉換角度</span><button class="iconbtn" type="button" id="osiReset">回正</button></div>
+      <div class="growbar" id="growBar" aria-hidden="true"></div>
+      <p class="center" id="osiStatus" aria-live="polite"></p>
+      <button class="btn" type="button" id="osiBtn"></button>
+      <p class="small muted center" id="osiNote"></p>
+    </div>
     <button class="btn link" type="button" data-go="s-home">回到神廟入口</button>
   </section>
 
@@ -875,6 +900,29 @@
       '<path d="M62 66 L76 58 L78 62 L65 71Z" fill="'+S+'"/><path d="M60 72 L74 66 L76 70 L62 77Z" fill="'+S+'"/>'+
       '<ellipse cx="51" cy="45" rx="8.5" ry="9.5" fill="'+S+'"/><path d="M58 42 L62 48 L58 50Z" fill="'+S+'"/>'+
       '<path d="M53 43.5 Q55.5 42 58 43.5 Q55.5 45 53 43.5Z" fill="#fff"/><circle cx="55.7" cy="43.5" r="1" fill="'+BLK+'"/><path d="M52 43.5 L47.5 44.5" stroke="'+BLK+'" stroke-width="1.1"/>'; };
+  function priestArt(pose){
+    var S='#9A6A45', legs='<path d="M44 150 L42 188 L48 188 L50 150Z" fill="'+S+'"/><path d="M53 150 L61 188 L67 188 L58 150Z" fill="'+S+'"/><path d="M40 188 L53 188 L53 192 L40 192Z" fill="'+S+'"/><path d="M59 188 L75 188 Q76 192 74 192 L59 192Z" fill="'+S+'"/>';
+    var kilt='<path d="M40 96 L62 96 L70 160 L36 160Z" fill="'+LINEN+'" opacity=".96"/><path d="M40 96 L62 96 L61 102 L41 102Z" fill="'+LINEN+'"/>';
+    var back='<path d="M37 66 L31 103 L35 105 L41 70Z" fill="'+S+'"/>';
+    var torso='<rect x="47" y="53" width="7" height="12" fill="'+S+'"/><path d="M36 64 Q50 60 64 64 L60 98 L42 98Z" fill="'+S+'"/><path d="M38 64 Q50 76 62 64" fill="none" stroke="'+GOLD+'" stroke-width="2.5"/>';
+    var head='<ellipse cx="51" cy="45" rx="8.5" ry="9.5" fill="'+S+'"/><path d="M58 42 L62 48 L58 50Z" fill="'+S+'"/><path d="M53 43.5 Q55.5 42 58 43.5 Q55.5 45 53 43.5Z" fill="#fff"/><circle cx="55.7" cy="43.5" r="1" fill="'+BLK+'"/><path d="M52 43.5 L47.5 44.5" stroke="'+BLK+'" stroke-width="1.1"/>';
+    var arms;
+    switch(pose){
+      case 'reach': arms='<path d="M62 66 L88 69 L88 75 L62 74Z" fill="'+S+'"/><circle cx="89" cy="72" r="3.4" fill="'+S+'"/>'; break;
+      case 'censer': arms='<path d="M62 66 L86 72 L86 78 L62 74Z" fill="'+S+'"/><path d="M84 74 L106 74 L106 78 L84 78Z" fill="'+GOLD+'"/><path d="M100 70 h10 l-2 5 h-6z" fill="'+GOLD+'"/><circle cx="105" cy="68" r="2.6" fill="#E0552B"/>'; break;
+      case 'offer': arms='<path d="M62 68 L86 74 L86 80 L62 75Z" fill="'+S+'"/><path d="M60 76 L84 82 L84 87 L60 82Z" fill="'+S+'"/>'; break;
+      case 'raise': arms='<path d="M62 66 L72 38 L78 40 L67 69Z" fill="'+S+'"/><g transform="rotate(-50 76 30)"><path d="M70 22 L82 22 L82 26 Q89 36 83 48 L69 48 Q63 36 70 26Z" fill="'+GOLD+'"/><path d="M82 24 Q90 16 94 18" stroke="'+GOLD+'" stroke-width="3" fill="none"/></g>'; break;
+      case 'sweep': arms='<path d="M62 66 L76 92 L72 95 L59 70Z" fill="'+S+'"/><path d="M74 92 L98 150" stroke="#8A6236" stroke-width="3"/><path d="M94 146 L106 160 M98 148 L104 162 M92 150 L100 164" stroke="#C9B07A" stroke-width="2"/>'; break;
+      default: arms='<path d="M62 66 L76 58 L78 62 L65 71Z" fill="'+S+'"/><path d="M60 72 L74 66 L76 70 L62 77Z" fill="'+S+'"/>';
+    }
+    if(pose==='kneel'){
+      var legsK='<path d="M38 150 L40 186 L74 186 L74 192 L36 192 L34 150Z" fill="'+S+'"/>';
+      var armsK='<path d="M62 70 L84 92 L80 96 L60 76Z" fill="'+S+'"/>';
+      return legsK+'<path d="M36 112 L62 112 L66 160 L34 160Z" fill="'+LINEN+'"/>'+'<g transform="translate(6 30) rotate(58 50 110)">'+back+torso+armsK+head+'</g>';
+    }
+    if(pose==='sweep') return back+legs+kilt+'<g transform="rotate(28 50 100)">'+torso+head+'</g>'+arms;
+    return back+legs+torso+kilt+arms+head;
+  }
   var OBJ={
     '白麵包':'<path d="M7 38 L13 8 L19 38Z" fill="#E7C88C"/><path d="M19 38 L26 13 L33 38Z" fill="#D2AA66"/><g fill="#A9824A"><circle cx="13" cy="24" r="1"/><circle cx="12" cy="31" r="1"/><circle cx="26" cy="27" r="1"/></g>',
     '糕點':'<ellipse cx="20" cy="34" rx="14" ry="4.5" fill="#A8692F"/><ellipse cx="20" cy="27" rx="12" ry="4.5" fill="#C98C4A"/><ellipse cx="20" cy="20" rx="9" ry="4" fill="#DDA761"/><path d="M14 20 Q20 16 26 20" stroke="url(#gg)" stroke-width="1.6" fill="none"/><path d="M26 21 q1 5 0 7" stroke="#E8B54A" stroke-width="1.4"/>',
@@ -891,7 +939,7 @@
   }
   $('godFig').innerHTML=DRAW['阿蒙-拉']();
   $('maatFig').innerHTML=DRAW['瑪特']();
-  $('priestFig').innerHTML=DRAW['祭司']();
+  $('priestFig').innerHTML=priestArt('stand');
 
   /* ---------- 每日神廟儀式 ---------- */
   var STEPS=[
@@ -960,6 +1008,16 @@
     op('prost',f.prost); op('foot',f.foot); op('holy',f.open && !f.closed);
   }
   function prevFx(i){ return i>0?STEPS[i-1].fx:{}; }
+  var PX=[330,300,252,252,262,292,262,342,254,252,282,330,320];
+  var POSE=['censer','stand','reach','reach','reach','kneel','offer','raise','reach','reach','offer','sweep','stand'];
+  var priestX=372;
+  function placePriest(x,pose){ $('priest').style.transform='translate('+x+'px,132px) scale(-.58,.58)'; if(pose) $('priestFig').innerHTML=priestArt(pose); priestX=x; }
+  function walkPriest(x,pose,cb){
+    if(Math.abs(x-priestX)<2 || calmNow()){ placePriest(x,pose); cb(); return; }
+    $('priestFig').innerHTML=priestArt('stand'); $('priest').classList.add('walking');
+    $('priest').style.transform='translate('+x+'px,132px) scale(-.58,.58)'; priestX=x;
+    setTimeout(function(){ $('priest').classList.remove('walking'); $('priestFig').innerHTML=priestArt(pose); setTimeout(cb,250); },1300);
+  }
   function renderStep(){
     var s=STEPS[cur];
     prog.querySelectorAll('span').forEach(function(sp,i){ sp.classList.toggle('on',i<=cur); });
@@ -979,21 +1037,24 @@
     window.scrollTo(0,0);
     var h=$('stepTitle'); h.setAttribute('tabindex','-1'); h.focus({preventScroll:true});
   }
-  $('btnStartRitual').onclick=function(){ cur=0; picked=[]; drawFood(); ob.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed','false');}); show('s-ritual'); renderStep(); };
+  $('btnStartRitual').onclick=function(){ placePriest(372,'stand'); cur=0; picked=[]; drawFood(); ob.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed','false');}); show('s-ritual'); renderStep(); };
   $('btnAct').onclick=function(){
-    var s=STEPS[cur];
+    var s=STEPS[cur], btn=this; btn.disabled=true; $('offerBox').classList.add('hidden');
+    unlockSpeech();
+    walkPriest(PX[cur],POSE[cur],function(){ btn.disabled=false; doAct(s,btn); });
+  };
+  function doAct(s,btn){
     setFx(s.fx);
     var ACTS={4:'open',5:'kiss',6:'maat',10:'offer'}; if(ACTS[cur]) act(ACTS[cur]);
     burstOn($('stage'), cur===4?28:16, cur===4); if(cur===4) flash();
     $('stepLine').classList.remove('hidden');
     if(s.eg) speakEg(s.eg.say,$('egSay'));
-    this.classList.add('hidden');
-    $('offerBox').classList.add('hidden');
+    btn.classList.add('hidden');
     $('btnNext').textContent = cur===STEPS.length-1 ? '收下今日紀錄' : '下一步';
     $('btnNext').classList.remove('hidden'); $('btnNext').focus();
-  };
+  }
   $('btnNext').onclick=function(){
-    if(cur<STEPS.length-1){ cur++; renderStep(); }
+    if(cur<STEPS.length-1){ cur++; $('priestFig').innerHTML=priestArt('stand'); renderStep(); }
     else{ var n=load(CK,0)+1; save(CK,n); $('ritualCount').textContent='這是你第 '+n+' 次完成每日儀式'; bump(null); act('done'); show('s-ritual-done'); setTimeout(function(){ flash(); burstOn(document.querySelector('.badge'),36,true); },250); }
   };
   $('btnQuit').onclick=function(){ show('s-home'); };
@@ -1354,7 +1415,15 @@
     for(var i=0;i<900 && a.length<480;i++){ var x=92+r()*96, y=16+r()*378; if(cx && !cx.isPointInPath(P,x,y)) continue; a.push([x,y,.75+r()*.5,r()*2-1,r()]); }
     a.sort(function(m,n){ return m[1]-n[1]; }); return a;
   })();
+  function bladesOf(o){
+    if(!o.seeds || !o.seeds.length) return BLADES;
+    if(o._bl && o._bl.n===o.seeds.length) return o._bl.a;
+    var r=rng(o.seeds.length*31+7), a=[];
+    o.seeds.forEach(function(q){ a.push([q[0],q[1],.75+r()*.5,r()*2-1,r()]); if(r()<.6) a.push([q[0]+r()*4-2,q[1]+r()*4-2,.7+r()*.5,r()*2-1,r()]); });
+    o._bl={n:o.seeds.length,a:a}; return a;
+  }
   function osiSVG(o){
+    var BLADES=bladesOf(o);
     var st=o.sown?o.stage:-1, L=[0,4,9,14,20,26,30,34][Math.max(0,st)], col=['#7FBF5A','#86C35E','#7BBA52','#70AF49','#6AA645','#8EAA44','#B9B04A','#D8B44C'][Math.max(0,st)], blades='', seeds='';
     var items=BLADES.map(function(p,i){ var q=P3(p[0],p[1],0); return {p:p,i:i,q:q}; }).sort(function(m,n){ return m.q[2]-n.q[2]; });
     if(st===0) seeds=items.map(function(it){ if(it.i%2) return ''; var q=it.q; return '<ellipse cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" rx="'+(1.4*q[3]).toFixed(2)+'" ry="'+(.9*q[3]).toFixed(2)+'" fill="#D8C08A"/>'; }).join('');
@@ -1383,7 +1452,83 @@
     ['pointerup','pointercancel'].forEach(function(ev){ f.addEventListener(ev,function(){ drag=null; }); });
     $('osiReset').onclick=function(){ VIEW.yaw=-18; VIEW.pitch=40; redraw(); };
   })();
+  /* ---- 製作苗床：工具 ---- */
+  var BT=[{k:'frame',n:'木框'},{k:'linen',n:'亞麻布'},{k:'silt',n:'淤泥'},{k:'seed',n:'大麥'},{k:'water',n:'澆水'}];
+  var TOOLICON={frame:'<path d="M8 4 L20 4 L24 10 L22 26 L6 26 L4 10Z" fill="none" stroke="#C9963E" stroke-width="2.4"/>',
+    linen:'<rect x="5" y="5" width="18" height="18" fill="#EDE4D0"/><path d="M5 10 H23 M5 15 H23 M5 20 H23 M10 5 V23 M15 5 V23 M20 5 V23" stroke="#C9BFA8" stroke-width=".8"/>',
+    silt:'<path d="M4 20 Q14 8 24 20 Z" fill="#4A3420"/><circle cx="10" cy="18" r="1.5" fill="#6B4E30"/><circle cx="17" cy="16" r="1.2" fill="#6B4E30"/>',
+    seed:'<g fill="#D8C08A"><ellipse cx="9" cy="10" rx="2" ry="3.4" transform="rotate(-20 9 10)"/><ellipse cx="17" cy="9" rx="2" ry="3.4" transform="rotate(25 17 9)"/><ellipse cx="13" cy="18" rx="2" ry="3.4"/><ellipse cx="20" cy="19" rx="2" ry="3.4" transform="rotate(-30 20 19)"/></g>',
+    water:'<path d="M14 4 Q22 16 20 21 Q17 26 14 26 Q11 26 8 21 Q6 16 14 4Z" fill="#7FB3E0"/>'};
+  var B={step:0,silt:[],seeds:[],cover:null,covered:0};
+  var OSI_IN=(function(){ try{ var P=new Path2D(OSI_PATH), c=document.createElement('canvas').getContext('2d'); return function(x,y){ return c.isPointInPath(P,x,y); }; }catch(e){ return function(){ return true; }; } })();
+  function coverPts(){ var a=[]; for(var y=20;y<392;y+=12) for(var x=94;x<190;x+=10) if(OSI_IN(x,y)) a.push([x,y,0]); return a; }
+  function startBuild(){ B={step:0,silt:[],seeds:[],cover:coverPts(),covered:0}; renderBuild(true); }
+  function bSVG(){
+    var st=B.step, h='<svg viewBox="0 0 280 410" id="bsvg" role="img" aria-label="製作中的奧西里斯苗床">'+
+      '<defs><clipPath id="bClip"><path d="'+OSI_PATH+'"/></clipPath><pattern id="weave" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#EDE4D0"/><path d="M0 3 H6 M3 0 V6" stroke="#D6CBB0" stroke-width=".7"/></pattern></defs>'+
+      '<path d="'+OSI_PATH+'" fill="#0E120A" stroke="#3A4030" stroke-width="1.2" stroke-dasharray="4 4"/>'+
+      '<path d="M127 62 Q113 40 119 16 M153 62 Q167 40 161 16" stroke="#3A4030" stroke-width="1.2" fill="none" stroke-dasharray="3 3"/>';
+    if(st>=2||B.linenDone) h+='<path d="'+OSI_PATH+'" fill="url(#weave)" class="'+(B.anim==='linen'?'fadein':'')+'"/>';
+    h+='<g clip-path="url(#bClip)" id="bSilt">'+B.silt.map(function(c){ return '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="16" fill="#3E2C1A"/>'; }).join('')+(B.siltDone?'<path d="'+OSI_PATH+'" fill="#3E2C1A"/>':'')+'</g>';
+    h+='<g id="bSeeds">'+B.seeds.map(function(q){ return '<ellipse cx="'+q[0]+'" cy="'+q[1]+'" rx="1.4" ry="2.4" fill="#D8C08A"/>'; }).join('')+'</g>';
+    if(st>=1||B.frameDone) h+='<path d="'+OSI_PATH+'" fill="none" stroke="#6B4826" stroke-width="8" stroke-linejoin="round" class="'+(B.anim==='frame'?'drawframe':'')+'"/><path d="'+OSI_PATH+'" fill="none" stroke="url(#ggL)" stroke-width="1.6" class="'+(B.anim==='frame'?'drawframe':'')+'"/><path d="M127 62 Q113 40 119 16 M153 62 Q167 40 161 16" stroke="url(#ggL)" stroke-width="1.6" fill="none" class="'+(B.anim==='frame'?'drawframe':'')+'"/>';
+    h+='<g id="bDrops"></g></svg>';
+    B.anim=''; return h;
+  }
+  function renderBuild(full){
+    var st=B.step;
+    $('bTools').innerHTML=BT.map(function(t,i){ return '<div class="tool'+(i===st?' cur':'')+(i<st?' done':'')+'" role="listitem" aria-current="'+(i===st)+'"><svg viewBox="0 0 28 28" aria-hidden="true">'+TOOLICON[t.k]+'</svg>'+(i<st?'✓ ':'')+t.n+'</div>'; }).join('');
+    if(full!==false) $('bField').innerHTML=bSVG();
+    var hint=['第一步：組裝奧西里斯形狀的木框。','第二步：在木框裡鋪上亞麻布，防止泥土漏掉。','第三步：用手指在苗床上來回抹，把尼羅河淤泥填滿。','第四步：用手指在淤泥上點或劃，撒下大麥種子。','最後一步：為種子澆第一次水。'][st];
+    $('bHint').textContent=hint;
+    var btn=$('bBtn'), prog=0;
+    if(st===0){ btn.textContent='放上木框'; btn.disabled=false; }
+    else if(st===1){ btn.textContent='鋪上亞麻布'; btn.disabled=false; prog=0; }
+    else if(st===2){ prog=B.cover?B.covered/B.cover.length:0; btn.textContent=prog>=.85?'淤泥填好了':'還要再抹一些淤泥（'+Math.round(prog*100)+'%）'; btn.disabled=prog<.85; }
+    else if(st===3){ prog=Math.min(1,B.seeds.length/80); btn.textContent=B.seeds.length<80?'再多撒一些種子（'+B.seeds.length+' / 80）':'種子撒好了（'+B.seeds.length+' 顆）'; btn.disabled=B.seeds.length<80; }
+    else { btn.textContent='澆水'; btn.disabled=false; }
+    $('bProg').style.width=(st===2||st===3?prog*100:st*25)+'%';
+  }
+  function svgPt(e){ var sv=$('bsvg'); if(!sv) return null; var pt=sv.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY; var m=sv.getScreenCTM(); if(!m) return null; var q=pt.matrixTransform(m.inverse()); return [q.x,q.y]; }
+  (function(){
+    var f=$('bField'), down=false, lastSeed=0;
+    function paint(e){
+      var q=svgPt(e); if(!q) return;
+      if(B.step===2){
+        if(!OSI_IN(q[0],q[1])) return;
+        B.silt.push([Math.round(q[0]),Math.round(q[1])]);
+        var g=$('bSilt'); if(g){ var c=document.createElementNS('http://www.w3.org/2000/svg','circle'); c.setAttribute('cx',q[0]); c.setAttribute('cy',q[1]); c.setAttribute('r',16); c.setAttribute('fill','#3E2C1A'); g.appendChild(c); }
+        B.cover.forEach(function(p){ if(!p[2] && (p[0]-q[0])*(p[0]-q[0])+(p[1]-q[1])*(p[1]-q[1])<300){ p[2]=1; B.covered++; } });
+        renderBuild(false);
+      } else if(B.step===3){
+        var now=Date.now(); if(now-lastSeed<35) return; lastSeed=now;
+        for(var k=0;k<3;k++){ var x=q[0]+Math.random()*16-8, y=q[1]+Math.random()*16-8; if(!OSI_IN(x,y) || B.seeds.length>=400) continue;
+          B.seeds.push([Math.round(x),Math.round(y)]);
+          var gs=$('bSeeds'); if(gs){ var el=document.createElementNS('http://www.w3.org/2000/svg','ellipse'); el.setAttribute('cx',Math.round(x)); el.setAttribute('cy',Math.round(y)); el.setAttribute('rx',1.4); el.setAttribute('ry',2.4); el.setAttribute('fill','#D8C08A'); el.setAttribute('transform','rotate('+Math.round(Math.random()*180)+' '+Math.round(x)+' '+Math.round(y)+')'); gs.appendChild(el); } }
+        renderBuild(false);
+      }
+    }
+    f.addEventListener('pointerdown',function(e){ if(B.step!==2 && B.step!==3) return; down=true; try{ f.setPointerCapture(e.pointerId); }catch(_){} paint(e); });
+    f.addEventListener('pointermove',function(e){ if(down) paint(e); });
+    ['pointerup','pointercancel'].forEach(function(ev){ f.addEventListener(ev,function(){ down=false; }); });
+  })();
+  $('bBtn').onclick=function(){
+    var st=B.step;
+    if(st===0){ B.frameDone=true; B.anim='frame'; B.step=1; renderBuild(); try{ clay(false); }catch(e){} return; }
+    if(st===1){ B.linenDone=true; B.anim='linen'; B.step=2; renderBuild(); return; }
+    if(st===2){ B.siltDone=true; B.step=3; renderBuild(); return; }
+    if(st===3){ B.step=4; renderBuild(); return; }
+    var drops=''; for(var i=0;i<16;i++) drops+='<circle class="drop" cx="'+(100+Math.random()*80).toFixed(0)+'" cy="'+(60+Math.random()*300).toFixed(0)+'" r="2.6" fill="#9CD2F5" style="animation-delay:'+(Math.random()*.5).toFixed(2)+'s"/>';
+    $('bDrops').innerHTML=drops; try{ bowl(); }catch(e){}
+    var o=osi(); o={sown:true,stage:0,last:today(),harvests:o.harvests||0,seeds:B.seeds.slice(0,400)}; save(OSK,o); act('sow'); bump(null);
+    setTimeout(function(){ flash(); renderOsi(); burstOn($('field'),24,true); },1100);
+  };
+  $('bUndo').onclick=function(){ startBuild(); };
+
   function renderOsi(){
+    var o0=osi();
+    $('osiBuild').classList.toggle('hidden',!!o0.sown); $('osiGrow').classList.toggle('hidden',!o0.sown);
+    if(!o0.sown){ if(!B.cover || B.step===4 && B.done) startBuild(); else renderBuild(); return; }
     var o=osi(), t=today();
     $('field').innerHTML=osiSVG(o);
     var bar=''; for(var i=1;i<=STAGES;i++) bar+='<i class="'+(o.sown&&o.stage>=i?'on':'')+'"></i>'; $('growBar').innerHTML=bar;
@@ -1398,7 +1543,7 @@
   $('osiBtn').onclick=function(){
     var o=osi(), t=today();
     if(!o.sown){ o={sown:true,stage:0,last:t,harvests:o.harvests||0}; save(OSK,o); act('sow'); renderOsi(); burstOn($('field'),14,false); return; }
-    if(o.stage>=STAGES){ o.harvests=(o.harvests||0)+1; o.sown=false; o.stage=0; o.last=''; save(OSK,o); bump('harvests'); act('harvest'); flash(); burstOn($('field'),36,true); renderOsi(); return; }
+    if(o.stage>=STAGES){ o.harvests=(o.harvests||0)+1; o.sown=false; o.stage=0; o.last=''; o.seeds=[]; save(OSK,o); B={step:0};  bump('harvests'); act('harvest'); flash(); burstOn($('field'),36,true); renderOsi(); return; }
     if(o.last===t) return;
     o.stage++; o.last=t; save(OSK,o); act('water'); bump(null);
     var drops=''; for(var i=0;i<10;i++) drops+='<circle class="drop" cx="'+(90+Math.random()*100).toFixed(0)+'" cy="'+(80+Math.random()*200).toFixed(0)+'" r="2.4" fill="#9CD2F5" style="animation-delay:'+(Math.random()*.4).toFixed(2)+'s"/>';
