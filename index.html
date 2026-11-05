@@ -179,6 +179,18 @@
   .ring{animation:ring 1.6s ease-out}
   @keyframes ring{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(1.8)}}
   body.calm .ring{animation:none;opacity:0}
+  .hero{position:relative;margin:6px 0 4px}
+  .hero .stage{margin:0}
+  .hchip{position:absolute;left:10px;top:10px;display:flex;align-items:center;gap:6px;background:rgba(7,11,22,.75);border:1px solid var(--gold-d);border-radius:999px;padding:4px 10px 4px 12px;color:var(--gold-l);font:inherit;font-size:.8em;cursor:pointer;min-height:40px}
+  .hchip .pill{min-width:24px;height:24px;font-size:.82em;border-radius:7px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .doorhot{position:absolute;left:41%;width:18%;top:33%;height:34%;background:transparent;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .doortag{white-space:nowrap;font-family:"Noto Serif TC",serif;font-size:.7em;letter-spacing:.12em;color:var(--gold-l);background:rgba(7,11,22,.55);border:1px solid var(--gold-d);border-radius:999px;padding:2px 8px;writing-mode:horizontal-tb}
+  .doorhot:hover .doortag,.doorhot:focus-visible .doortag{background:rgba(212,168,71,.25)}
+  .herobar{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:10px}
+  .hb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;color:var(--ink);font:inherit;font-size:.74em;cursor:pointer;min-width:62px;padding:0;text-shadow:0 1px 3px #000}
+  .hb .o{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.45em;color:var(--gold-l);background:linear-gradient(180deg,#26489A,#122458);border:1.5px solid var(--gold);box-shadow:0 4px 12px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.22)}
+  .hb:hover .o,.hb:focus-visible .o{filter:brightness(1.2)}
   #gdefs{position:absolute;width:0;height:0;overflow:hidden}
 </style>
 </head>
@@ -217,57 +229,46 @@
     <div class="band" aria-hidden="true">𓋹𓌀𓊽𓋹𓌀𓊽𓋹</div>
     <h1 class="center">線上古埃及神廟</h1>
     <p class="center muted">依神廟浮雕與莎草紙文獻重建的參拜體驗</p>
-    <div class="stage" aria-hidden="true">
-      <svg viewBox="0 0 400 220">
-        <rect width="400" height="220" fill="url(#night)"/>
-        <g fill="#F4E6C0" opacity=".7"><circle cx="40" cy="30" r="1"/><circle cx="90" cy="18" r="1.2"/><circle cx="150" cy="40" r=".8"/><circle cx="330" cy="22" r="1.1"/><circle cx="365" cy="52" r=".8"/><circle cx="260" cy="14" r=".9"/></g>
-        <rect x="18" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M18 64 L24 48 L30 64Z" fill="url(#ggL)"/>
-        <rect x="370" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M370 64 L376 48 L382 64Z" fill="url(#ggL)"/>
-        <g stroke="#8E6A22" stroke-width="2"><path d="M88 52 V200 M112 52 V200 M288 52 V200 M312 52 V200"/></g>
-        <g fill="#C2502E"><path d="M88 54 l14 4 l-14 4Z"/><path d="M112 54 l14 4 l-14 4Z"/><path d="M288 54 l14 4 l-14 4Z"/><path d="M312 54 l14 4 l-14 4Z"/></g>
-        <path d="M58 210 L76 78 L176 78 L182 210Z" fill="url(#stone)"/>
-        <path d="M218 210 L224 78 L324 78 L342 210Z" fill="url(#stone)"/>
-        <rect x="74" y="72" width="104" height="8" fill="url(#ggL)"/><rect x="222" y="72" width="104" height="8" fill="url(#ggL)"/>
-        <g fill="#6F5534" opacity=".6"><rect x="100" y="100" width="52" height="3"/><rect x="100" y="140" width="52" height="3"/><rect x="248" y="100" width="52" height="3"/><rect x="248" y="140" width="52" height="3"/></g>
-        <rect x="174" y="112" width="52" height="98" fill="#0A1024"/>
-        <rect x="174" y="112" width="52" height="98" fill="url(#torch)"/>
-        <rect x="166" y="98" width="68" height="14" fill="url(#ggL)"/>
-        <circle cx="200" cy="105" r="5" fill="url(#sunG)"/><path d="M194 105 Q182 99 170 104 Q182 103 194 107Z M206 105 Q218 99 230 104 Q218 103 206 107Z" fill="#1E3A8A"/>
-        <circle cx="200" cy="40" r="20" fill="url(#sunG)" class="glow"/>
-        <rect x="0" y="208" width="400" height="12" fill="url(#ggL)" opacity=".85"/>
-      </svg>
+    <div class="hero">
+      <div class="stage" aria-hidden="true">
+        <svg viewBox="0 0 400 330">
+          <rect width="400" height="330" fill="url(#night)"/>
+          <g fill="#F4E6C0" opacity=".7"><circle cx="40" cy="30" r="1"/><circle cx="90" cy="18" r="1.2"/><circle cx="150" cy="40" r=".8"/><circle cx="330" cy="22" r="1.1"/><circle cx="365" cy="52" r=".8"/><circle cx="260" cy="14" r=".9"/></g>
+          <rect x="18" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M18 64 L24 48 L30 64Z" fill="url(#ggL)"/>
+          <rect x="370" y="64" width="12" height="146" fill="url(#ggL)"/><path d="M370 64 L376 48 L382 64Z" fill="url(#ggL)"/>
+          <g stroke="#8E6A22" stroke-width="2"><path d="M88 52 V200 M112 52 V200 M288 52 V200 M312 52 V200"/></g>
+          <g fill="#C2502E"><path d="M88 54 l14 4 l-14 4Z"/><path d="M112 54 l14 4 l-14 4Z"/><path d="M288 54 l14 4 l-14 4Z"/><path d="M312 54 l14 4 l-14 4Z"/></g>
+          <path d="M58 210 L76 78 L176 78 L182 210Z" fill="url(#stone)"/>
+          <path d="M218 210 L224 78 L324 78 L342 210Z" fill="url(#stone)"/>
+          <rect x="74" y="72" width="104" height="8" fill="url(#ggL)"/><rect x="222" y="72" width="104" height="8" fill="url(#ggL)"/>
+          <g fill="#6F5534" opacity=".6"><rect x="100" y="100" width="52" height="3"/><rect x="100" y="140" width="52" height="3"/><rect x="248" y="100" width="52" height="3"/><rect x="248" y="140" width="52" height="3"/></g>
+          <rect x="174" y="112" width="52" height="98" fill="#0A1024"/>
+          <rect x="174" y="112" width="52" height="98" fill="url(#torch)"/>
+          <rect x="166" y="98" width="68" height="14" fill="url(#ggL)"/>
+          <circle cx="200" cy="105" r="5" fill="url(#sunG)"/><path d="M194 105 Q182 99 170 104 Q182 103 194 107Z M206 105 Q218 99 230 104 Q218 103 206 107Z" fill="#1E3A8A"/>
+          <circle cx="200" cy="40" r="20" fill="url(#sunG)" class="glow"/>
+          <rect x="0" y="208" width="400" height="122" fill="#241C12"/>
+          <path d="M174 210 L120 330 M226 210 L280 330 M150 210 L30 330 M250 210 L370 330" stroke="#3A2E1C" stroke-width="1.5"/>
+          <path d="M0 240 H400 M0 278 H400" stroke="#33281A" stroke-width="1"/>
+          <path d="M174 210 L226 210 L262 330 L138 330Z" fill="#D4A847" opacity=".06"/>
+          <rect x="0" y="208" width="400" height="3" fill="url(#ggL)" opacity=".85"/>
+        </svg>
+      </div>
+      <button class="hchip" type="button" data-go="s-day" id="todayCard" aria-label="今日吉凶">今日<span class="seg3" id="todayPills" aria-hidden="true"></span><span class="sr" id="todayLine"></span></button>
+      <button class="doorhot" type="button" data-go="s-priest-intro" aria-label="進入聖所：每日神廟儀式"><span class="doortag">進入聖所</span></button>
+      <div class="herobar" role="group" aria-label="參拜選項">
+        <button class="hb" type="button" data-go="s-priest-intro" aria-label="祭司之路：每日神廟儀式"><span class="o" aria-hidden="true">祭</span>每日儀式</button>
+        <button class="hb" type="button" data-go="s-ear-gods" aria-label="參拜者之路：聽耳之門"><span class="o" aria-hidden="true">耳</span>聽耳之門</button>
+        <button class="hb" type="button" data-go="s-oracle" aria-label="神諭之路：神諭出巡"><span class="o" aria-hidden="true">諭</span>神諭出巡</button>
+        <button class="hb" type="button" data-go="s-sit" aria-label="在多柱廳靜坐"><span class="o" aria-hidden="true">坐</span>靜坐</button>
+      </div>
     </div>
+    <p class="small muted" style="margin-top:10px">在古埃及，神廟深處只有祭司能進入；一般人則在神廟外圍向「聆聽祈禱的神」說話。點大殿下方的按鈕選一條路，或直接點大門進入聖所。</p>
     <div class="frieze" aria-hidden="true"></div>
-    <button class="card today" type="button" data-go="s-day" id="todayCard">
-      <div style="flex:1;min-width:0"><div class="small muted">今日吉凶</div><div class="serif" id="todayLine" style="color:var(--gold-l)"></div></div>
-      <div class="seg3" id="todayPills" aria-hidden="true"></div>
-    </button>
     <div class="card" id="meCard">
       <div class="me-row"><div><div class="small muted">你的形象</div><div class="nm" id="meNick"></div></div><button class="iconbtn" type="button" id="meEdit">改暱稱與顏色</button></div>
       <div class="looks" id="homeLooks" role="group" aria-label="選擇你的形象"></div>
     </div>
-    <p class="small muted">在古埃及，神廟深處只有祭司能進入；一般人則在神廟外圍向「聆聽祈禱的神」說話。你可以選擇其中一條路。</p>
-
-    <button class="card mode" type="button" data-go="s-priest-intro">
-      <div class="k">祭司之路・約 6 分鐘</div>
-      <h3>每日神廟儀式</h3>
-      <div class="small muted">黎明時分，打開阿蒙-拉的神龕：破封、開門、讚頌、獻上瑪特、更衣、塗油、獻供、關門。</div>
-    </button>
-    <button class="card mode" type="button" data-go="s-ear-gods">
-      <div class="k">參拜者之路・約 2 分鐘</div>
-      <h3>聽耳之門</h3>
-      <div class="small muted">像新王國時代的百姓一樣，親吻大地、說出祈願，獻上一塊刻著耳朵的還願碑。</div>
-    </button>
-    <button class="card mode" type="button" data-go="s-oracle">
-      <div class="k">神諭之路・約 1 分鐘</div>
-      <h3>神諭出巡</h3>
-      <div class="small muted">把是非題寫在陶片上，等神的聖船出巡經過。船向前傾是「是」，向後退是「否」。</div>
-    </button>
-    <button class="card mode" type="button" data-go="s-sit">
-      <div class="k">靜坐・不限時間</div>
-      <h3>在多柱廳靜坐</h3>
-      <div class="small muted">什麼都不用做，和此刻也在殿內的人一起安靜坐一會兒。想要的話，可以輕搖叉鈴。</div>
-    </button>
     <button class="btn link" type="button" id="btnAbout">這是怎麼重建的？資料來源</button>
     <div class="note"><b>文化重建體驗，非宗教機構。</b>今日也有人實踐古埃及信仰（如 Kemetic 信仰社群），本站僅以歷史文獻為本，不代表任何團體。</div>
   </section>
